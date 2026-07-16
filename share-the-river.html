@@ -5,36 +5,28 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Share the River — Water in the World</title>
 <style>
-  /* Suite family with the Vocab Hub: warm paper, Georgia display, river teal
-     primary + ochre secondary. Adds an assessment layer coloured by the
-     school continuum band: support (amber), at-standard (teal), extend (indigo). */
   :root{
     --bg:#f2ece0; --paper:#fbf7ef; --ink:#211d17; --muted:#6c6353;
     --line:#d9cfb9; --line-soft:#e8e0ce;
     --water:#2c7488; --water-d:#215866;
     --earth:#b0741f; --earth-d:#8f5d16;
-    --correct:#2f6a3e; --wrong:#a8432f;
-    --okbg:#eef4ec; --badbg:#f6ece8;
-    /* four values the student is balancing */
+    --good:#2f6a3e; --warn:#9a6b1f; --bad:#a8432f;
+    --okbg:#eef4ec; --badbg:#f6ece8; --warnbg:#f6efda;
     --farm:#b0741f; --farmbg:#f4ead7;
     --town:#7a4a6f; --townbg:#f1e6ee;
     --river:#2c7488; --riverbg:#e6f0f1;
     --culture:#3f7a4a; --culturebg:#e6f1e8;
-    /* continuum bands */
-    --support:#b06a1f; --supportbg:#f6ead6;
-    --core:#2c7488; --corebg:#e2edf0;
-    --extend:#4a4a86; --extendbg:#e8e7f3;
   }
   *{margin:0;padding:0;box-sizing:border-box}
   body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:var(--bg);
        min-height:100vh;padding:16px;display:flex;justify-content:center;align-items:flex-start;color:var(--ink)}
   .container{background:var(--paper);border:1px solid var(--line);border-radius:12px;
-       max-width:940px;width:100%;padding:24px;margin-top:12px;box-shadow:0 2px 12px rgba(0,0,0,.06)}
-  h1{text-align:center;font-size:24px;font-family:Georgia,'Times New Roman',serif;letter-spacing:.3px}
-  h2{font-family:Georgia,serif;font-size:19px;margin:4px 0 10px}
-  h3{font-family:Georgia,serif;font-size:15px;margin:16px 0 8px}
-  .subtitle{color:var(--muted);text-align:center;margin:6px 0 16px;font-size:13px}
-  .muted{color:var(--muted);font-size:13px;line-height:1.55}
+       max-width:1000px;width:100%;padding:22px;margin-top:12px;box-shadow:0 2px 12px rgba(0,0,0,.06)}
+  h1{text-align:center;font-size:25px;font-family:Georgia,'Times New Roman',serif;letter-spacing:.3px}
+  h2{font-family:Georgia,serif;font-size:19px;margin:2px 0 8px}
+  h3{font-family:Georgia,serif;font-size:15px;margin:14px 0 7px}
+  .subtitle{color:var(--muted);text-align:center;margin:6px 0 14px;font-size:13px}
+  .muted{color:var(--muted);font-size:13px;line-height:1.6}
   .screen{display:none}.screen.active{display:block}
   button{font-family:inherit}
   .btn{padding:11px 18px;border:1px solid var(--line);border-radius:8px;font-size:15px;font-weight:600;
@@ -46,850 +38,644 @@
   .btn-ghost:hover{color:var(--ink);border-color:var(--ink)}
   .linkbtn{background:none;border:none;color:var(--water-d);font-weight:600;font-size:13px;cursor:pointer;padding:4px 8px}
   .linkbtn:hover{text-decoration:underline}
-  button:focus-visible,[tabindex]:focus-visible,input:focus-visible{outline:3px solid var(--water);outline-offset:2px}
+  button:focus-visible,[tabindex]:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid var(--water);outline-offset:2px}
   @media (prefers-reduced-motion: reduce){*{animation-duration:.001ms !important;transition-duration:.001ms !important}}
 
-  .topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+  .topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
   .progress{font-size:12px;font-weight:700;color:var(--muted);letter-spacing:.4px}
   .brief{background:var(--bg);border:1px solid var(--line-soft);border-left:4px solid var(--water);
-       border-radius:8px;padding:14px 16px;margin:12px 0;font-size:14px;line-height:1.6}
+       border-radius:8px;padding:13px 16px;margin:10px 0;font-size:14px;line-height:1.65}
   .brief b{color:var(--water-d)}
-  .rolebox{border:1px solid var(--line);border-radius:10px;padding:16px;margin:12px 0;background:var(--paper)}
-  .note{font-size:12px;color:var(--muted);font-style:italic;line-height:1.5;margin-top:10px}
+  .note{font-size:12px;color:var(--muted);font-style:italic;line-height:1.55}
 
-  /* ---- season header ---- */
-  .seasonhead{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:8px;
-       border-bottom:2px solid var(--line-soft);padding-bottom:8px;margin-bottom:12px}
-  .seasonhead .s-name{font-family:Georgia,serif;font-size:20px;font-weight:700}
-  .seasonhead .s-sub{color:var(--muted);font-size:13px}
-  .seasonhead .s-count{font-size:12px;font-weight:700;color:var(--muted)}
+  /* ---- advisers ---- */
+  .advisers{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:10px 0}
+  @media(max-width:680px){.advisers{grid-template-columns:1fr}}
+  .adv{border:1px solid var(--line-soft);border-top:4px solid var(--line);border-radius:9px;padding:11px 13px;background:var(--paper)}
+  .adv.farm{border-top-color:var(--farm)} .adv.town{border-top-color:var(--town)}
+  .adv.river{border-top-color:var(--river)} .adv.culture{border-top-color:var(--culture)}
+  .adv.hydro{border-top-color:var(--muted)}
+  .adv-top{display:flex;align-items:center;gap:9px}
+  .adv-face{width:34px;height:34px;flex:0 0 auto;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;background:var(--bg);border:1px solid var(--line)}
+  .adv-name{font-weight:700;font-size:13.5px}
+  .adv-role{font-size:11px;color:var(--muted)}
+  .adv-mood{margin-left:auto;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.3px;padding:2px 8px;border-radius:11px;color:#fff}
+  .adv-bar{height:6px;background:var(--line-soft);border-radius:99px;overflow:hidden;margin:7px 0 0}
+  .adv-bar span{display:block;height:100%;border-radius:99px;transition:width .5s}
+  .adv-say{font-size:12.5px;line-height:1.5;margin-top:7px}
+  .adv-consult{margin-top:7px}
+  .adv-consult .linkbtn{padding:2px 0}
+  .adv-full{display:none;margin-top:7px;border-top:1px dashed var(--line-soft);padding-top:7px}
+  .adv-full.open{display:block}
+  .adv-full p{font-size:12.5px;line-height:1.55;margin-bottom:6px;color:var(--ink)}
+  .adv-wants{font-size:12px;color:var(--muted);margin-top:4px}
+  .adv-wants b{color:var(--ink)}
 
   /* ---- map ---- */
-  .mapwrap{border:1px solid var(--line-soft);border-radius:10px;background:#eaf1f2;padding:10px;margin-bottom:10px}
+  .mapwrap{border:1px solid var(--line-soft);border-radius:10px;background:#e9f1f2;padding:8px;margin:10px 0 6px}
   .mapwrap svg{width:100%;height:auto;display:block}
-  .layerbtns{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}
-  .lbtn{cursor:pointer;font-size:12px;font-weight:600;border:1px solid var(--line);background:var(--bg);
-       border-radius:16px;padding:6px 13px;color:var(--muted)}
-  .lbtn.on{background:var(--paper);border-color:var(--water);color:var(--water-d)}
-  .lbtn .dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px;vertical-align:0}
-  .mapcap{font-size:12.5px;color:var(--muted);background:var(--bg);border-radius:6px;padding:8px 11px;min-height:34px;line-height:1.5}
+  .mapcap{font-size:12.5px;color:var(--muted);background:var(--bg);border-radius:6px;padding:8px 11px;line-height:1.55;min-height:34px;margin-bottom:8px}
 
   /* ---- allocation ---- */
-  .budget{display:flex;align-items:center;gap:12px;background:var(--bg);border:1px solid var(--line);
-       border-radius:10px;padding:12px 14px;margin:10px 0;flex-wrap:wrap}
-  .budget .lab{font-weight:700;font-size:14px}
-  .budget .bar{flex:1;min-width:160px;height:14px;background:var(--line-soft);border-radius:99px;overflow:hidden}
-  .budget .fill{height:100%;background:var(--water);border-radius:99px;transition:width .25s}
+  .seasonhead{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:8px;border-bottom:2px solid var(--line-soft);padding-bottom:7px;margin:8px 0 10px}
+  .seasonhead .s-name{font-family:Georgia,serif;font-size:20px;font-weight:700}
+  .seasonhead .s-sub{color:var(--muted);font-size:13px}
+  .seasonhead .s-inflow{font-size:12px;font-weight:700;color:var(--muted)}
+  .budget{display:flex;align-items:center;gap:12px;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:11px 14px;margin:8px 0;flex-wrap:wrap}
+  .budget .lab{font-weight:700;font-size:13.5px}
+  .budget .bar{flex:1;min-width:150px;height:13px;background:var(--line-soft);border-radius:99px;overflow:hidden}
+  .budget .fill{height:100%;background:var(--water);border-radius:99px;transition:width .2s}
   .budget .num{font-family:Georgia,serif;font-weight:700;font-size:16px;white-space:nowrap}
-  .budget .num.over{color:var(--wrong)}
-  .allocgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
-  @media(max-width:620px){.allocgrid{grid-template-columns:1fr}}
-  .alloc{border:1px solid var(--line-soft);border-radius:10px;padding:12px 14px;background:var(--paper);border-left:5px solid}
+  .allocgrid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:8px 0}
+  @media(max-width:680px){.allocgrid{grid-template-columns:1fr}}
+  .alloc{border:1px solid var(--line-soft);border-radius:10px;padding:11px 13px;background:var(--paper);border-left:5px solid}
   .alloc.farm{border-left-color:var(--farm)} .alloc.town{border-left-color:var(--town)}
   .alloc.river{border-left-color:var(--river)} .alloc.culture{border-left-color:var(--culture)}
-  .alloc .a-top{display:flex;align-items:center;gap:8px}
-  .alloc .a-name{font-weight:700;font-size:14.5px}
-  .alloc .a-who{font-size:11.5px;color:var(--muted);margin-left:auto}
-  .alloc .a-desc{font-size:12px;color:var(--muted);line-height:1.5;margin:6px 0 8px}
+  .alloc .a-name{font-weight:700;font-size:14px}
+  .alloc .a-who{font-size:11px;color:var(--muted);float:right}
+  .alloc .a-desc{font-size:11.5px;color:var(--muted);line-height:1.5;margin:5px 0 8px;clear:both}
   .stepper{display:flex;align-items:center;gap:10px}
-  .stepper button{width:38px;height:38px;border-radius:9px;border:1px solid var(--line);background:var(--bg);
-       font-size:20px;font-weight:800;cursor:pointer;color:var(--ink)}
+  .stepper button{width:36px;height:36px;border-radius:9px;border:1px solid var(--line);background:var(--bg);font-size:20px;font-weight:800;cursor:pointer;color:var(--ink)}
   .stepper button:hover:not(:disabled){border-color:var(--water)}
   .stepper button:disabled{opacity:.35;cursor:not-allowed}
-  .stepper .val{font-family:Georgia,serif;font-size:20px;font-weight:700;min-width:44px;text-align:center}
-  .stepper .need{font-size:11px;color:var(--muted);margin-left:4px}
-  .needbar{height:6px;background:var(--line-soft);border-radius:99px;overflow:hidden;margin-top:8px}
-  .needbar span{display:block;height:100%;border-radius:99px;transition:width .25s}
-  .alloc.farm .needbar span{background:var(--farm)} .alloc.town .needbar span{background:var(--town)}
-  .alloc.river .needbar span{background:var(--river)} .alloc.culture .needbar span{background:var(--culture)}
+  .stepper .val{font-family:Georgia,serif;font-size:19px;font-weight:700;min-width:40px;text-align:center}
+  .stepper .need{font-size:11px;color:var(--muted)}
 
-  /* ---- stakeholders ---- */
-  .stakes{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
-  .stake{flex:1 1 190px;border:1px solid var(--line-soft);border-radius:9px;padding:9px 11px;background:var(--paper)}
-  .stake .st-top{display:flex;align-items:center;gap:8px}
-  .stake .st-name{font-size:12.5px;font-weight:700}
-  .stake .st-mood{margin-left:auto;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.3px;
-       padding:2px 7px;border-radius:11px;color:#fff}
-  .stake .st-role{font-size:11px;color:var(--muted);font-style:italic;margin-top:1px}
-  .stake .st-bar{height:6px;background:var(--line-soft);border-radius:99px;overflow:hidden;margin-top:6px}
-  .stake .st-bar span{display:block;height:100%;border-radius:99px;transition:width .4s}
-  .stake .st-line{font-size:11.5px;color:var(--ink);margin-top:6px;line-height:1.4}
-
-  /* ---- meters (the four values) ---- */
-  .meters{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0}
-  @media(max-width:620px){.meters{grid-template-columns:1fr}}
-  .meter{border:1px solid var(--line-soft);border-radius:8px;padding:8px 11px;background:var(--paper)}
+  /* ---- season log (consequences accumulate) ---- */
+  .runrow{display:flex;justify-content:space-between;gap:8px;align-items:center;flex-wrap:wrap;margin:10px 0}
+  .logentry{border:1px solid var(--line-soft);border-radius:10px;padding:13px 15px;margin:10px 0;background:var(--paper)}
+  .logentry .le-head{font-family:Georgia,serif;font-weight:700;font-size:15px;margin-bottom:6px}
+  .le-narr{font-size:13.5px;line-height:1.6;margin-bottom:8px}
+  .le-narr b{color:var(--water-d)}
+  .meters{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin:8px 0}
+  @media(max-width:680px){.meters{grid-template-columns:1fr}}
+  .meter{border:1px solid var(--line-soft);border-radius:8px;padding:7px 10px;background:var(--bg)}
   .meter .m-top{display:flex;justify-content:space-between;font-size:12px;font-weight:700}
-  .meter .m-track{height:9px;background:var(--line-soft);border-radius:99px;overflow:hidden;margin:5px 0 2px}
-  .meter .m-fill{height:100%;border-radius:99px;transition:width .5s}
+  .meter .m-track{height:8px;background:var(--line-soft);border-radius:99px;overflow:hidden;margin:5px 0 2px}
+  .meter .m-fill{height:100%;border-radius:99px;transition:width .6s}
   .meter.farm .m-fill{background:var(--farm)} .meter.town .m-fill{background:var(--town)}
   .meter.river .m-fill{background:var(--river)} .meter.culture .m-fill{background:var(--culture)}
-  .meter .m-delta{font-size:11px;font-weight:700}
-  .m-delta.up{color:var(--correct)} .m-delta.down{color:var(--wrong)}
+  .meter .m-delta{font-size:10.5px;font-weight:700}
+  .m-delta.up{color:var(--good)} .m-delta.down{color:var(--bad)} .m-delta.flat{color:var(--muted)}
+  .alert{border-radius:8px;padding:9px 12px;margin:7px 0;font-size:12.5px;line-height:1.5}
+  .alert.bad{background:var(--badbg);border:1px solid var(--bad)}
+  .react{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:8px}
+  @media(max-width:680px){.react{grid-template-columns:1fr}}
+  .rcard{border:1px solid var(--line-soft);border-left:3px solid;border-radius:7px;padding:8px 10px;font-size:12px;line-height:1.45}
+  .rcard.farm{border-left-color:var(--farm)} .rcard.town{border-left-color:var(--town)}
+  .rcard.river{border-left-color:var(--river)} .rcard.culture{border-left-color:var(--culture)}
+  .rcard .rc-name{font-weight:700}
 
-  /* ---- assessment task shell ---- */
-  .taskcard{border:1px solid var(--line);border-radius:10px;padding:16px;margin:12px 0;background:var(--paper)}
-  .bandtag{display:inline-block;font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;
-       padding:3px 10px;border-radius:20px;margin-bottom:8px}
-  .bandtag.support{color:var(--support);background:var(--supportbg)}
-  .bandtag.core{color:var(--core);background:var(--corebg)}
-  .bandtag.extend{color:var(--extend);background:var(--extendbg)}
-  .strandtag{font-size:11px;font-weight:700;color:var(--muted);margin-left:6px}
-  .qtext{font-size:16px;line-height:1.6;margin:6px 0 12px}
-  .scaffold{background:var(--supportbg);border:1px solid #e2c79a;border-radius:8px;padding:10px 13px;margin:8px 0;font-size:13px;line-height:1.55}
-  .scaffold b{color:var(--support)}
-  .stretchbox{background:var(--extendbg);border:1px solid #c3c1e0;border-radius:8px;padding:10px 13px;margin:8px 0;font-size:13px;line-height:1.55}
-  .stretchbox b{color:var(--extend)}
-  .opts{display:flex;flex-direction:column;gap:8px}
-  .opt{padding:12px 14px;border:1px solid var(--line);border-radius:8px;background:var(--paper);font-size:14.5px;
-       text-align:left;cursor:pointer;line-height:1.5}
-  .opt:hover:not(:disabled){border-color:var(--water)}
-  .opt:disabled{cursor:default}
-  .opt.right{background:var(--okbg);border-color:var(--correct);color:var(--correct);font-weight:600}
-  .opt.wrongpick{background:var(--badbg);border-color:var(--wrong);color:var(--wrong)}
-  .feedback{margin-top:12px;padding:12px 14px;border-radius:8px;font-size:13.5px;line-height:1.55;display:none}
-  .feedback.ok{display:block;background:var(--okbg);border:1px solid var(--correct)}
-  .feedback.bad{display:block;background:var(--badbg);border:1px solid var(--wrong)}
-  .writeframe{width:100%;font-family:inherit;font-size:14px;padding:11px;border:1px solid var(--line);
-       border-radius:8px;background:var(--paper);color:var(--ink);resize:vertical;min-height:70px;margin-top:8px}
-  .writeframe:focus{outline:none;border-color:var(--water)}
-  .nextrow{margin-top:14px;display:flex;justify-content:space-between;gap:8px;align-items:center;flex-wrap:wrap}
+  /* ---- verdict ---- */
+  .verdict{border-radius:10px;padding:16px;margin:12px 0;border:1px solid}
+  .verdict.good{background:var(--okbg);border-color:var(--good)}
+  .verdict.mixed{background:var(--warnbg);border-color:var(--warn)}
+  .verdict.bad{background:var(--badbg);border-color:var(--bad)}
+  .verdict h3{margin:0 0 6px;font-size:18px}
+  .verdict p{font-size:14px;line-height:1.6}
 
-  /* ---- level flag ---- */
-  .levelflag{display:flex;align-items:center;gap:10px;font-size:12.5px;padding:9px 12px;border-radius:8px;margin:6px 0}
-  .levelflag.support{background:var(--supportbg)} .levelflag.core{background:var(--corebg)} .levelflag.extend{background:var(--extendbg)}
-  .levelflag .lf-i{font-size:16px}
+  /* ---- reflection (opt-in, non-grading) ---- */
+  details.reflect{border:1px solid var(--line);border-radius:10px;margin:12px 0;background:var(--paper)}
+  details.reflect>summary{cursor:pointer;font-family:Georgia,serif;font-weight:700;font-size:16px;padding:13px 16px;list-style:none}
+  details.reflect>summary::-webkit-details-marker{display:none}
+  details.reflect>summary::before{content:"▸ ";color:var(--water)}
+  details.reflect[open]>summary::before{content:"▾ "}
+  .reflect-body{padding:0 16px 14px}
+  .saq{border-top:1px solid var(--line-soft);padding:12px 0}
+  .saq .tie{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.3px}
+  .saq .q{font-size:14.5px;line-height:1.55;margin:5px 0 4px}
+  .saq textarea{width:100%;font-family:inherit;font-size:14px;padding:10px;border:1px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink);resize:vertical;min-height:64px}
+  .saq-tools{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+  .chip{font-size:11.5px;font-weight:600;border:1px solid var(--line);background:var(--bg);border-radius:14px;padding:5px 11px;cursor:pointer;color:var(--muted)}
+  .chip:hover{border-color:var(--water);color:var(--water-d)}
+  .scaffold{background:var(--warnbg);border:1px solid #e2c79a;border-radius:8px;padding:9px 12px;margin-top:6px;font-size:12.5px;line-height:1.55;display:none}
+  .scaffold.show{display:block}
+  .stretchq{background:var(--riverbg);border:1px solid #b9d2da;border-radius:8px;padding:9px 12px;margin-top:6px;font-size:12.5px;line-height:1.55;display:none}
+  .stretchq.show{display:block}
+  .sc{font-size:12.5px;line-height:1.55;margin-top:7px;padding:9px 12px;border-radius:8px;background:var(--bg);display:none}
+  .sc.show{display:block}
+  .sc .ok{color:var(--good);font-weight:700} .sc .miss{color:var(--warn)}
 
   /* ---- self-assessment ladder ---- */
-  .ladder{display:flex;flex-direction:column;gap:6px;margin:10px 0}
-  .rung{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line-soft);border-radius:8px;
-       padding:10px 12px;background:var(--paper);cursor:pointer;text-align:left;width:100%}
+  .ladder{display:flex;flex-direction:column;gap:5px;margin:8px 0}
+  .rung{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line-soft);border-radius:8px;padding:9px 11px;background:var(--paper);cursor:pointer;text-align:left;width:100%}
   .rung:hover{border-color:var(--water)}
   .rung.picked{border-color:var(--water);background:var(--riverbg)}
-  .rung.evid{box-shadow:inset 4px 0 0 var(--core)}
-  .rung .r-lvl{font-family:Georgia,serif;font-weight:800;font-size:13px;color:var(--muted);flex-shrink:0;width:58px}
-  .rung .r-txt{font-size:13px;line-height:1.45}
-  .rung .r-tags{display:block;margin-top:3px;font-size:10.5px;font-weight:700}
-  .r-mine{color:var(--water-d)} .r-app{color:var(--extend)}
+  .rung .r-lvl{font-family:Georgia,serif;font-weight:800;font-size:12px;color:var(--muted);flex-shrink:0;width:52px}
+  .rung .r-txt{font-size:12.5px;line-height:1.4}
+  .yearband{font-size:10px;font-weight:800;color:var(--muted);margin-left:4px}
 
   /* ---- report ---- */
-  .sumbox{border:1px solid var(--line);border-radius:10px;padding:16px;margin:12px 0;text-align:center}
-  .sumbox .big{font-family:Georgia,serif;font-size:34px;font-weight:700}
-  .repgrid{width:100%;border-collapse:collapse;margin:10px 0}
-  .repgrid th,.repgrid td{border:1px solid var(--line);padding:8px 10px;font-size:13px;text-align:left;vertical-align:top}
+  .repgrid{width:100%;border-collapse:collapse;margin:8px 0}
+  .repgrid th,.repgrid td{border:1px solid var(--line);padding:7px 9px;font-size:12.5px;text-align:left;vertical-align:top}
   .repgrid th{background:var(--bg);font-size:11px;text-transform:uppercase;letter-spacing:.3px;color:var(--muted)}
-  .repgrid .lvl{font-family:Georgia,serif;font-weight:700;white-space:nowrap}
   .idrow{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0;align-items:flex-end}
   .idrow label{font-size:12px;font-weight:700;color:var(--muted);display:block;margin-bottom:4px}
   .idrow input{padding:10px 12px;border:1px solid var(--line);border-radius:8px;font-size:15px;font-family:inherit;background:#fff}
   .vcode{font-family:'Courier New',monospace;font-size:13px;letter-spacing:2px}
-  .band-key{display:flex;gap:12px;flex-wrap:wrap;font-size:11.5px;margin:6px 0 2px}
-  .band-key span{display:inline-flex;align-items:center;gap:5px;font-weight:700}
-  .band-key i{width:12px;height:12px;border-radius:3px;display:inline-block}
-  @media print{
-    body{background:#fff;padding:0}
-    .container{border:none;box-shadow:none;max-width:100%;padding:6px}
-    .noprint{display:none !important}
-  }
+  @media print{ body{background:#fff;padding:0} .container{border:none;box-shadow:none;max-width:100%;padding:6px} .noprint{display:none !important} }
 </style>
 </head>
 <body>
 <div class="container">
-
-<div class="screen active" id="scr-intro"></div>
-<div class="screen" id="scr-season">
-  <div class="topbar noprint"><button class="linkbtn" onclick="quitToIntro()">&larr; restart</button><span class="progress" id="season-prog"></span></div>
-  <div id="season-body"></div>
-</div>
-<div class="screen" id="scr-selfassess">
-  <div class="topbar noprint"><span></span><span class="progress">SELF-ASSESSMENT</span></div>
-  <div id="selfassess-body"></div>
-</div>
+<div class="screen active" id="scr-game"></div>
 <div class="screen" id="scr-report">
-  <div class="topbar noprint"><button class="linkbtn" onclick="go('intro')">&larr; play again</button><span class="progress">REPORT</span></div>
+  <div class="topbar noprint"><button class="linkbtn" onclick="location.reload()">&larr; play again</button><span class="progress">PLAN &amp; REPORT</span></div>
   <div id="report-body"></div>
 </div>
-
 </div>
 <script>
 "use strict";
 /* ============================================================
-   SHARE THE RIVER — a Murray–Darling allocation simulation
-   Companion to the Year 7 "Water in the World" unit.
+   SHARE THE RIVER  — an authentic water-allocation simulation
+   for the Year 7 "Water in the World" unit.
 
-   THE DESIGN, IN ONE LINE: a concrete, accessible core task
-   (divide a shrinking river between four users, four seasons)
-   with an ASSESSMENT LAYER laid on top that follows the school's
-   Geography continuum. Every season the student meets a short
-   task on one continuum strand (Map & Data, Challenges, or
-   Interconnection), served at THEIR current level. The engine:
-     • pitches the core at Levels 7–8 (Years 7–8);
-     • FLAGS + SUPPORTS students working at Level 6 (Years 5–6)
-       with scaffolds, sentence starters and simpler framing;
-     • FLAGS + EXTENDS students working at Levels 9–10
-       (Years 9–10) with criteria, scale/time and justification.
-   It closes with SELF-ASSESSMENT against the school's exact
-   "I can…" ladder, shows the app's evidence beside the
-   student's own rating, and prints a report keyed to the
-   continuum. Place is a fictionalised reach of the Murray–
-   Darling Basin; stakeholders are role archetypes, not real
-   individuals.
+   Built to the pedagogy of the Coasts / Deserts / Mountains
+   sims it sits beside:
+   • You are a real manager making decisions under an
+     IRREDUCIBLE TRADE-OFF — helping one user provably costs
+     another, and no plan keeps everyone at the top.
+   • Consequences EMERGE from a transparent systems model and
+     are IRREVERSIBLE: a dried waterhole cannot be un-dried; a
+     collapsed river recovers only slowly.
+   • The knowledge lives inside the ADVISERS' own words — you
+     consult them; the sim never lectures you.
+   • Judgement is WITHHELD at decision time. You allocate, you
+     run the season, and you read what happened.
+   • Assessment is an OPT-IN, non-grading debrief that coaches
+     geographic reasoning and lets you self-assess against the
+     school's own continuum — it never interrupts the play.
+
+   The place is a fictionalised single reach standing in for the
+   whole Murray–Darling Basin (a deliberate simplification, named
+   as such). Characters are role archetypes, not real people.
    ============================================================ */
 /* ============================================================
-   SCHOOL LEARNING CONTINUUM (Geography self-assessment ladders)
-   Verbatim "I can…" statements, Levels 6–11, exactly as used in
-   the unit's self-assessment. Level→year-band mapping:
-     Level 6  = Years 5–6  (working towards)
-     Levels 7–8 = Years 7–8 (at standard — the core target)
-     Levels 9–10 = Years 9–10 (extending)
-     Level 11 = beyond
+   THE FOUR SHARES + THE MODEL
+   ============================================================ */
+const BUCKETS = [
+  { key:"farm", cls:"farm", name:"Irrigated farms", who:"upstream", need:8, icon:"🌾",
+    desc:"Cotton and citrus. This is where the district's money and jobs come from — but it's the thirstiest use, and it takes water before anyone downstream sees it." },
+  { key:"town", cls:"town", name:"Willow Bend town", who:"midstream", need:4, icon:"🏘",
+    desc:"3,000 people: drinking water, the hospital, homes. Needs a reliable minimum every season." },
+  { key:"river", cls:"river", name:"Environmental flow", who:"the wetland", need:6, icon:"🦢",
+    desc:"Water left IN the river to keep the wetland and its fish, birds and red-gums alive. Water you don't allocate also stays in the river." },
+  { key:"culture", cls:"culture", name:"Cultural flow", who:"the waterhole", need:3, icon:"💧",
+    desc:"Keeps the sacred waterhole full and Country healthy. Below a minimum it dries — and a dried waterhole cannot simply be refilled." },
+];
+const WATERHOLE_MIN = 1;
+
+/* transparent systems model — every meter is a function of the shares you set,
+   the drought, and the state you inherit. The interlocks are the whole point:
+   the town leans on farm income (jobs) AND its own water AND a living river;
+   the river collapses if you over-take; the waterhole dries irreversibly. */
+const MODEL = {
+  start:{ farm:55, town:58, river:60, culture:60 },
+  overTakeThreshold:0.90,   // taking >90% of inflow stresses the river
+  overTakePenalty:20,
+  riverInertiaUp:0.30,      // river recovers SLOWLY (asymmetric)
+  riverInertiaDown:0.65,    // but drops fast
+  townFromJobs:0.35,        // share of town wellbeing that comes from farm income
+  townRiverFailPenalty:16,  // a failing river fouls the town's own supply
+  driedCultureCap:30,       // once the waterhole dries, cultural value can't rise above this
+  cultureRiverBonus:8,      // healthy Country lifts cultural value a little
+};
+
+/* seasons: inflow shrinks into drought, then a wet pulse. Events are context,
+   delivered by the hydrologist — not judgements of the player. */
+const SEASONS = [
+  { name:"Summer", sub:"the dry sets in", inflow:15,
+    setUp:"A hot, dry summer opens the year. There is already less water than everyone has asked for.",
+    event:"The Bureau says an <b>El Niño</b> is likely — a hotter, drier year ahead." },
+  { name:"Autumn", sub:"El Niño confirmed", inflow:11,
+    setUp:"El Niño is confirmed and inflow has dropped again.",
+    event:"A heatwave lifts the town's demand and dries the soil further." },
+  { name:"Winter", sub:"deep drought", inflow:8,
+    setUp:"The driest winter on record for the reach. The river barely moves past the town.",
+    event:"Upstream, an irrigator is caught taking more than their licence — 'water theft' makes the news." },
+  { name:"Spring", sub:"a wet pulse", inflow:14,
+    setUp:"Rain in the northern catchment sends a pulse downstream — a chance to let the river recover, if you choose to.",
+    event:"La Niña signs appear. The drought may be breaking." },
+];
+
+/* ============================================================
+   ADVISERS — the knowledge lives in their own voices.
+   profile[] = what they tell you up front (consult).
+   wants     = their goals, revealed on consult.
+   react{}   = how they respond to YOUR actual allocation.
+   The hydrologist is the neutral physics narrator (no meter).
+   ============================================================ */
+const HYDRO = { key:"hydro", cls:"hydro", name:"Sana O.", role:"Catchment hydrologist", icon:"📈", emblem:true,
+  profile:[
+    "My job is to explain how this river works, not to take a side. Here's what you're managing.",
+    "Water is a <b>renewable</b> resource — the water cycle keeps re-supplying it — but the amount reaching us each season is <b>finite</b>, and in a drought it shrinks. Whatever you take out up top never reaches the users below: this river is one connected system from the farms to the waterhole.",
+    "Take too much and the flow left in the river gets slow, warm and shallow — the conditions for blue-green algae and fish kills, a biological hazard that then fouls the town's own supply. Everything here is downstream of everything else."],
+};
+const ADVISERS = [
+  { key:"farm", cls:"farm", name:"Dai N.", role:"Cotton & citrus grower", icon:"🚜",
+    concern:"“The district's doing it tough. This water is our income.”",
+    profile:[
+      "The district has lost jobs as other work dried up, and young people are leaving. The farms are what's left.",
+      "Irrigation is the biggest single use of water in Australia — and here it's where the money and the jobs are. Water on the crop means pickers in work and money moving through Willow Bend's shops.",
+      "I know the river matters to others too. I'm not asking to drain it — I'm asking you not to forget that if the farms fold, the town feels it just as hard."],
+    wants:"Wants enough irrigation water to keep crops and jobs alive.",
+    react:{ good:"“Good on ya. That keeps the pickers on and money in the town.”",
+      concern:"“It'll do, but the crop's thirsty and I'm watching every drop.”",
+      bad:"“Cut like that and I lay people off. That's real, and the town wears it too.”" } },
+  { key:"town", cls:"town", name:"Mayor Ellis", role:"Willow Bend council", icon:"🏛",
+    concern:"“People come first — but our jobs come from the farms.”",
+    profile:[
+      "Three thousand people rely on me getting this right: drinking water, the hospital, the homes. We need a reliable minimum every single season.",
+      "But here's the bind — a lot of our jobs come from the farms. If you starve irrigation, the town still hurts, just more slowly. And if the river turns foul, it's OUR taps that aren't safe to drink.",
+      "So I'm not just asking for the town's share. I'm asking you to keep the whole system healthy enough that the town can live in it."],
+    wants:"Wants secure town water AND a working farm economy AND a river clean enough to drink from.",
+    react:{ good:"“Taps on, hospital running, people working. Thank you.”",
+      concern:"“We're managing — just. Don't let it slip further.”",
+      bad:"“The town can't run on this. Either the water or the jobs have gone.”" } },
+  { key:"river", cls:"river", name:"Priya R.", role:"River ecologist", icon:"🔬",
+    concern:"“Renewable doesn't mean unlimited. The wetland is a living system.”",
+    profile:[
+      "I read this reach as a living system. The environmental flow — the water left IN the river — keeps the Ramsar wetland alive: the fish, the waterbirds, the red-gums.",
+      "Water is renewable through the cycle, but it is finite in any one season, and a wetland has limits. Pull too much and the flow goes slow, warm and shallow: blue-green algae blooms, fish die, and the damage takes years to undo — far longer than the season that caused it.",
+      "And this reach is tied to places far away — the migratory birds that feed here link us to wetlands thousands of kilometres up the flyway. What you decide here doesn't stay here."],
+    wants:"Wants enough environmental flow left in-stream to keep the wetland from collapsing.",
+    react:{ good:"“The wetland's breathing. Birds are back on the lignum.”",
+      concern:"“It's hanging on, but stressed. One more hard season could tip it.”",
+      bad:"“Slow, warm, shallow water — this is how algal blooms and fish kills start. This won't bounce back by spring.”" } },
+  { key:"culture", cls:"culture", name:"Aunty Marion", role:"First Nations custodian", icon:"🌏", emblem:true,
+    concern:"“We belong to this river. The waterhole is a living, sacred place.”",
+    profile:[
+      "Our people have cared for this Country and its waters for tens of thousands of years. The waterhole here is not just a water source — it is a living place, and a sacred one.",
+      "A cultural flow keeps it alive. Below a minimum it dries, and a dried waterhole is a deep loss — for Country, for food, for ceremony — and it is not simply refilled.",
+      "And we ask to be part of the decision from the start — spoken with early, given the full picture, with a real say — not told after the choice is already made."],
+    wants:"Wants the cultural flow kept above the minimum every season so the waterhole never dries, and to be consulted early.",
+    react:{ good:"“The waterhole's alive and Country is holding. Thank you for keeping it, and for asking us.”",
+      concern:"“It's holding, but only just. Country needs more than the leftovers.”",
+      bad:"“The waterhole is drying. That is a living, sacred place — and this cannot simply be undone.”" } },
+];
+
+/* ============================================================
+   SCHOOL LEARNING CONTINUUM (verbatim "I can…" ladders).
+   Level 6 = Yrs 5–6 · Levels 7–8 = Yrs 7–8 · Levels 9–10 = Yrs 9–10.
+   Used ONLY in the end debrief — never during play.
    ============================================================ */
 const CONTINUUM = {
-  mapdata: { code:"2.1 Map & Data Analyses", name:"Reading the map & data",
-    rungs:{
-      6:"I can identify the key features of a map (BOLTSS).",
-      7:"I can use geographical language to interpret increases, decreases or trends in maps, graphs, charts or tables.",
-      8:"I can describe patterns, quantify them, and point out exceptions in maps, graphs, charts or tables (PQE).",
-      9:"I can use social, historical, environmental, economic, political or technological factors (SHEEPT) to explain trends.",
-      10:"I can analyse relationships between multiple sources of geographical data.",
-      11:"I can analyse and draw reasoned conclusions from independently collected sources of geographical data." } },
-  challenges: { code:"1.3 Challenges", name:"Responding to the challenge",
-    rungs:{
-      6:"I can identify responses to a geographical challenge.",
+  challenges:{ code:"1.3 Challenges", name:"Responding to the challenge",
+    rungs:{ 6:"I can identify responses to a geographical challenge.",
       7:"I can identify and compare strategies to respond to a geographical challenge.",
       8:"I can compare strategies to respond to a geographical challenge and predict the likely outcomes.",
       9:"I can evaluate alternative views and strategies to respond to a geographical challenge.",
       10:"I can evaluate alternative views and responses to a geographical challenge and explain the predicted outcomes.",
-      11:"I can evaluate alternative views and responses to a geographical challenge and draw a conclusion about the most effective response." } },
-  interconnection: { code:"1.2 Interconnection", name:"Connections between places & people",
-    rungs:{
-      6:"I can identify how places, people and environments are connected.",
+      11:"I can evaluate alternative views and responses and draw a conclusion about the most effective response." } },
+  interconnection:{ code:"1.2 Interconnection", name:"Connections between places & people",
+    rungs:{ 6:"I can identify how places, people and environments are connected.",
       7:"I can identify interconnections within and between places, people and environments.",
       8:"I can describe interconnections within and between places, people and environments.",
       9:"I can explain interconnections within and between places, people and environments over time and at different scales.",
       10:"I can analyse interconnections within and between places, people and environments over time and at different scales.",
       11:"I can synthesise multiple data sources to analyse interconnections within and between places, people and environments." } },
+  mapdata:{ code:"2.1 Map & Data Analyses", name:"Reading the data",
+    rungs:{ 6:"I can identify the key features of a map (BOLTSS).",
+      7:"I can use geographical language to interpret increases, decreases or trends in maps, graphs, charts or tables.",
+      8:"I can describe patterns, quantify them, and point out exceptions (PQE).",
+      9:"I can use SHEEPT factors to explain trends.",
+      10:"I can analyse relationships between multiple sources of geographical data.",
+      11:"I can analyse and draw reasoned conclusions from independently collected data." } },
 };
-function bandOf(level){ return level<=6 ? "support" : (level<=8 ? "core" : "extend"); }
-function bandLabel(level){ return level<=6 ? "Working towards · Years 5–6" : (level<=8 ? "At standard · Years 7–8" : "Extending · Years 9–10"); }
-const BAND_ICON={support:"⛺",core:"⚑",extend:"⛰"};
+function bandLabel(level){ return level<=6?"Yrs 5–6":(level<=8?"Yrs 7–8":"Yrs 9–10"); }
 
 /* ============================================================
-   THE PLACE — a fictionalised reach of the Murray–Darling Basin.
-   Four users share the river, upstream → downstream.
+   REFLECTION — opt-in, non-grading. Each question tags a
+   continuum strand, offers an on-demand SUPPORT scaffold
+   (sentence starter, Yrs 5–6) and a STRETCH extension
+   (Yrs 9–10). The checker reports which IDEAS you used, never
+   whether your reasoning is right.
    ============================================================ */
-const BUCKETS = [
-  { key:"farm", cls:"farm", name:"Irrigated farms", who:"upstream", need:9,
-    desc:"Cotton and citrus growers. Water here means jobs and export income for the district.",
-    meter:"Farm economy" },
-  { key:"town", cls:"town", name:"Willow Bend township", who:"midstream", need:4,
-    desc:"3,000 people: drinking water, hospital, homes, small industry. Needs a reliable minimum.",
-    meter:"Town wellbeing" },
-  { key:"river", cls:"river", name:"Environmental flow", who:"the wetland", need:6,
-    desc:"Keeps the river and its Ramsar wetland alive — fish, birds, red-gums. Too little and it sickens.",
-    meter:"River health" },
-  { key:"culture", cls:"culture", name:"Cultural flow", who:"First Nations custodians", need:3,
-    desc:"Keeps the sacred waterhole (billabong) full and Country healthy. A minimum each season stops it drying.",
-    meter:"Cultural & spiritual value" },
+const QUESTIONS = [
+  { n:1, strand:"challenges", tie:"1.3 Challenges · the hardest trade-off",
+    q:"Describe the hardest allocation choice you made this year. What did you gain by it, and what did you give up?",
+    scaffold:"Try: “The hardest choice was in <b>____</b> season. I chose to give more water to <b>____</b>. This helped <b>____</b>, but it cost <b>____</b>.”",
+    stretch:"Stretch (Yrs 9–10): <b>evaluate</b> it — was there a better strategy? Justify using economic, social <b>and</b> environmental reasons.",
+    lookFor:["season","gave","gain","cost","farm","town","river","waterhole","culture","irrigat","because"] },
+  { n:2, strand:"interconnection", tie:"1.2 Interconnection · one choice, another place",
+    q:"Pick two users on the river. Explain how a choice about one of them affected the other.",
+    scaffold:"Try: “When I gave more water to <b>____</b> upstream, there was less left for <b>____</b> downstream, so <b>____</b> happened.”",
+    stretch:"Stretch (Yrs 9–10): explain it <b>over time and at a larger scale</b> — how do choices across the whole Basin, over many years, change this reach?",
+    lookFor:["upstream","downstream","less","more","affect","because","wetland","waterhole","town","farm","flow","connect"] },
+  { n:3, strand:"mapdata", tie:"2.1 Map & Data · reading the drought",
+    q:"The inflow shrank across the year (15 → 11 → 8 → 14 GL). Describe that pattern, and explain — using a factor like drought or El Niño — why the downstream users were hit hardest.",
+    scaffold:"Try: “The inflow <b>decreased</b> from ____ to ____ GL, then rose to ____. Downstream users got least because ____ (El Niño / drought / upstream takes water first).”",
+    stretch:"Stretch (Yrs 9–10): <b>analyse the relationship</b> between falling inflow and where demand sits along the river.",
+    lookFor:["decreas","fell","dropped","15","11","8","14","el niño","drought","downstream","upstream","less","pattern"] },
+  { n:4, strand:"challenges", tie:"Values of water · what you protected",
+    q:"Water has environmental, economic, cultural and spiritual value. Which of these did your plan protect, and which did it sacrifice? Was that a fair call?",
+    scaffold:"Try: “My plan protected the <b>____</b> value of water (e.g. economic — jobs). It sacrificed the <b>____</b> value (e.g. cultural — the waterhole). I think this was / wasn't fair because ____.”",
+    stretch:"Stretch (Yrs 9–10): what would you <b>recommend</b> to a real catchment authority, and how would you justify it to the people who lost out?",
+    lookFor:["environment","economic","cultural","spiritual","jobs","waterhole","wetland","fair","protect","sacrific","value"] },
 ];
-const WATERHOLE_MIN = 1; // cultural flow below this dries the billabong
-
-const STAKES = [
-  { key:"farm", name:"Dai N.", role:"Cotton grower", link:"farm",
-    happy:"“Good on ya — that allocation keeps pickers in work.”",
-    ok:"“It'll do, but the crop's thirsty.”",
-    unhappy:"“Cut like that and I lay people off. That's real.”" },
-  { key:"town", name:"Mayor Ellis", role:"Willow Bend council", link:"town",
-    happy:"“Taps on, hospital running. Thank you.”",
-    ok:"“We're managing — just.”",
-    unhappy:"“The town can't run on this. People come first.”" },
-  { key:"river", name:"Priya R.", role:"River ecologist", link:"river",
-    happy:"“The wetland's breathing. Birds are back on the lignum.”",
-    ok:"“Hanging on, but stressed.”",
-    unhappy:"“Pull much more and we'll see fish kills and blue-green algae.”" },
-  { key:"culture", name:"Aunty Marion", role:"First Nations custodian", link:"culture",
-    happy:"“The waterhole's alive. We belong to this river — thank you for keeping it.”",
-    ok:"“It's holding, but Country needs more than this.”",
-    unhappy:"“The billabong's drying. That's a living place, and a sacred one.”" },
-];
-
-/* seasons: inflow (GL) available to share, shrinking then a wet pulse */
-const SEASONS = [
-  { name:"Summer", sub:"The dry sets in", inflow:16,
-    intro:"A hot, dry summer. There's less water than everyone's asked for. How you read the river now sets up the whole year.",
-    event:"The Bureau warns an <b>El Niño</b> is likely — expect a hotter, drier year." },
-  { name:"Autumn", sub:"El Niño confirmed", inflow:12,
-    intro:"El Niño is confirmed. Inflow has dropped again. Every decision now has winners and losers.",
-    event:"A heatwave pushes up town demand and evaporation from the dam." },
-  { name:"Winter", sub:"Deep drought", inflow:9,
-    intro:"The driest winter on record for the reach. The river is barely flowing past the town.",
-    event:"An upstream irrigator is caught taking more than their licence — 'water theft' hits the news." },
-  { name:"Spring", sub:"A wet pulse", inflow:15,
-    intro:"Rain in the northern catchment sends a pulse downstream. A chance to help the river recover — if you choose to.",
-    event:"La Niña signs appear: the drought may be breaking." },
-];
-
-/* ============================================================
-   ASSESSMENT BANKS — laddered by continuum level (6–10).
-   Each item: {id, q, opts, a, explain, scaffold?, stretch?}
-   scaffold = extra support shown in the Level-6 (Years 5–6) band.
-   stretch  = a free-response justification prompt added in the
-              Level 9–10 (Years 9–10) band.
-   ============================================================ */
-const QBANKS = {
-  mapdata: {
-    6:[{ id:"md6a",
-      q:"This season's inflow is measured at four weirs, upstream → downstream: <b>Weir A 16 GL, Weir B 11, Weir C 7, Weir D 4</b>. Which weir has the <b>most</b> water?",
-      opts:["Weir A","Weir B","Weir C","Weir D"], a:"Weir A",
-      explain:"Reading values off a map or table is the first BOLTSS skill — 16 is the largest number, so Weir A has the most.",
-      scaffold:"<b>Tip:</b> 'the most' means the biggest number. Line the four up and find the largest." }],
-    7:[{ id:"md7a",
-      q:"Inflow along the river reads <b>16, 11, 7, 4 GL</b> from upstream to downstream. Using geographical language, the trend is that water…",
-      opts:["decreases downstream","increases downstream","stays the same","changes randomly"], a:"decreases downstream",
-      explain:"'Decreases downstream' names the trend with directional, geographical language — exactly the Level-7 skill." }],
-    8:[{ id:"md8a",
-      q:"Catchment rainfall (mm/yr): <b>north-east 520, centre 300, south-west 170, far west 90</b>. Which statement is a complete <b>PQE</b> (pattern, quantify, exception)?",
-      opts:[
-        "Rainfall decreases from the north-east (520 mm) to the far west (90 mm); the centre (300 mm) fits this gradient, with no strong exception.",
-        "It rains a lot in the north-east.",
-        "The far west is dry.",
-        "Rainfall is different in different places."],
-      a:"Rainfall decreases from the north-east (520 mm) to the far west (90 mm); the centre (300 mm) fits this gradient, with no strong exception.",
-      explain:"PQE = state the Pattern, Quantify it with figures, name an Exception. Only the first option does all three." }],
-    9:[{ id:"md9a",
-      q:"The north-east of the catchment is wet and the far west is dry. Using <b>SHEEPT</b> factors, which best <b>explains</b> this environmental pattern?",
-      opts:[
-        "Environmental: moist air and ranges in the north-east drop rain there, while the far west, further inland, sits in a rain shadow and gets little.",
-        "Political: the far west has fewer voters.",
-        "Historical: it was drier a hundred years ago.",
-        "It is just luck."],
-      a:"Environmental: moist air and ranges in the north-east drop rain there, while the far west, further inland, sits in a rain shadow and gets little.",
-      explain:"SHEEPT asks WHY a trend exists. The rainfall gradient is an environmental process (orographic + distance inland), not a political or chance one." }],
-    10:[{ id:"md10a",
-      q:"Compare two datasets: inflow <b>falls</b> downstream (16→4 GL) while the number of <b>irrigation licences rises</b> downstream. Analysing the relationship, what does the comparison reveal?",
-      opts:[
-        "Demand grows exactly where supply shrinks, so scarcity risk is highest for the downstream users — the wetland and the community.",
-        "There is no relationship between the two datasets.",
-        "More licences cause more rain.",
-        "The datasets show the same thing twice."],
-      a:"Demand grows exactly where supply shrinks, so scarcity risk is highest for the downstream users — the wetland and the community.",
-      explain:"Analysing a relationship means reading two datasets together: falling supply + rising demand downstream = a growing mismatch that concentrates scarcity at the bottom of the system." }],
-  },
-  challenges: {
-    6:[{ id:"ch6a",
-      q:"The river is short of water this year. Which of these is a way of <b>responding</b> to the shortage?",
-      opts:["Set limits on how much each user can take","Pretend there is no problem","Take as much as possible before others do","Wait and hope for rain"],
-      a:"Set limits on how much each user can take",
-      explain:"A 'response' is an action that addresses the challenge. Setting shared limits is a real management response; the others avoid or worsen it.",
-      scaffold:"<b>Tip:</b> a 'response' is something you DO about a problem. Which choice actually does something to help share the water?" }],
-    7:[{ id:"ch7a",
-      q:"Two strategies for the drought: <b>(A)</b> cut every user by the same share, or <b>(B)</b> protect the town's drinking water and the cultural flow first, then share the rest. Which sentence correctly <b>compares</b> them?",
-      opts:[
-        "A is simpler and feels fair to all; B is less equal but protects the most essential needs first.",
-        "A and B are exactly the same.",
-        "B gives everyone more water than A.",
-        "Neither strategy responds to the drought."],
-      a:"A is simpler and feels fair to all; B is less equal but protects the most essential needs first.",
-      explain:"Comparing means naming how two strategies differ. A = equal but blunt; B = prioritised but unequal. That trade-off is the heart of the decision." }],
-    8:[{ id:"ch8a",
-      q:"You keep irrigation at full allocation through a deep-drought season. Which <b>outcome</b> should you predict?",
-      opts:[
-        "River health and downstream users decline, with rising risk of fish kills and a blue-green algae (biological) hazard.",
-        "Everyone is better off with no downside.",
-        "The river refills itself faster.",
-        "Nothing changes downstream."],
-      a:"River health and downstream users decline, with rising risk of fish kills and a blue-green algae (biological) hazard.",
-      explain:"Predicting outcomes is the Level-8 skill: over-extraction upstream leaves too little flow, warming, stagnant water — the conditions for algal blooms and fish kills." }],
-    9:[{ id:"ch9a",
-      q:"The irrigator argues jobs and export income; the ecologist argues the wetland will collapse. Which response best <b>evaluates</b> both views?",
-      opts:[
-        "Both hold weight: the irrigator's income is real and immediate, but the ecologist's collapse is harder to reverse — a short-term gain risks a long-term, system-wide loss.",
-        "The irrigator is simply right because money matters most.",
-        "The ecologist is simply right because nature matters most.",
-        "Both views should be ignored."],
-      a:"Both hold weight: the irrigator's income is real and immediate, but the ecologist's collapse is harder to reverse — a short-term gain risks a long-term, system-wide loss.",
-      explain:"Evaluating weighs the strengths AND limits of competing views rather than just siding with one. Note the time dimension — reversible vs hard-to-reverse.",
-      stretch:"Now <b>recommend</b> this season's allocation and justify it using all three criteria — <b>economic, social and environmental</b> — and name the trade-off you accept." }],
-    10:[{ id:"ch10a",
-      q:"Choose the response that both <b>evaluates the alternatives and explains the predicted outcomes</b> most fully.",
-      opts:[
-        "Prioritising essential (town + cultural) and environmental flows costs the farms income this year, but likely prevents an algal-bloom collapse whose recovery would take years and hurt everyone — so the predicted long-term outcome favours it despite the short-term economic loss.",
-        "Give the farms everything; the economy is what matters.",
-        "Split evenly; fairness solves it.",
-        "Keep the wetland full and let the town and farms manage."],
-      a:"Prioritising essential (town + cultural) and environmental flows costs the farms income this year, but likely prevents an algal-bloom collapse whose recovery would take years and hurt everyone — so the predicted long-term outcome favours it despite the short-term economic loss.",
-      explain:"Level 10 evaluates the options AND spells out the predicted outcomes over time and across the whole system — not just this season, not just one user.",
-      stretch:"Draw a <b>conclusion</b>: across the whole year, which single strategy was most effective for the river system as a whole? Justify with evidence from your seasons." }],
-  },
-  interconnection: {
-    6:[{ id:"ic6a",
-      q:"When more water is taken for farms upstream, the wetland downstream gets less. This shows the two places are…",
-      opts:["connected","completely separate","the same place","not part of the river"],
-      a:"connected",
-      explain:"Identifying that an action in one place affects another is the first interconnection skill — the river links every user along it.",
-      scaffold:"<b>Tip:</b> if doing something in one place changes another place, those places must be linked, or…" }],
-    7:[{ id:"ic7a",
-      q:"Which chain correctly identifies an <b>interconnection</b> along the river?",
-      opts:[
-        "Upstream extraction → less flow → lower wetland levels → fewer fish and birds → less food and cultural value downstream",
-        "Upstream extraction → more rain in the north-east",
-        "The town's water use → changes the price of cotton overseas directly",
-        "The wetland's health → has no link to anything else"],
-      a:"Upstream extraction → less flow → lower wetland levels → fewer fish and birds → less food and cultural value downstream",
-      explain:"An interconnection is a linked chain of cause and effect between places, people and environments — the first option traces one down the river." }],
-    8:[{ id:"ic8a",
-      q:"Upstream extraction stays high all year. Which best <b>describes</b> the interconnection for the billabong and the community?",
-      opts:[
-        "With little flow reaching it, the billabong drops and can dry; the community loses a water source, a food source and a sacred, cultural place all at once.",
-        "The billabong is unaffected by upstream use.",
-        "The community would simply move away, so it doesn't matter.",
-        "Only the fish are affected."],
-      a:"With little flow reaching it, the billabong drops and can dry; the community loses a water source, a food source and a sacred, cultural place all at once.",
-      explain:"Describing an interconnection means spelling out the linked effects — here environmental (billabong), economic (food) and cultural/spiritual (sacred place) at the same time." }],
-    9:[{ id:"ic9a",
-      q:"Which response best <b>explains</b> the interconnection <b>over time and at different scales</b>?",
-      opts:[
-        "In one dry season the wetland stresses but recovers; but repeated dry years (over time) and extraction across the whole Basin (larger scale) can push it past recovery, affecting migratory birds that link this reach to places thousands of km away.",
-        "The wetland only matters this season.",
-        "Only this reach of the river is involved.",
-        "Time and scale make no difference to the wetland."],
-      a:"In one dry season the wetland stresses but recovers; but repeated dry years (over time) and extraction across the whole Basin (larger scale) can push it past recovery, affecting migratory birds that link this reach to places thousands of km away.",
-      explain:"Level 9 explanation adds the time dimension (one season vs many years) and scale (this reach vs the whole Basin, and even international migratory-bird flyways)." }],
-    10:[{ id:"ic10a",
-      q:"Which response best <b>analyses</b> the interconnections over time and at different scales?",
-      opts:[
-        "Extraction, drought and management interact: upstream licences reduce downstream flow, drought amplifies it, and Basin-wide rules shift the impact between states and generations — so the wetland's fate is set less by this reach than by the whole system's choices over decades.",
-        "The wetland dries because it doesn't rain enough here.",
-        "Farms and the wetland have nothing to do with each other.",
-        "The problem is only about this town this year."],
-      a:"Extraction, drought and management interact: upstream licences reduce downstream flow, drought amplifies it, and Basin-wide rules shift the impact between states and generations — so the wetland's fate is set less by this reach than by the whole system's choices over decades.",
-      explain:"Analysis breaks the interconnection into interacting parts (extraction × drought × governance) across scales (reach → Basin → states) and time (decades, generations)." }],
-  },
+/* ================= STATE + HELPERS ================= */
+const state = {
+  seasonIdx:0, stage:"allocate",
+  meters:Object.assign({},MODEL.start),
+  dried:false,
+  alloc:{farm:0,town:0,river:0,culture:0},
+  log:[], consult:{}, reflections:{}, self:{}, name:"", sid:"", started:false,
 };
-
-/* which strand each season assesses (some seasons carry two tasks) */
-const SEASON_TASKS = [
-  ["mapdata"],                 // Summer
-  ["challenges","interconnection"], // Autumn
-  ["mapdata","challenges"],    // Winter
-  ["challenges","interconnection"], // Spring
-];
-/* ================= STATE ================= */
-function freshState(){
-  return {
-    levels:{mapdata:7, challenges:7, interconnection:7},
-    history:{mapdata:[], challenges:[], interconnection:[]}, // {served, correct}
-    used:{mapdata:[], challenges:[], interconnection:[]},
-    meters:{farm:58, town:58, river:58, culture:58},
-    waterholeDry:false,
-    seasonIdx:0,
-    alloc:{}, lastDelta:{},
-    writes:{}, self:{}, seen:{}, // seen bands per strand for teacher note
-    name:"", sid:"", startedAt:Date.now(), finished:false,
-  };
-}
-let S = freshState();
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
-const sum=o=>BUCKETS.reduce((t,b)=>t+(o[b.key]||0),0);
+const blend=(a,b,t)=>a*(1-t)+b*t;
+const need=k=>BUCKETS.find(x=>x.key===k).need;
+const sumAlloc=a=>a.farm+a.town+a.river+a.culture;
 function esc(t){ const d=document.createElement("div"); d.textContent=t; return d.innerHTML; }
-function shuffle(a){ a=a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+function go(id){ document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active")); document.getElementById("scr-"+id).classList.add("active"); window.scrollTo(0,0); if(id==="report") renderReport(); }
+function moodOf(v){ return v>=60?"good":(v>=40?"concern":"bad"); }
+function moodWord(v){ return v>=60?"content":(v>=40?"uneasy":"unhappy"); }
+function moodColor(v){ return v>=60?"#2f6a3e":(v>=40?"#9a6b1f":"#a8432f"); }
 
-function go(id){
-  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
-  document.getElementById("scr-"+id).classList.add("active");
-  window.scrollTo(0,0);
-  if(id==="intro") renderIntro();
-  if(id==="report") renderReport();
+/* ================= THE MODEL ================= */
+function runModel(alloc, inflow){
+  const leftover = Math.max(0, inflow - sumAlloc(alloc));
+  const extraction = alloc.farm+alloc.town;
+  const overTake = extraction/inflow > MODEL.overTakeThreshold;
+  const farmTarget = clamp(100*Math.min(1, alloc.farm/need("farm")),0,100);
+  const newFarm = Math.round(blend(state.meters.farm, farmTarget, 0.5));
+  let riverTarget = 100*Math.min(1,(alloc.river+leftover)/need("river"));
+  if(overTake) riverTarget -= MODEL.overTakePenalty;
+  riverTarget = clamp(riverTarget,0,100);
+  const inertia = riverTarget < state.meters.river ? MODEL.riverInertiaDown : MODEL.riverInertiaUp;
+  const newRiver = Math.round(blend(state.meters.river, riverTarget, inertia));
+  let driedNow=false;
+  if(alloc.culture < WATERHOLE_MIN && !state.dried){ driedNow=true; }
+  if(alloc.culture < WATERHOLE_MIN) state.dried=true;
+  let cultureTarget = 100*Math.min(1, alloc.culture/need("culture"));
+  if(newRiver>=60) cultureTarget += MODEL.cultureRiverBonus;
+  cultureTarget = clamp(cultureTarget,0,100);
+  let newCulture = Math.round(blend(state.meters.culture, cultureTarget, 0.5));
+  if(state.dried) newCulture = Math.min(newCulture, MODEL.driedCultureCap);
+  const townWater = 100*Math.min(1, alloc.town/need("town"));
+  let townTarget = (1-MODEL.townFromJobs)*townWater + MODEL.townFromJobs*newFarm;
+  if(newRiver<35) townTarget -= MODEL.townRiverFailPenalty;
+  townTarget = clamp(townTarget,0,100);
+  const newTown = Math.round(blend(state.meters.town, townTarget, 0.5));
+  const before={...state.meters};
+  state.meters={farm:newFarm,town:newTown,river:newRiver,culture:newCulture};
+  const deltas={}; for(const k in before) deltas[k]=state.meters[k]-before[k];
+  return { inflow, alloc:{...alloc}, leftover, extraction, overTake, driedNow, deltas, meters:{...state.meters} };
 }
-function quitToIntro(){ if(confirm("Restart from the beginning? Your current run will be cleared.")){ S=freshState(); go("intro"); } }
 
-/* ================= MAP ================= */
-let curLayer="flow";
-function moodColor(v){ return v>=66?"#2f6a3e":(v>=40?"#9a6b1f":"#a8432f"); }
+/* ================= LIVE MAP ================= */
 function drawMap(){
-  const health=S.meters.river;
-  const riverCol = health>=66? "#2c7488" : (health>=40? "#5a94a2" : "#9bb6b8");
-  const riverW = health>=66? 16 : (health>=40? 11 : 6);
+  const inflow=SEASONS[state.seasonIdx].inflow, a=state.alloc;
+  const reachFrac = clamp((inflow-(a.farm+a.town))/inflow,0,1);
+  const riverInput=a.river+Math.max(0,inflow-sumAlloc(a));
+  const wetOK = riverInput>=need("river")*0.6 && state.meters.river>=40;
+  const farmOK = a.farm>=need("farm")*0.5;
+  const townOK = a.town>=need("town")*0.5;
+  const waterCol = state.meters.river>=60?"#2c7488":(state.meters.river>=40?"#5a94a2":"#9bb6b8");
+  const upW=14, downW=Math.max(3, 3+11*reachFrac);
+  const wh = state.dried
+    ? `<g><ellipse cx="838" cy="150" rx="20" ry="12" fill="#d8c08a" stroke="#a98b4f" stroke-width="2"/>
+       <path d="M824 150 h28 M838 142 v16" stroke="#a98b4f" stroke-width="1.5"/><text x="838" y="188" text-anchor="middle" font-size="11" fill="#8a5a0c" font-family="Georgia,serif">waterhole — dried</text></g>`
+    : `<g><ellipse cx="838" cy="150" rx="${8+8*Math.min(1,a.culture/need('culture'))}" ry="${5+5*Math.min(1,a.culture/need('culture'))}" fill="#7fb0d4" stroke="#2c7488" stroke-width="1.6"/><text x="838" y="188" text-anchor="middle" font-size="11" fill="#215866" font-family="Georgia,serif">waterhole</text></g>`;
   const nodes=[
-    {x:150,label:"Irrigated farms",cls:"farm",icon:"🌾"},
-    {x:370,label:"Willow Bend",cls:"town",icon:"🏘"},
-    {x:590,label:"Wetland",cls:"river",icon:"🦢"},
-    {x:800,label:"Waterhole & community",cls:"culture",icon:"💧"},
+    {x:150,label:"Irrigated farms",icon:"🌾",lit:farmOK},
+    {x:370,label:"Willow Bend",icon:"🏘",lit:townOK},
+    {x:600,label:"Wetland",icon:wetOK?"🦢":"🥀",lit:wetOK},
   ];
-  let rain="";
-  if(curLayer==="rain"){
-    rain=`<defs><linearGradient id="rg" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0" stop-color="#cfe3c9"/><stop offset="0.5" stop-color="#e8e0c4"/><stop offset="1" stop-color="#e6d3ad"/></linearGradient></defs>
-      <rect x="0" y="0" width="920" height="260" fill="url(#rg)" opacity="0.65"/>
-      <text x="80" y="30" font-size="12" fill="#3a6030" font-family="Georgia,serif">wetter source ~520 mm</text>
-      <text x="700" y="30" font-size="12" fill="#8a5a0c" font-family="Georgia,serif">dry far west ~90 mm</text>`;
-  }
-  let alloc="";
-  if(curLayer==="alloc" && Object.keys(S.alloc).length){
-    alloc = nodes.map(n=>{
-      const v=S.alloc[n.cls]||0; const r=6+Math.sqrt(v)*7;
-      return `<circle cx="${n.x}" cy="205" r="${r}" fill="var(--${n.cls})" fill-opacity="0.5" stroke="var(--${n.cls})" stroke-width="2"/>
-        <text x="${n.x}" y="209" text-anchor="middle" font-size="12" font-weight="800" fill="#fff">${v}</text>
-        <text x="${n.x}" y="240" text-anchor="middle" font-size="11.5" font-weight="700" fill="#211d17">${v} GL</text>`;
-    }).join("");
-  }
   const nodeSvg=nodes.map(n=>`
-    <line x1="${n.x}" y1="120" x2="${n.x}" y2="150" stroke="#8a8577" stroke-width="1.5"/>
-    <circle cx="${n.x}" cy="95" r="22" fill="#fbf7ef" stroke="var(--${n.cls})" stroke-width="2.5"/>
-    <text x="${n.x}" y="103" text-anchor="middle" font-size="20">${n.icon}</text>
-    <text x="${n.x}" y="172" text-anchor="middle" font-size="11.5" font-weight="700" fill="#211d17" font-family="ui-sans-serif,system-ui,sans-serif">${n.label}</text>`).join("");
-  const healthLabel = curLayer==="health"
-    ? `<text x="460" y="252" text-anchor="middle" font-size="12" font-family="Georgia,serif" fill="${riverCol}">river health: ${health>=66?"healthy":(health>=40?"stressed":"failing")} (${Math.round(health)}/100)</text>` : "";
-  return `<svg viewBox="0 0 920 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Schematic river with four users from upstream to downstream">
-    ${rain}
-    <path d="M20 128 q60 -12 120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t60 0" fill="none" stroke="${riverCol}" stroke-width="${riverW}" stroke-linecap="round"/>
-    <text x="30" y="150" font-size="11" fill="#215866" font-family="Georgia,serif">upstream ▶</text>
-    <text x="828" y="150" font-size="11" fill="#215866" font-family="Georgia,serif">▶ downstream</text>
-    ${alloc}${nodeSvg}${healthLabel}
+    <line x1="${n.x}" y1="150" x2="${n.x}" y2="120" stroke="#8a8577" stroke-width="1.4"/>
+    <circle cx="${n.x}" cy="98" r="21" fill="${n.lit?'#fbf7ef':'#efe7d5'}" stroke="#8a8577" stroke-width="1.6" opacity="${n.lit?1:0.7}"/>
+    <text x="${n.x}" y="105" text-anchor="middle" font-size="19" opacity="${n.lit?1:0.5}">${n.icon}</text>
+    <text x="${n.x}" y="176" text-anchor="middle" font-size="11.5" font-weight="700" fill="#211d17" font-family="ui-sans-serif,system-ui">${n.label}</text>`).join("");
+  return `<svg viewBox="0 0 900 210" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="River from upstream farms to the downstream waterhole; it thins as water is taken">
+    <path d="M20 150 h300" fill="none" stroke="${waterCol}" stroke-width="${upW}" stroke-linecap="round"/>
+    <path d="M320 150 H820" fill="none" stroke="${waterCol}" stroke-width="${downW}" stroke-linecap="round" opacity="${0.5+0.5*reachFrac}"/>
+    <text x="26" y="140" font-size="11" fill="#215866" font-family="Georgia,serif">upstream ▶</text>
+    ${wh}${nodeSvg}
   </svg>`;
 }
-function setLayer(l){ curLayer=l; const w=document.getElementById("mapwrap"); if(w) w.innerHTML=drawMap();
-  document.querySelectorAll(".lbtn").forEach(b=>b.classList.toggle("on", b.dataset.layer===l));
-  const cap=document.getElementById("mapcap"); if(cap) cap.innerHTML=LAYER_CAP[l]; }
-const LAYER_CAP={
-  flow:"The river flows left (upstream) to right (downstream). Water taken high up never reaches the users below — that is the heart of the problem.",
-  rain:"Rainfall falls mostly on the wetter upstream source and fades to the dry far west. Most inflow is born upstream; downstream users depend on what's passed on.",
-  alloc:"Your shares this season, shown as circles. Bigger circle = more water. Anything you don't allocate flows on downstream and helps the river.",
-  health:"River health depends on the environmental flow you leave. Healthy = teal and wide; failing = pale and thin.",
-};
+function mapCaption(){
+  const a=state.alloc, inflow=SEASONS[state.seasonIdx].inflow;
+  const reaching=Math.max(0,inflow-(a.farm+a.town));
+  if(sumAlloc(a)===0) return "The river flows from the upstream farms down to the wetland and the waterhole. Whatever you take up top never reaches the users below. Set your shares and watch the river downstream.";
+  return `You're taking <b>${a.farm+a.town} GL</b> out for farms and town, so about <b>${reaching} GL</b> is left flowing downstream toward the wetland and the waterhole.`;
+}
+
+/* ================= ADVISERS ================= */
+function renderAdvisers(){
+  const latest=state.log.length?state.log[state.log.length-1]:null;
+  const hSay = latest ? latest.narrative : HYDRO.profile[0];
+  const hydro=`<div class="adv hydro">
+    <div class="adv-top"><span class="adv-face">${HYDRO.icon}</span>
+      <span><span class="adv-name">${HYDRO.name}</span><br><span class="adv-role">${HYDRO.role}</span></span></div>
+    <div class="adv-say">${hSay}</div>
+    <div class="adv-consult noprint"><button class="linkbtn" onclick="toggleConsult('hydro')">${state.consult.hydro?"Close ▲":"How does the river work? ▶"}</button></div>
+    <div class="adv-full ${state.consult.hydro?'open':''}">${HYDRO.profile.map(p=>`<p>${p}</p>`).join("")}
+      <p class="note">Model note: this sim shrinks the whole Murray–Darling Basin to one reach with four users, to keep the choices clear.</p></div></div>`;
+  const cards=ADVISERS.map(ad=>{
+    const v=state.meters[ad.key], mood=moodOf(v);
+    const say = latest ? ad.react[mood] : ad.concern;
+    return `<div class="adv ${ad.cls}">
+      <div class="adv-top"><span class="adv-face">${ad.icon}</span>
+        <span><span class="adv-name">${esc(ad.name)}</span><br><span class="adv-role">${esc(ad.role)}</span></span>
+        <span class="adv-mood" style="background:${moodColor(v)}">${moodWord(v)}</span></div>
+      <div class="adv-bar"><span style="width:${v}%;background:${moodColor(v)}"></span></div>
+      <div class="adv-say">${say}</div>
+      <div class="adv-consult noprint"><button class="linkbtn" onclick="toggleConsult('${ad.key}')">${state.consult[ad.key]?"Close ▲":"Consult ▶"}</button></div>
+      <div class="adv-full ${state.consult[ad.key]?'open':''}">${ad.profile.map(p=>`<p>${p}</p>`).join("")}
+        <div class="adv-wants"><b>What they want:</b> ${esc(ad.wants)}</div></div></div>`;
+  }).join("");
+  return hydro+`<div class="advisers">${cards}</div>`;
+}
+function toggleConsult(key){ state.consult[key]=!state.consult[key]; document.getElementById("advzone").innerHTML=renderAdvisers(); }
 
 /* ================= INTRO ================= */
 function renderIntro(){
-  document.getElementById("scr-intro").innerHTML=`
+  document.getElementById("scr-game").innerHTML=`
     <h1>Share the River</h1>
-    <p class="subtitle">You are the water manager for a reach of the Murray–Darling Basin in a drought year. Four users. Not enough water. Four seasons to decide.</p>
+    <p class="subtitle">You manage a reach of the Murray–Darling in a drought year. Four users. Not enough water. Four seasons to decide.</p>
     <div class="mapwrap" id="mapwrap">${drawMap()}</div>
     <div class="brief">
-      <b>Your job.</b> Each season, divide the river's inflow between <b>irrigated farms</b>, the <b>township</b>, the <b>environment</b> (the wetland) and a <b>cultural flow</b> that keeps a sacred waterhole alive. You cannot keep everyone happy — that is the point. Read the river, decide, and live with the consequences.
+      <b>You are the water manager.</b> Each season you divide the river's inflow between the <b>farms</b>, the <b>town</b>, the <b>environmental flow</b> and a <b>cultural flow</b>. You can't keep everyone happy — helping one user costs another, and some losses can't be undone. Before you decide, <b>consult your advisers</b>: they'll tell you what's at stake. Then run the season and read what happened.
     </div>
-    <div class="rolebox">
-      <h3 style="margin-top:0">How this works with our Geography continuum</h3>
-      <p class="muted">The <b>core game is pitched at Years 7–8</b>. As you play, short thinking tasks appear on three continuum strands — <b>reading the map & data</b>, <b>responding to the challenge</b>, and <b>interconnection</b>. The app meets you where you are:</p>
-      <div class="levelflag support"><span class="lf-i">⛺</span><span><b>Years 5–6 (working towards):</b> if a task is tricky, you'll get sentence starters, simpler framing and worked hints to build up.</span></div>
-      <div class="levelflag core"><span class="lf-i">⚑</span><span><b>Years 7–8 (at standard):</b> the default — describe patterns, compare strategies, predict outcomes, explain connections.</span></div>
-      <div class="levelflag extend"><span class="lf-i">⛰</span><span><b>Years 9–10 (extending):</b> if you're flying, tasks step up to evaluating views with criteria, scale and time, and justifying your own recommendation.</span></div>
-      <p class="muted" style="margin-top:10px">At the end you'll <b>self-assess against the same "I can…" statements your teacher uses</b>, and see the level your play showed — side by side.</p>
-      <p class="note">This is a fictionalised reach of the Murray–Darling Basin; the four characters are role archetypes, not real individuals. Across the real Basin, First Nations peoples — including the Barkandji, whose name for the Darling is the <b>Baaka</b> — are the river's long-time custodians.</p>
-    </div>
-    <div class="nextrow noprint" style="justify-content:center">
-      <button class="btn btn-primary" onclick="startGame()">Start — Summer, season 1 →</button>
-    </div>`;
-  document.getElementById("mapcap")&&(document.getElementById("mapcap").innerHTML="");
+    <div id="advzone">${renderAdvisers()}</div>
+    <p class="note" style="text-align:center;margin-top:8px">A fictionalised reach standing in for the Murray–Darling Basin. The advisers are role archetypes, not real people. Across the real Basin, First Nations peoples — including the Barkandji, whose name for the Darling is the <b>Baaka</b> — are its long-time custodians.</p>
+    <div class="runrow noprint" style="justify-content:center"><button class="btn btn-primary" onclick="startSeason(0)">Begin — Summer, season 1 →</button></div>`;
 }
-function startGame(){ if(!S.startedAt) S.startedAt=Date.now(); S.seasonIdx=0; renderSeason(0); }
 
-/* ================= SEASON — ALLOCATION PHASE ================= */
-function renderSeason(idx){
-  S.seasonIdx=idx;
-  const se=SEASONS[idx];
-  S.alloc={}; BUCKETS.forEach(b=>S.alloc[b.key]=0);
-  curLayer="flow";
-  go("season");
-  document.getElementById("season-prog").textContent=`SEASON ${idx+1} / 4`;
-  const mount=document.getElementById("season-body");
-  mount.innerHTML=`
+/* ================= SEASON — ALLOCATE ================= */
+function startSeason(idx){
+  state.started=true; state.seasonIdx=idx; state.stage="allocate";
+  state.alloc={farm:0,town:0,river:0,culture:0};
+  renderSeason();
+}
+function renderSeason(){
+  const se=SEASONS[state.seasonIdx];
+  const g=document.getElementById("scr-game");
+  g.innerHTML=`
+    <div class="topbar noprint"><button class="linkbtn" onclick="if(confirm('Restart the whole year?'))location.reload()">↺ restart</button><span class="progress">SEASON ${state.seasonIdx+1} / 4 · ${esc(se.name.toUpperCase())}</span></div>
     <div class="seasonhead"><div><div class="s-name">${esc(se.name)}</div><div class="s-sub">${esc(se.sub)}</div></div>
-      <div class="s-count">Inflow to share: <b style="font-size:16px;color:var(--water-d)">${se.inflow} GL</b></div></div>
-    <p class="muted" style="margin-bottom:8px">${se.intro}</p>
+      <div class="s-inflow">Inflow to share: <b style="font-size:16px;color:var(--water-d)">${se.inflow} GL</b></div></div>
+    <p class="muted" style="margin-bottom:6px">${se.setUp}</p>
+    <div id="advzone">${renderAdvisers()}</div>
     <div class="mapwrap" id="mapwrap">${drawMap()}</div>
-    <div class="layerbtns noprint">
-      <button class="lbtn on" data-layer="flow" onclick="setLayer('flow')"><span class="dot" style="background:var(--water)"></span>River &amp; users</button>
-      <button class="lbtn" data-layer="rain" onclick="setLayer('rain')"><span class="dot" style="background:#8aab6a"></span>Rainfall</button>
-      <button class="lbtn" data-layer="alloc" onclick="setLayer('alloc')"><span class="dot" style="background:var(--earth)"></span>My shares</button>
-      <button class="lbtn" data-layer="health" onclick="setLayer('health')"><span class="dot" style="background:var(--river)"></span>River health</button>
-    </div>
-    <div class="mapcap" id="mapcap">${LAYER_CAP.flow}</div>
-
-    <h3>Divide the ${se.inflow} GL</h3>
-    <div class="budget"><span class="lab">Still to share</span>
-      <span class="bar"><span class="fill" id="budfill" style="width:100%"></span></span>
-      <span class="num" id="budnum">${se.inflow} / ${se.inflow} GL</span></div>
-    <div class="allocgrid" id="allocgrid"></div>
-    <div class="nextrow">
-      <span class="muted" id="allocnote">Tip: water you leave unallocated flows on downstream and helps the river.</span>
-      <button class="btn btn-primary" id="lockbtn" onclick="lockAllocation()">Lock in this allocation →</button>
-    </div>`;
-  const grid=mount.querySelector("#allocgrid");
-  BUCKETS.forEach(b=>{
-    const el=document.createElement("div"); el.className="alloc "+b.cls;
-    el.innerHTML=`<div class="a-top"><span class="a-name">${esc(b.name)}</span><span class="a-who">${esc(b.who)}</span></div>
+    <div class="mapcap" id="mapcap">${mapCaption()}</div>
+    <div id="actionzone"></div>`;
+  renderAllocate();
+}
+function renderAllocate(){
+  const se=SEASONS[state.seasonIdx];
+  const grid=BUCKETS.map(b=>`
+    <div class="alloc ${b.cls}"><span class="a-who">${esc(b.who)}</span><div class="a-name">${b.icon} ${esc(b.name)}</div>
       <div class="a-desc">${esc(b.desc)}</div>
-      <div class="stepper">
-        <button aria-label="less" onclick="stepAlloc('${b.key}',-1)">−</button>
+      <div class="stepper"><button aria-label="less" onclick="stepAlloc('${b.key}',-1)">−</button>
         <span class="val" id="val-${b.key}">0</span>
         <button aria-label="more" id="plus-${b.key}" onclick="stepAlloc('${b.key}',1)">+</button>
-        <span class="need">needs ~${b.need} GL to be met</span>
-      </div>
-      <div class="needbar"><span id="need-${b.key}" style="width:0%"></span></div>`;
-    grid.appendChild(el);
-  });
+        <span class="need">needs ~${b.need} GL</span></div></div>`).join("");
+  document.getElementById("actionzone").innerHTML=`
+    <h3>Divide the ${se.inflow} GL</h3>
+    <div class="budget"><span class="lab">Still to share</span><span class="bar"><span class="fill" id="budfill" style="width:100%"></span></span><span class="num" id="budnum">${se.inflow} / ${se.inflow} GL</span></div>
+    <div class="allocgrid">${grid}</div>
+    <div class="runrow"><span class="muted">Water you leave unallocated flows on downstream and helps the river.</span>
+      <button class="btn btn-primary" id="runbtn" onclick="runSeason()">Run ${esc(se.name)} →</button></div>`;
   refreshAlloc();
 }
-function stepAlloc(key,d){
-  const se=SEASONS[S.seasonIdx];
-  const remaining=se.inflow - sum(S.alloc);
-  if(d>0 && remaining<=0) return;
-  S.alloc[key]=clamp((S.alloc[key]||0)+d, 0, se.inflow);
-  refreshAlloc();
-}
+function stepAlloc(key,d){ const se=SEASONS[state.seasonIdx]; const rem=se.inflow-sumAlloc(state.alloc); if(d>0&&rem<=0)return; state.alloc[key]=clamp(state.alloc[key]+d,0,se.inflow); refreshAlloc(); }
 function refreshAlloc(){
-  const se=SEASONS[S.seasonIdx];
-  const used=sum(S.alloc); const remaining=se.inflow-used;
-  BUCKETS.forEach(b=>{
-    document.getElementById("val-"+b.key).textContent=S.alloc[b.key]||0;
-    document.getElementById("need-"+b.key).style.width=Math.min(100,100*(S.alloc[b.key]||0)/b.need)+"%";
-    document.getElementById("plus-"+b.key).disabled = remaining<=0;
-  });
-  document.getElementById("budfill").style.width=(100*remaining/se.inflow)+"%";
-  const num=document.getElementById("budnum"); num.textContent=`${remaining} / ${se.inflow} GL`;
-  num.classList.toggle("over", remaining<0);
+  const se=SEASONS[state.seasonIdx], rem=se.inflow-sumAlloc(state.alloc);
+  BUCKETS.forEach(b=>{ document.getElementById("val-"+b.key).textContent=state.alloc[b.key]; document.getElementById("plus-"+b.key).disabled=rem<=0; });
+  document.getElementById("budfill").style.width=(100*rem/se.inflow)+"%";
+  document.getElementById("budnum").textContent=`${rem} / ${se.inflow} GL`;
+  document.getElementById("mapwrap").innerHTML=drawMap();
+  document.getElementById("mapcap").innerHTML=mapCaption();
 }
 
-/* ================= CONSEQUENCE (apply the allocation) ================= */
-function lockAllocation(){
-  const se=SEASONS[S.seasonIdx];
-  const used=sum(S.alloc), remaining=se.inflow-used, extraction=used/se.inflow;
-  S.lastDelta={};
-  BUCKETS.forEach(b=>{
-    let ratio=Math.min(1,(S.alloc[b.key]||0)/b.need);
-    let target=100*ratio;
-    if(b.key==="river"){ target += Math.min(16, remaining*5); if(extraction>0.92) target-=18; }
-    if(b.key==="town" && (S.alloc.town||0) < b.need*0.6) target-=26;
-    if(b.key==="culture" && (S.alloc.culture||0) < WATERHOLE_MIN){ target=Math.min(target,22); S.waterholeDry=true; }
-    target=clamp(target,0,100);
-    const before=S.meters[b.key];
-    S.meters[b.key]=Math.round(0.45*before + 0.55*target);
-    S.lastDelta[b.key]=S.meters[b.key]-before;
-  });
-  runSeasonTasks(0);
+/* ================= RUN → CONSEQUENCE ================= */
+function narrativeFor(r){
+  const a=r.alloc;
+  const reaching=a.river+r.leftover;
+  let s=`This season you split the <b>${r.inflow} GL</b>: ${a.farm} to the farms, ${a.town} to the town, ${a.river} to the river and ${a.culture} to the waterhole${r.leftover?`, with ${r.leftover} left to flow on`:""}. `;
+  s+= reaching>=need("river")*0.8 ? `About <b>${reaching} GL</b> reached the wetland — enough to keep it breathing. `
+     : reaching>=need("river")*0.45 ? `Only about <b>${reaching} GL</b> reached the wetland — it's stressed and shallow. `
+     : `Barely <b>${reaching} GL</b> reached the wetland — the water there is slow, warm and going stagnant. `;
+  if(r.overTake) s+=`You took most of the inflow out of the river, so what's left downstream is at real risk of algae. `;
+  return s;
 }
-
-/* ================= ASSESSMENT TASKS (the continuum layer) ================= */
-function pickItem(strand){
-  const lv=clamp(S.levels[strand],6,10);
-  const bank=QBANKS[strand][lv]||QBANKS[strand][8];
-  const unused=bank.filter(it=>S.used[strand].indexOf(it.id)<0);
-  const it=(unused.length?unused:bank)[0];
-  S.used[strand].push(it.id);
-  return {it, servedLevel:lv};
+function runSeason(){
+  const se=SEASONS[state.seasonIdx];
+  const r=runModel(state.alloc, se.inflow);
+  r.narrative=narrativeFor(r);
+  state.log.push(r);
+  state.stage="result";
+  document.getElementById("advzone").innerHTML=renderAdvisers();
+  document.getElementById("mapwrap").innerHTML=drawMap();
+  renderResult(r);
 }
-function runSeasonTasks(ti){
-  const strands=SEASON_TASKS[S.seasonIdx];
-  if(ti>=strands.length){ showConsequence(); return; }
-  const strand=strands[ti];
-  const {it, servedLevel}=pickItem(strand);
-  const band=bandOf(servedLevel);
-  S.seen[strand]=S.seen[strand]||[]; S.seen[strand].push(band);
-  const mount=document.getElementById("season-body");
-  const cont=CONTINUUM[strand];
-  const scaffold = (band==="support" && it.scaffold) ? `<div class="scaffold">${it.scaffold}</div>` : "";
-  const targetStmt = cont.rungs[servedLevel];
-  mount.innerHTML=`
-    <div class="seasonhead"><div><div class="s-name">${esc(SEASONS[S.seasonIdx].name)} · thinking task</div>
-      <div class="s-sub">${esc(cont.name)}</div></div><div class="s-count">task ${ti+1} of ${strands.length}</div></div>
-    <div class="taskcard">
-      <span class="bandtag ${band}">${BAND_ICON[band]} ${bandLabel(servedLevel)}</span><span class="strandtag">${esc(cont.code)}</span>
-      <p class="muted" style="margin:2px 0 8px"><b>Targeting:</b> “${esc(targetStmt)}”</p>
-      ${scaffold}
-      <div class="qtext">${it.q}</div>
-      <div class="opts" id="opts"></div>
-      <div class="feedback" id="fb"></div>
-      <div id="stretchslot"></div>
-      <div class="nextrow noprint"><span></span><button class="btn btn-primary" id="tnext" style="display:none">Continue →</button></div>
-    </div>`;
-  const optsEl=mount.querySelector("#opts");
-  let answered=false;
-  shuffle(it.opts.slice()).forEach(o=>{
-    const btn=document.createElement("button"); btn.className="opt"; btn.textContent=o;
-    btn.onclick=()=>{
-      if(answered) return; answered=true;
-      const correct=(o===it.a);
-      btn.classList.add(correct?"right":"wrongpick");
-      if(!correct) optsEl.querySelectorAll(".opt").forEach(x=>{ if(x.textContent===it.a) x.classList.add("right"); });
-      optsEl.querySelectorAll(".opt").forEach(x=>x.disabled=true);
-      const fb=mount.querySelector("#fb");
-      fb.className="feedback "+(correct?"ok":"bad");
-      fb.innerHTML=(correct?"<b>Yes.</b> ":`<b>Not quite.</b> `)+it.explain;
-      /* adapt the level */
-      S.history[strand].push({served:servedLevel, correct});
-      S.levels[strand]=clamp(S.levels[strand]+(correct?1:-1),5,11);
-      const moved = correct
-        ? `<div class="levelflag ${bandOf(clamp(S.levels[strand],6,11))}" style="margin-top:10px"><span class="lf-i">▲</span><span>Nice — stepping you up. Next ${esc(cont.name.toLowerCase())} task will aim higher.</span></div>`
-        : `<div class="levelflag support" style="margin-top:10px"><span class="lf-i">⛺</span><span>No worries — the next ${esc(cont.name.toLowerCase())} task will build up from a simpler step, with support.</span></div>`;
-      fb.innerHTML+=moved;
-      /* stretch: free-response justification in the extend band */
-      if(band==="extend" && it.stretch){
-        document.getElementById("stretchslot").innerHTML=
-          `<div class="stretchbox"><b>Extend:</b> ${it.stretch}
-            <textarea class="writeframe" id="stretchtext" placeholder="Write your justification…"></textarea></div>`;
-      }
-      const nb=mount.querySelector("#tnext"); nb.style.display="inline-block";
-      nb.onclick=()=>{
-        const t=document.getElementById("stretchtext");
-        if(t && t.value.trim()){ (S.writes[strand]=S.writes[strand]||[]).push({level:servedLevel, text:t.value.trim()}); }
-        runSeasonTasks(ti+1);
-      };
-      nb.focus();
-    };
-    optsEl.appendChild(btn);
-  });
-}
-
-/* ================= CONSEQUENCE SCREEN ================= */
-function moodOf(v){ return v>=66?"happy":(v>=40?"ok":"unhappy"); }
-function showConsequence(){
-  const se=SEASONS[S.seasonIdx];
-  curLayer="health";
-  const mount=document.getElementById("season-body");
-  const meterHtml=BUCKETS.map(b=>{
-    const v=S.meters[b.key], d=S.lastDelta[b.key]||0;
-    return `<div class="meter ${b.cls}"><div class="m-top"><span>${esc(b.meter)}</span><span>${v}/100</span></div>
+function renderResult(r){
+  const last = state.seasonIdx>=SEASONS.length-1;
+  const meterHtml=BUCKETS.map(b=>{ const v=state.meters[b.key], d=r.deltas[b.key];
+    return `<div class="meter ${b.cls}"><div class="m-top"><span>${esc(b.name)}</span><span>${v}/100</span></div>
       <div class="m-track"><div class="m-fill" style="width:${v}%"></div></div>
-      <div class="m-delta ${d>=0?'up':'down'}">${d>=0?'▲ +':'▼ '}${d} this season</div></div>`;
-  }).join("");
-  const stakeHtml=STAKES.map(s=>{
-    const v=S.meters[s.link], mood=moodOf(v);
-    const line=s[mood];
-    return `<div class="stake"><div class="st-top"><span class="st-name">${esc(s.name)}</span>
-      <span class="st-mood" style="background:${moodColor(v)}">${mood}</span></div>
-      <div class="st-role">${esc(s.role)}</div>
-      <div class="st-bar"><span style="width:${v}%;background:${moodColor(v)}"></span></div>
-      <div class="st-line">${esc(line)}</div></div>`;
-  }).join("");
-  const dry = S.waterholeDry ? `<div class="levelflag support" style="margin-top:8px"><span class="lf-i">⚠</span><span>The sacred <b>waterhole (billabong) has dried</b> at least once — a hard loss to reverse. Cultural &amp; spiritual value takes a heavy hit.</span></div>` : "";
-  const last = S.seasonIdx>=SEASONS.length-1;
-  mount.innerHTML=`
-    <div class="seasonhead"><div><div class="s-name">${esc(se.name)} · what happened</div>
-      <div class="s-sub">Your allocation, played out</div></div></div>
-    <div class="mapwrap" id="mapwrap">${drawMap()}</div>
-    <div class="mapcap">${LAYER_CAP.health}</div>
-    <h3>The four values now</h3>
-    <div class="meters">${meterHtml}</div>
-    ${dry}
-    <h3>Around the table</h3>
-    <div class="stakes">${stakeHtml}</div>
-    <div class="brief" style="border-left-color:var(--earth)"><b>Next:</b> ${se.event}</div>
-    <div class="nextrow noprint"><span></span>
-      <button class="btn btn-primary" onclick="${last?"endGame()":"renderSeason("+(S.seasonIdx+1)+")"}">${last?"Finish the year →":"On to "+SEASONS[S.seasonIdx+1].name+" →"}</button></div>`;
+      <div class="m-delta ${d>0?'up':(d<0?'down':'flat')}">${d>0?'▲ +'+d:(d<0?'▼ '+d:'– no change')}</div></div>`;}).join("");
+  const reactHtml=ADVISERS.map(ad=>{ const v=state.meters[ad.key];
+    return `<div class="rcard ${ad.cls}"><span class="rc-name">${esc(ad.name)}:</span> ${ad.react[moodOf(v)]}</div>`;}).join("");
+  const driedAlert = r.driedNow ? `<div class="alert bad"><b>The waterhole has dried.</b> You gave it less than the minimum, and a dried waterhole cannot simply be refilled — the cultural and spiritual loss carries through the rest of the year.</div>` : "";
+  document.getElementById("actionzone").innerHTML=`
+    <div class="logentry"><div class="le-head">${esc(SEASONS[state.seasonIdx].name)} — what happened</div>
+      <div class="le-narr">${r.narrative}</div>
+      ${driedAlert}
+      <div class="meters">${meterHtml}</div>
+      <div class="react">${reactHtml}</div>
+      <div class="brief" style="border-left-color:var(--earth);margin-bottom:0"><b>Next:</b> ${SEASONS[state.seasonIdx].event}</div></div>
+    <div class="runrow noprint"><span></span><button class="btn btn-primary" onclick="${last?'renderEnd()':'startSeason('+(state.seasonIdx+1)+')'}">${last?'Finish the year →':'On to '+SEASONS[state.seasonIdx+1].name+' →'}</button></div>`;
+  document.getElementById("actionzone").scrollIntoView({behavior:"smooth",block:"start"});
 }
 
-/* ================= SELF-ASSESSMENT (against the school ladder) ================= */
-function endGame(){ S.finished=true; renderSelfAssess(); }
-function renderSelfAssess(){
-  go("selfassess");
-  const mount=document.getElementById("selfassess-body");
-  let strandsHtml="";
-  Object.keys(CONTINUUM).forEach(strand=>{
+/* ================= VERDICT + DEBRIEF ================= */
+function verdict(){
+  const M=state.meters, vals=BUCKETS.map(b=>M[b.key]), avg=Math.round(vals.reduce((a,b)=>a+b,0)/4), low=Math.min(...vals);
+  if(vals.every(v=>v>=52) && !state.dried) return {cls:"good",h:"A balanced year on a hard river",p:"You found water for people without letting the river or the waterhole fail. On a river this stretched, in a year this dry, that is genuinely hard — and you got close. No plan keeps everyone at the top; you kept everyone in the game."};
+  if(M.farm>=62 && (M.river<38 || state.dried || M.culture<38)) return {cls:"bad",h:"A boom district on a struggling river",p:"The farms did well and money moved through the town — but it came out of the river and the waterhole. Some of that damage (a dried waterhole, a collapsing wetland) is slow or impossible to undo. Look at which bar fell furthest, and whose voice you left behind."};
+  if(M.river>=58 && M.culture>=55 && (M.farm<40 || M.town<42)) return {cls:"mixed",h:"The river lived; the district struggled",p:"You protected the wetland and the waterhole — real, lasting value. But the farms and the town paid for it, and a district that empties out is its own kind of loss. Was there a share that kept a little more money flowing without breaking the river?"};
+  if(low<32) return {cls:"bad",h:"Something was sacrificed",p:"To keep the system running you let one value fall hard. That's a real choice with real costs — name who paid, and decide whether you'd make it again."};
+  return {cls:"mixed",h:"A mixed year",p:"You got some things right and paid for others. Trace each fallen bar back to a season and a choice — that's where the geography is."};
+}
+function renderEnd(){
+  const v=verdict(), M=state.meters;
+  const feelings=ADVISERS.map(ad=>`<div class="rcard ${ad.cls}"><span class="rc-name">${esc(ad.name)}</span> (${moodWord(M[ad.key])}): ${ad.react[moodOf(M[ad.key])]}</div>`).join("");
+  const qs=QUESTIONS.map(q=>`
+    <div class="saq"><div class="tie">${esc(q.tie)}</div><p class="q">${q.n}. ${q.q}</p>
+      <textarea id="ta${q.n}" oninput="saveRefl(${q.n})">${esc(state.reflections[q.n]||"")}</textarea>
+      <div class="saq-tools noprint"><button class="chip" onclick="toggleAid(${q.n},'scaf')">💡 Sentence starter</button>
+        <button class="chip" onclick="toggleAid(${q.n},'str')">⛰ Stretch</button>
+        <button class="chip" onclick="checkRefl(${q.n})">Check my ideas</button></div>
+      <div class="scaffold" id="scaf${q.n}">${q.scaffold}</div>
+      <div class="stretchq" id="str${q.n}">${q.stretch}</div>
+      <div class="sc" id="sc${q.n}"></div></div>`).join("");
+  const ladders=Object.keys(CONTINUUM).map(strand=>{
     const c=CONTINUUM[strand];
-    const rungs=Object.keys(c.rungs).map(Number).sort((a,b)=>a-b);
-    const ladder=rungs.map(lv=>`
-      <button class="rung" data-strand="${strand}" data-lv="${lv}" onclick="pickRung('${strand}',${lv})">
-        <span class="r-lvl">Lvl ${lv}</span>
-        <span class="r-txt">${esc(c.rungs[lv])}<span class="r-tags" id="tags-${strand}-${lv}"></span></span>
-      </button>`).join("");
-    strandsHtml+=`<div class="taskcard"><h3 style="margin-top:0">${esc(c.name)} <span class="strandtag">${esc(c.code)}</span></h3>
-      <p class="muted">Which statement best matches what <b>you</b> did today? Tap it.</p>
-      <div class="ladder" id="ladder-${strand}">${ladder}</div></div>`;
-  });
-  mount.innerHTML=`<h2 style="text-align:center">How did you go?</h2>
-    <p class="subtitle">Rate yourself on the same continuum your teacher uses. Then reveal the level your play actually showed.</p>
-    ${strandsHtml}
-    <div class="nextrow noprint" style="justify-content:center">
-      <button class="btn btn-ghost" id="revealbtn" onclick="revealEvidence()">Reveal my evidence &amp; compare</button>
-      <button class="btn btn-primary" id="toreport" style="display:none" onclick="go('report')">See my report →</button></div>`;
+    const rungs=Object.keys(c.rungs).map(Number).sort((a,b)=>a-b).map(lv=>`
+      <button class="rung" onclick="pickRung('${strand}',${lv})" id="rung-${strand}-${lv}"><span class="r-lvl">Lvl ${lv}<span class="yearband">${bandLabel(lv)}</span></span><span class="r-txt">${esc(c.rungs[lv])}</span></button>`).join("");
+    return `<h3>${esc(c.name)} <span class="progress">${esc(c.code)}</span></h3><div class="ladder" id="ladder-${strand}">${rungs}</div>`;
+  }).join("");
+  document.getElementById("scr-game").innerHTML=`
+    <div class="topbar noprint"><button class="linkbtn" onclick="if(confirm('Play the whole year again?'))location.reload()">↺ play again</button><span class="progress">THE YEAR IS OVER</span></div>
+    <h2 style="text-align:center">After four seasons on the river</h2>
+    <div class="verdict ${v.cls}"><h3>${v.h}</h3><p>${v.p}</p></div>
+    <h3>How your advisers feel now</h3><div class="react">${feelings}</div>
+    <details class="reflect noprint"><summary>Reflect like a geographer</summary>
+      <div class="reflect-body"><p class="muted">Answer using what you decided and what happened. The check button only tells you which <b>ideas</b> you used — not whether your reasoning is right; that's for you and your teacher. Tap <b>Sentence starter</b> if you'd like a way in, or <b>Stretch</b> to push further.</p>${qs}</div></details>
+    <details class="reflect noprint"><summary>Rate yourself on our Geography continuum</summary>
+      <div class="reflect-body"><p class="muted">Which statement best matches what <b>you</b> did across the year? These are the same “I can…” statements your teacher uses — the year-level band is a guide, not a grade.</p>${ladders}</div></details>
+    <div class="runrow noprint" style="justify-content:center"><button class="btn btn-primary" onclick="go('report')">Make my plan &amp; report →</button></div>`;
+  window.scrollTo(0,0);
 }
-function pickRung(strand,lv){
-  S.self[strand]=lv;
-  document.querySelectorAll(`#ladder-${strand} .rung`).forEach(r=>r.classList.toggle("picked", +r.dataset.lv===lv));
-  refreshRungTags(strand);
-}
-function evidencedLevel(strand){
-  const h=S.history[strand]; if(!h||!h.length) return clamp(S.levels[strand],6,11);
-  const cleared=h.filter(x=>x.correct).map(x=>x.served);
-  return clamp(cleared.length?Math.max.apply(null,cleared):Math.min.apply(null,h.map(x=>x.served)), 6,11);
-}
-let revealed=false;
-function refreshRungTags(strand){
-  const mine=S.self[strand], ev=revealed?evidencedLevel(strand):null;
-  Object.keys(CONTINUUM[strand].rungs).forEach(lv=>{
-    lv=+lv; const el=document.getElementById(`tags-${strand}-${lv}`); if(!el) return;
-    let t=[];
-    if(mine===lv) t.push(`<span class="r-mine">◀ your pick</span>`);
-    if(ev===lv) t.push(`<span class="r-app">● shown by your play</span>`);
-    el.innerHTML=t.length? " &nbsp;"+t.join(" &nbsp;"):"";
-    const rung=document.querySelector(`#ladder-${strand} .rung[data-lv="${lv}"]`);
-    if(rung) rung.classList.toggle("evid", ev===lv);
-  });
-}
-function revealEvidence(){
-  if(Object.keys(S.self).length<3){ alert("Pick a statement for all three strands first."); return; }
-  revealed=true;
-  Object.keys(CONTINUUM).forEach(refreshRungTags);
-  document.getElementById("revealbtn").disabled=true;
-  document.getElementById("toreport").style.display="inline-block";
+function saveRefl(n){ state.reflections[n]=document.getElementById("ta"+n).value; }
+function toggleAid(n,which){ const el=document.getElementById((which==="scaf"?"scaf":"str")+n); el.classList.toggle("show"); }
+function pickRung(strand,lv){ state.self[strand]=lv; Object.keys(CONTINUUM[strand].rungs).forEach(l=>{ const el=document.getElementById(`rung-${strand}-${l}`); if(el) el.classList.toggle("picked",+l===lv); }); }
+function checkRefl(n){
+  const q=QUESTIONS.find(x=>x.n===n), t=(state.reflections[n]||document.getElementById("ta"+n).value||"").toLowerCase(), box=document.getElementById("sc"+n);
+  box.classList.add("show");
+  if(t.trim().split(/\s+/).length<12){ box.innerHTML="Have a proper go first — a couple of sentences — then check."; return; }
+  const hit=q.lookFor.filter(k=>t.includes(k));
+  box.innerHTML=`<div><span class="ok">Ideas you used:</span> ${hit.length?esc(hit.join(", ")):"none of the key ones yet"}.</div>`
+    + (hit.length>=3?`<div class="ok" style="margin-top:3px">Good range — now make sure each idea is <b>explained</b>, not just named.</div>`
+       :`<div class="miss" style="margin-top:3px">You could also bring in ideas like: ${esc(q.lookFor.slice(0,6).join(", "))}.</div>`)
+    + `<div class="muted" style="margin-top:5px">This checks which ideas you used, not whether your reasoning is correct.</div>`;
 }
 
 /* ================= REPORT ================= */
 function vcode(str){ let h=5381; for(let i=0;i<str.length;i++){ h=((h<<5)+h+str.charCodeAt(i))>>>0; } return h.toString(36).toUpperCase().padStart(7,"0").slice(0,7); }
 function renderReport(){
   const m=document.getElementById("report-body");
-  const name=S.name||"", sid=S.sid||"";
+  state.name=(document.getElementById("rep-name")?document.getElementById("rep-name").value.trim():state.name);
+  state.sid=(document.getElementById("rep-sid")?document.getElementById("rep-sid").value.trim():state.sid);
   const dt=new Date().toLocaleString("en-AU",{dateStyle:"full",timeStyle:"short"});
-  const overallRaw=Math.round(BUCKETS.reduce((t,b)=>t+S.meters[b.key],0)/4);
-  const lowest=Math.min.apply(null,BUCKETS.map(b=>S.meters[b.key]));
-  const balancePenalty = lowest<35 ? 10 : (lowest<45?4:0);
-  const overall=clamp(overallRaw-balancePenalty,0,100);
-  const cls=overall>=70?"good":(overall>=50?"mid":"low");
-  const meterRows=BUCKETS.map(b=>`<tr><td>${esc(b.meter)}</td><td class="lvl">${S.meters[b.key]}/100</td>
-    <td>${S.meters[b.key]>=66?"looked after":(S.meters[b.key]>=40?"under strain":"sacrificed")}</td></tr>`).join("");
-  let contRows="";
-  Object.keys(CONTINUUM).forEach(strand=>{
-    const c=CONTINUUM[strand]; const ev=clamp(evidencedLevel(strand),6,11); const mine=S.self[strand];
-    const band=bandOf(ev);
-    contRows+=`<tr><td><b>${esc(c.name)}</b><br><span class="muted">${esc(c.code)}</span></td>
-      <td class="lvl"><span class="bandtag ${band}">${BAND_ICON[band]} Lvl ${ev}</span><br><span class="muted">${bandLabel(ev)}</span></td>
-      <td>“${esc(c.rungs[ev])}”${mine&&mine!==ev?`<br><span class="muted">Self-rated Level ${mine} — ${mine>ev?"aim to show it next time":"you sold yourself short"}.</span>`:(mine?`<br><span class="muted">Matches your self-rating. ✓</span>`:"")}</td></tr>`;
-  });
-  let writeHtml="";
-  Object.keys(S.writes||{}).forEach(strand=>{
-    (S.writes[strand]||[]).forEach(w=>{ writeHtml+=`<p class="muted"><b>${esc(CONTINUUM[strand].name)} (extend):</b> “${esc(w.text)}”</p>`; });
-  });
-  const code=vcode(`${name}|${sid}|${overall}|${BUCKETS.map(b=>S.meters[b.key]).join(",")}|${Object.keys(CONTINUUM).map(s=>evidencedLevel(s)).join(",")}`);
+  const v=verdict(), M=state.meters;
+  const seasonRows=state.log.map((r,i)=>`<tr><td>${esc(SEASONS[i].name)} (${r.inflow} GL)</td><td>${r.alloc.farm}</td><td>${r.alloc.town}</td><td>${r.alloc.river}</td><td>${r.alloc.culture}</td></tr>`).join("");
+  const meterRows=BUCKETS.map(b=>`<tr><td>${esc(b.name)}</td><td><b>${M[b.key]}/100</b></td><td>${M[b.key]>=60?"looked after":(M[b.key]>=40?"under strain":"sacrificed")}</td></tr>`).join("");
+  const reflRows=QUESTIONS.filter(q=>(state.reflections[q.n]||"").trim()).map(q=>`<p class="muted"><b>${esc(q.tie)}</b><br>${esc(state.reflections[q.n])}</p>`).join("") || `<p class="muted"><i>No written reflection saved.</i></p>`;
+  const selfRows=Object.keys(CONTINUUM).map(s=>{ const lv=state.self[s]; return `<tr><td>${esc(CONTINUUM[s].name)}</td><td>${lv?`Level ${lv} · ${bandLabel(lv)}`:"—"}</td><td>${lv?`“${esc(CONTINUUM[s].rungs[lv])}”`:'<i>not rated</i>'}</td></tr>`; }).join("");
+  const code=vcode(`${state.name}|${state.sid}|${BUCKETS.map(b=>M[b.key]).join(",")}|${Object.keys(CONTINUUM).map(s=>state.self[s]||0).join(",")}`);
   m.innerHTML=`
     <div class="idrow noprint">
-      <span><label>Your name</label><input id="rep-name" value="${esc(name)}" placeholder="e.g. Ama Osei"></span>
-      <span><label>Student ID</label><input id="rep-sid" value="${esc(sid)}" placeholder="e.g. KHS12345"></span>
-      <span><button class="btn btn-primary" onclick="saveIdAndPrint()">Save as PDF</button></span>
-    </div>
+      <span><label>Your name</label><input id="rep-name" value="${esc(state.name)}" placeholder="e.g. Ama Osei"></span>
+      <span><label>Student ID</label><input id="rep-sid" value="${esc(state.sid)}" placeholder="e.g. KHS12345"></span>
+      <span><button class="btn btn-primary" onclick="saveAndPrint()">Save as PDF</button></span></div>
     <p class="muted noprint" style="margin-bottom:12px">Enter your name &amp; ID, click <b>Save as PDF</b>, choose “Save as PDF” in the print box, then send it to your teacher.</p>
-    <h2>Share the River — Report</h2>
-    <p class="muted">${name?`<b>${esc(name)}</b>`:"<i>(name not entered)</i>"} · ID ${sid?`<b>${esc(sid)}</b>`:"<i>(not entered)</i>"} · ${dt}</p>
-    <div class="sumbox"><div class="progress">HOW WELL YOU SHARED THE RIVER</div>
-      <div class="big ${cls}">${overall}/100</div>
-      <p class="muted">${lowest<35?"You kept the system running by sacrificing one value — a real choice with real costs.":(lowest<50?"A workable balance, though one value ran close to the edge.":"A genuinely balanced year — rare, and hard-won.")}</p></div>
+    <h2>Share the River — my plan</h2>
+    <p class="muted">${state.name?`<b>${esc(state.name)}</b>`:"<i>(name not entered)</i>"} · ID ${state.sid?`<b>${esc(state.sid)}</b>`:"<i>(not entered)</i>"} · ${dt}</p>
+    <div class="verdict ${v.cls}"><h3>${v.h}</h3><p>${v.p}</p></div>
+    <h3>My allocations (GL)</h3>
+    <table class="repgrid"><tr><th>Season</th><th>Farms</th><th>Town</th><th>River</th><th>Waterhole</th></tr>${seasonRows}</table>
     <h3>The four values at year's end</h3>
     <table class="repgrid"><tr><th>Value</th><th>Final</th><th>Verdict</th></tr>${meterRows}</table>
-    <h3>Your Geography continuum — shown by your play</h3>
-    <div class="band-key"><span><i style="background:var(--supportbg);border:1px solid var(--support)"></i>⛺ Years 5–6</span>
-      <span><i style="background:var(--corebg);border:1px solid var(--core)"></i>⚑ Years 7–8</span>
-      <span><i style="background:var(--extendbg);border:1px solid var(--extend)"></i>⛰ Years 9–10</span></div>
-    <table class="repgrid"><tr><th>Strand</th><th>Level shown</th><th>“I can…” &amp; self-assessment</th></tr>${contRows}</table>
-    ${writeHtml?`<h3>Your written justifications</h3>${writeHtml}`:""}
-    <h3>What this means</h3>
-    <p class="muted">The core simulation sits at Years 7–8. Where your thinking tasks showed Year 5–6, you were given extra support to build up; where they showed Years 9–10, the tasks stepped up to evaluation, scale and time. “Level shown” is the highest rung your answers actually cleared — bring the written justification and this report to class to talk it through with your teacher.</p>
+    ${state.dried?`<p class="muted"><b>Note:</b> the sacred waterhole dried during the year — an irreversible loss.</p>`:""}
+    <h3>My reflection</h3>${reflRows}
+    <h3>My self-assessment (school continuum)</h3>
+    <table class="repgrid"><tr><th>Strand</th><th>I rated myself</th><th>“I can…”</th></tr>${selfRows}</table>
     <p class="muted">Verification code: <span class="vcode">${code}</span> · Share the River</p>`;
 }
-function saveIdAndPrint(){
-  S.name=document.getElementById("rep-name").value.trim();
-  S.sid=document.getElementById("rep-sid").value.trim();
-  renderReport();
-  setTimeout(()=>window.print(),150);
-}
+function saveAndPrint(){ renderReport(); setTimeout(()=>window.print(),150); }
 
 /* ---- boot ---- */
 renderIntro();

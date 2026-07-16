@@ -74,17 +74,30 @@ screen wipes it.
 ## Interactive simulations
 
 **`share-the-river.html`** — *Share the River*, a Murray–Darling allocation simulator
-(built). You are the water manager for a fictionalised reach of the Basin in a drought
-year: across four seasons you divide a shrinking inflow between irrigated farms, the town,
-environmental flow and a cultural flow that keeps a sacred waterhole alive — with
-stakeholders whose trust moves as you decide. The concrete core is pitched at **Years 7–8**;
-short thinking tasks on three continuum strands (Map & Data, Challenges, Interconnection)
-are served at each student's level and **adapt** — dropping to **Years 5–6** with scaffolds
-and sentence starters when a task is missed, stepping up to **Years 9–10** (criteria, scale,
-time, written justification) when they're flying. It closes with **self-assessment against
-the school's exact "I can…" continuum ladders**, shows the level the student's play
-evidenced beside their own rating, and prints a continuum-keyed PDF report. Open the file in
-any browser.
+(built, in the mould of the Coasts / Deserts / Mountains sims). You are the water manager
+for a fictionalised reach of the Basin in a drought year: across four seasons you divide a
+shrinking inflow between irrigated farms, the town, environmental flow and a cultural flow
+that keeps a sacred waterhole alive.
+
+The design follows the reference sims' pedagogy rather than quizzing over the top of them:
+- **An irreducible trade-off engine.** A transparent systems model links the four values —
+  the town leans on *both* its own water *and* farm-jobs income *and* a river clean enough to
+  drink from — so helping one user provably costs another. No plan keeps everyone at the top.
+- **Consequences emerge and are irreversible.** Over-take the river and it goes slow, warm
+  and algal (and fouls the town's own supply); starve the cultural flow and the sacred
+  waterhole **dries — and cannot be un-dried**. A live map thins downstream as water is taken.
+- **The knowledge lives in the advisers' voices** — a neutral hydrologist narrator plus four
+  consultable advisers (grower, mayor, ecologist, First Nations custodian) whose upfront
+  profiles carry the curriculum content and whose reactions respond to your actual choices.
+- **Judgement is withheld at decision time** — you allocate, run the season, and read what
+  happened; the sim never lectures mid-play.
+- **Assessment is an opt-in, non-grading debrief.** A collapsible "Reflect like a geographer"
+  with sentence-starter scaffolds (Years 5–6) and stretch extensions (Years 9–10), an
+  idea-checker that reports *which ideas you used, not whether your reasoning is right*, and
+  a self-assessment against the school's exact "I can…" continuum ladders. It prints a
+  plan + report PDF for the teacher.
+
+Open the file in any browser.
 
 See `INTERACTIVE-TASKS-PROPOSAL.md` for the full menu — *Share the River* plus three more
 designs (a Cape Town "Day Zero" planner, a flood-response sim, and a support-tier
