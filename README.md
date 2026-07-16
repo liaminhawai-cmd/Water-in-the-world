@@ -80,6 +80,16 @@ shrinking inflow between irrigated farms, the town, environmental flow and a cul
 that keeps a sacred waterhole alive.
 
 The design follows the reference sims' pedagogy rather than quizzing over the top of them:
+- **The map is the decision surface, with data you must read.** A vertical catchment — highland
+  dam, two farm districts, a tributary confluence, the town, a Ramsar wetland and a cut-off
+  billabong — with **four toggleable data layers** (water, rainfall/inflow, demand, river
+  health) and a live accounting tally showing exactly how much reaches the wetland and
+  waterhole. The health layer reddens downstream of wherever you took water.
+- **Many combinable levers** (a large decision space, like the reference sims): per-district
+  **allocation + flood-vs-drip method**, a **reservoir** you bank water in across seasons, town
+  **recycling + restriction levels**, and a deliberate **cultural release** to the billabong —
+  planned against a **budget** (farms earn it; efficiency, the dam and recycling cost it) and a
+  4-season **inflow forecast**.
 - **An irreducible trade-off engine.** A transparent systems model links the four values —
   the town leans on *both* its own water *and* farm-jobs income *and* a river clean enough to
   drink from — so helping one user provably costs another. No plan keeps everyone at the top.
