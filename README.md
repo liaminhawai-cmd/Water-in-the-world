@@ -71,12 +71,24 @@ Morphemes deliberately spiral: *spir* (transpiration → spiritual → perspire)
 Progress is stored in the browser (localStorage) per device. "Start over" on the home
 screen wipes it.
 
-## Further interactive tasks
+## Interactive simulations
 
-See `INTERACTIVE-TASKS-PROPOSAL.md` for detailed designs of four decision-and-consequence
-simulations (Murray–Darling allocation, a Cape Town "Day Zero" planner, a flood-response
-sim, and a support-tier water-cycle journey) modelled on the Coasts / Deserts / Mountains
-interactives and tied to the unit's lessons and CAT.
+**`share-the-river.html`** — *Share the River*, a Murray–Darling allocation simulator
+(built). You are the water manager for a fictionalised reach of the Basin in a drought
+year: across four seasons you divide a shrinking inflow between irrigated farms, the town,
+environmental flow and a cultural flow that keeps a sacred waterhole alive — with
+stakeholders whose trust moves as you decide. The concrete core is pitched at **Years 7–8**;
+short thinking tasks on three continuum strands (Map & Data, Challenges, Interconnection)
+are served at each student's level and **adapt** — dropping to **Years 5–6** with scaffolds
+and sentence starters when a task is missed, stepping up to **Years 9–10** (criteria, scale,
+time, written justification) when they're flying. It closes with **self-assessment against
+the school's exact "I can…" continuum ladders**, shows the level the student's play
+evidenced beside their own rating, and prints a continuum-keyed PDF report. Open the file in
+any browser.
+
+See `INTERACTIVE-TASKS-PROPOSAL.md` for the full menu — *Share the River* plus three more
+designs (a Cape Town "Day Zero" planner, a flood-response sim, and a support-tier
+water-cycle journey) modelled on the Coasts / Deserts / Mountains interactives.
 
 ## Notes for teachers
 
