@@ -188,6 +188,85 @@
   .idrow label{font-size:12px;font-weight:700;color:var(--muted);display:block;margin-bottom:4px}
   .idrow input{padding:10px 12px;border:1px solid var(--line);border-radius:8px;font-size:15px;font-family:inherit;background:#fff}
   .vcode{font-family:'Courier New',monospace;font-size:13px;letter-spacing:2px}
+  /* ---- persistent nav ---- */
+  .topnav{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin:-4px 0 16px;
+       border-bottom:1px solid var(--line-soft);padding-bottom:12px}
+  .topnav button{font-family:inherit;font-size:12.5px;font-weight:700;letter-spacing:.3px;color:var(--muted);
+       background:var(--bg);border:1px solid var(--line-soft);border-radius:20px;padding:7px 15px;cursor:pointer}
+  .topnav button:hover{border-color:var(--earth);color:var(--earth-d)}
+  .topnav button.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+
+  /* ---- morpheme colour system (prefix / root / suffix), from the EAL book ---- */
+  :root{
+    --mpre:#2c6fa8; --mpre-bg:#e5eef5;
+    --mroot:#9a5518; --mroot-bg:#f5e7d8;
+    --msuf:#3f7a4a; --msuf-bg:#e6f1e8;
+    --mcon:#6c6353; --mcon-bg:#ece7db;
+  }
+  .mlegend{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin:8px 0 14px;font-size:12px}
+  .mlegend span{display:inline-flex;align-items:center;gap:5px;font-weight:700;color:var(--ink)}
+  .mlegend i{width:13px;height:13px;border-radius:4px;display:inline-block}
+  .mtile{border-radius:9px;padding:8px 12px;display:inline-flex;flex-direction:column;align-items:center;gap:1px;
+       line-height:1.15;font-family:inherit;cursor:grab;user-select:none;touch-action:none;border:1.5px solid;background:var(--paper)}
+  .mtile .mm{font-weight:800;font-size:16px}
+  .mtile .gl{font-size:10.5px;opacity:.85}
+  .mtile.prefix{color:var(--mpre);background:var(--mpre-bg);border-color:var(--mpre)}
+  .mtile.root{color:var(--mroot);background:var(--mroot-bg);border-color:var(--mroot)}
+  .mtile.suffix{color:var(--msuf);background:var(--msuf-bg);border-color:var(--msuf)}
+  .mtile.connector{color:var(--mcon);background:var(--mcon-bg);border-color:var(--mcon)}
+  .mtile.sel{outline:3px solid var(--ink);outline-offset:2px}
+  .mtile.dragging{opacity:.35}
+  .drag-ghost{position:fixed;transform:translate(-50%,-50%);z-index:999;pointer-events:none;box-shadow:0 6px 18px rgba(0,0,0,.25)}
+  /* colour the tap-tile builder used by the tiers, too */
+  .tile.prefix .mm{color:var(--mpre)} .tile.root .mm{color:var(--mroot)} .tile.suffix .mm{color:var(--msuf)} .tile.connector .mm{color:var(--mcon)}
+
+  .mbank{background:var(--bg);border:1px solid var(--line-soft);border-radius:10px;padding:12px;margin-bottom:14px;position:sticky;top:6px;z-index:5}
+  .mbank .mgroup{margin-bottom:8px}
+  .mbank .mgroup:last-child{margin-bottom:0}
+  .mbank .glabel{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;margin-bottom:5px}
+  .mbank .glabel.prefix{color:var(--mpre)} .mbank .glabel.root{color:var(--mroot)} .mbank .glabel.suffix{color:var(--msuf)} .mbank .glabel.connector{color:var(--mcon)}
+  .mtiles{display:flex;flex-wrap:wrap;gap:7px}
+
+  /* ---- word-build table (drag morphemes to the matching meaning) ---- */
+  .wtable{display:flex;flex-direction:column;gap:9px}
+  .wrow{display:flex;align-items:center;gap:12px;border:1px solid var(--line-soft);border-radius:10px;
+       padding:10px 12px;background:var(--paper);transition:opacity .3s ease,transform .3s ease,background .2s}
+  .wrow.wrong{animation:shake .3s;border-color:var(--wrong)}
+  .wrow.done{border-color:var(--correct);background:var(--okbg)}
+  .wrow.gone{opacity:0;transform:translateX(40px)}
+  .wmean{flex:1 1 46%;min-width:190px;font-size:13.5px;line-height:1.45}
+  .wmean .pos{color:var(--muted);font-style:italic;font-size:12px}
+  .wslots{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+  .wjoin{color:var(--muted);font-weight:700}
+  .wslot{min-width:60px;min-height:46px;border:2px dashed var(--line);border-radius:8px;display:flex;
+       align-items:center;justify-content:center;background:var(--bg);cursor:pointer;padding:4px 8px}
+  .wslot .ph{color:var(--muted);font-size:10px;letter-spacing:.3px}
+  .wslot .mm{font-weight:800;font-size:15px}
+  .wslot.over{border-color:var(--ink);background:#fff}
+  .wslot.filled{border-style:solid}
+  .wslot.filled.prefix{border-color:var(--mpre);background:var(--mpre-bg);color:var(--mpre)}
+  .wslot.filled.root{border-color:var(--mroot);background:var(--mroot-bg);color:var(--mroot)}
+  .wslot.filled.suffix{border-color:var(--msuf);background:var(--msuf-bg);color:var(--msuf)}
+  .wslot.filled.connector{border-color:var(--mcon);background:var(--mcon-bg);color:var(--mcon)}
+  .wbuilt{flex:1 1 46%;min-width:190px;text-align:right;display:none}
+  .wrow.done .wslots{display:none}
+  .wrow.done .wbuilt{display:block}
+  .wbuilt .wname{font-family:Georgia,serif;font-weight:700;font-size:16px;color:var(--correct)}
+  .wbuilt .wtickmark{color:var(--correct);font-weight:800;margin-left:4px}
+  .buildhint{font-size:12.5px;color:var(--wrong);text-align:center;min-height:16px;margin:4px 0 6px;font-weight:600}
+  @media(max-width:560px){ .wmean{flex:1 1 100%} .wbuilt{flex:1 1 100%;text-align:left} }
+
+  /* ---- reference views (morpheme table + word list) ---- */
+  .reftable{width:100%;border-collapse:collapse;margin:4px 0 14px}
+  .reftable th,.reftable td{border:1px solid var(--line-soft);padding:7px 10px;font-size:13px;text-align:left;vertical-align:middle}
+  .reftable th{background:var(--bg);font-size:11px;text-transform:uppercase;letter-spacing:.3px;color:var(--muted)}
+  .reftable .mtile{display:inline-flex}
+  .refhead{font-family:Georgia,serif;font-size:16px;margin:18px 0 6px;padding-bottom:3px;border-bottom:2px solid var(--line-soft)}
+  .refhead.prefix{color:var(--mpre)} .refhead.root{color:var(--mroot)} .refhead.suffix{color:var(--msuf)} .refhead.connector{color:var(--mcon)}
+  .reffilter{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+  .reffilter input{padding:9px 13px;border:1px solid var(--line);border-radius:8px;font-family:inherit;font-size:14px;background:var(--paper);color:var(--ink);min-width:220px}
+  .eqn{font-family:Georgia,serif;font-size:18px;letter-spacing:.5px}
+
   @media print{
     body{background:#fff;padding:0}
     .container{border:none;box-shadow:none;max-width:100%;padding:8px}
@@ -197,6 +276,13 @@
 </head>
 <body>
 <div class="container">
+
+<div class="topnav noprint">
+  <button data-scr="home" onclick="go('home')">&#9776; Lessons</button>
+  <button data-scr="morphtable" onclick="go('morphtable')">Morpheme table</button>
+  <button data-scr="glossary" onclick="go('glossary')">Word list</button>
+  <button data-scr="report" onclick="go('report')">My report</button>
+</div>
 
 <div class="screen active" id="scr-home">
   <h1>Water in the World</h1>
@@ -214,13 +300,6 @@
       <button class="btn btn-ghost" onclick="go('report')">Open my report</button>
     </div>
   </div>
-  <details class="teach noprint">
-    <summary>For teachers (and curious students)</summary>
-    <p><b>How scoring works.</b> Every task records the <b>first attempt</b>; wrong answers loop back until they&rsquo;re mastered, so finishing with a low first-attempt score still means every word was eventually built and used. The report shows both.</p>
-    <p><b>Why screens differ.</b> Apply tasks are sampled from a bank and review words are drawn by weighted shuffle (words a student has missed come back more often), so neighbouring screens rarely match &mdash; comparing answers doesn&rsquo;t help.</p>
-    <p><b>Adaptive tiers.</b> A student who struggles in a lesson is offered <b>Base camp</b> &mdash; the same morphemes in everyday primary-school words &mdash; before retrying. A student who finishes clean unlocks <b>Stretch</b> &mdash; heavier unit words (desalination, hydrometeorological&hellip;) built from parts they now know. Both are always self-selectable; neither is compulsory.</p>
-    <p><b>Reports.</b> Students enter their name and ID on the report screen and print to PDF. The verification code is a hash of the name, ID and scores &mdash; it changes if any of those do.</p>
-  </details>
   <div class="nextrow noprint" style="justify-content:center">
     <button class="linkbtn" onclick="resetAll()">start over (clears everything)</button>
   </div>
@@ -266,6 +345,16 @@
   <div id="report-body"></div>
 </div>
 
+<div class="screen" id="scr-morphtable">
+  <div class="topbar noprint"><button class="linkbtn" onclick="go('home')">&larr; lessons</button><span class="progress">MORPHEME TABLE</span></div>
+  <div id="morphtable-body"></div>
+</div>
+
+<div class="screen" id="scr-glossary">
+  <div class="topbar noprint"><button class="linkbtn" onclick="go('home')">&larr; lessons</button><span class="progress">WORD LIST</span></div>
+  <div id="glossary-body"></div>
+</div>
+
 </div>
 <script>
 "use strict";
@@ -273,19 +362,25 @@
    WATER IN THE WORLD — VOCAB HUB
    Companion to the Year 7 Humanities (Geography) unit, Term 3.
 
+   Clicking a lesson AUTO-RUNS a 6-word review of earlier lessons
+   first (skipped for the very first lesson), then drops into it.
+
    One lesson = one short set of key words (5–7). For each lesson:
      MEET  — read the words: meaning + the morphemes that build it.
-     BUILD — assemble each word from its morphemes, in order, from
-             a bank that includes plausible decoys. Opaque/borrowed
-             words (billabong, hazard, El Niño…) arrive as honest
-             word-origin questions instead of invented parts.
-     USE   — apply tasks sampled from a bank (cloze, scenario,
-             description, diagram, morpheme-match), so neighbouring
-             students rarely see the same item.
+     BUILD — a single colour-coded morpheme bank (prefix/root/suffix)
+             above a table of word MEANINGS; drag (or tap) each
+             morpheme into the word it belongs to. Morphemes are
+             reused across many words, so the bank never depletes.
+             A finished word ticks off and leaves the board; you go
+             until none remain. Opaque/borrowed words (billabong,
+             hazard, El Niño…) can't be cut into parts, so they come
+             as honest word-origin questions afterwards.
+     USE   — a mixed bag of tasks (cloze, scenario, description,
+             diagram, word-sum, meaning-match, part-meaning) sampled
+             and generated so neighbouring students differ.
 
-   REVIEW — from the home screen: a weighted shuffle of 6 words
-     from earlier lessons (missed words return more often), each
-     with a randomly drawn task. Every run is different.
+   A persistent MORPHEME TABLE and WORD LIST are always available
+   from the top nav as look-ups.
 
    ADAPTIVE TIERS —
      BASE CAMP (support): the same morphemes in everyday primary-
@@ -1617,6 +1712,24 @@ const ALL_WORDS = []; const WORD_LESSON = {};
 LESSONS.forEach(l=>l.words.forEach(w=>{ ALL_WORDS.push(w); WORD_LESSON[w.w]=l.id; }));
 const ITEM_WORD = {}; // apply item id -> word object
 LESSONS.forEach(l=>l.words.forEach(w=>(w.apply||[]).forEach(it=>ITEM_WORD[it.id]=w)));
+const WORD_BY_NAME = {}; ALL_WORDS.forEach(w=>WORD_BY_NAME[w.w]=w);
+
+/* morpheme index: unique word-parts across every buildable word, typed + with examples */
+function classifyMorph(piece){
+  if(/^-.*-$/.test(piece)) return "connector";   // e.g. -o-
+  if(/^-/.test(piece)) return "suffix";
+  if(/-$/.test(piece)) return "prefix";
+  return "root";
+}
+const MORPHS = [];                 // {piece, gloss, type, examples:[wordName]}
+const MORPH_BY_PIECE = {};
+LESSONS.forEach(l=>l.words.forEach(w=>(w.tiles||[]).forEach(([p,g])=>{
+  if(!MORPH_BY_PIECE[p]){ const m={piece:p, gloss:g, type:classifyMorph(p), examples:[]}; MORPH_BY_PIECE[p]=m; MORPHS.push(m); }
+  if(MORPH_BY_PIECE[p].examples.indexOf(w.w)<0) MORPH_BY_PIECE[p].examples.push(w.w);
+})));
+const ALL_GLOSSES = [...new Set(MORPHS.map(m=>m.gloss))];
+const MTYPE_LABEL = {prefix:"Prefixes", root:"Roots & base words", suffix:"Suffixes", connector:"Joiners"};
+const MTYPE_ORDER = ["prefix","root","suffix","connector"];
 
 /* ================= STATE ================= */
 /* storage shim: real localStorage as a standalone file / on GitHub Pages;
@@ -1625,7 +1738,7 @@ const store = (function(){
   try{ const k="__wvh_probe"; localStorage.setItem(k,"1"); localStorage.removeItem(k); return localStorage; }
   catch(e){ const m={}; return { getItem:k=>(k in m?m[k]:null), setItem:(k,v)=>{m[k]=String(v);}, removeItem:k=>{delete m[k];} }; }
 })();
-const KEY = "waterworld.vocabhub.v1";
+const KEY = "waterworld.vocabhub.v2";
 let S = load();
 function blankLesson(){ return { studied:false, buildDone:{}, buildFirst:{}, buildComplete:false,
   applySample:[], applyFirst:{}, applyDone:false,
@@ -1647,10 +1760,17 @@ function go(id){
   document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
   document.getElementById("scr-"+id).classList.add("active");
   window.scrollTo(0,0);
+  updateNav(id);
   if(id==="home") renderHome();
   if(id==="report") renderReport();
+  if(id==="morphtable") renderMorphTable();
+  if(id==="glossary") renderGlossary();
 }
-function goLesson(){ if(cur) openLesson(cur); else go("home"); }
+function updateNav(id){
+  const group={morphtable:"morphtable", glossary:"glossary", report:"report"}[id] || "home";
+  document.querySelectorAll(".topnav button").forEach(b=>b.classList.toggle("on", b.dataset.scr===group));
+}
+function goLesson(){ if(cur) openLesson(cur, false); else go("home"); }
 
 /* translations */
 function trSpan(w, big){
@@ -1666,12 +1786,19 @@ function buildCounts(l){
   const clean=l.words.filter(w=>st.buildFirst[w.w]===true).length;
   return {done, clean, total:l.words.length};
 }
+/* apply sample = descriptors: {k:"a",id} authored, or {k:"g",g:type,w:name} generated */
+function applyKey(d){ return d.k==="a" ? d.id : ("g:"+d.g+":"+d.w); }
+function applyItem(d){
+  if(d.k==="a"){ const w=ITEM_WORD[d.id]; return w.apply.find(x=>x.id===d.id); }
+  return genTask(d.g, WORD_BY_NAME[d.w]);
+}
+function applyWordName(d){ return d.k==="a" ? ITEM_WORD[d.id].w : d.w; }
 function applyCounts(l){
   const st=L(l.id);
-  const ids=st.applySample||[];
-  const ans=ids.filter(id=>st.applyFirst[id]!==undefined).length;
-  const got=ids.filter(id=>st.applyFirst[id]===true).length;
-  return {ans, got, total:ids.length||l.words.length};
+  const ds=st.applySample||[];
+  const ans=ds.filter(d=>st.applyFirst[applyKey(d)]!==undefined).length;
+  const got=ds.filter(d=>st.applyFirst[applyKey(d)]===true).length;
+  return {ans, got, total:ds.length||l.words.length};
 }
 function lessonCleanRate(l){
   const b=buildCounts(l), a=applyCounts(l);
@@ -1719,7 +1846,7 @@ function renderHome(){
     card.innerHTML=`<span class="lnum">LESSON ${esc(l.id)} · ${l.words.length} WORDS</span>
       <span class="lname">${esc(l.title)}</span>
       <span class="lstat">${chips.join("")||`<span class="chip">not started</span>`}</span>`;
-    card.onclick=()=>openLesson(l.id);
+    card.onclick=()=>openLesson(l.id, true);
     grid.appendChild(card);
   });
   /* review availability */
@@ -1727,21 +1854,26 @@ function renderHome(){
   const btn=document.getElementById("review-start");
   btn.disabled = pool.length<4;
   document.getElementById("review-desc").innerHTML = pool.length<4
-    ? "Unlocks once you’ve built the words of your first lesson — then every session starts with a quick look back."
-    : `A shuffled set from the <b>${pool.length} words</b> you’ve met so far — everyone gets a different mix, so eyes on your own screen. Done ${S.reviews.length} review${S.reviews.length===1?"":"s"} so far.`;
+    ? "A quick look back is <b>baked into the start of every lesson</b> once you’ve done your first one. This button is here for extra practice any time."
+    : `Extra practice — a shuffled set from the <b>${pool.length} words</b> you’ve met so far (this also runs automatically when you open a lesson). Everyone gets a different mix. Done ${S.reviews.length} review${S.reviews.length===1?"":"s"} so far.`;
 }
 
 /* ================= LESSON HOME ================= */
-function openLesson(id){
+function openLesson(id, fromHome){
   cur=id;
   const l=LESSON_BY_ID[id], st=L(id);
+  if(fromHome){
+    const idx=LESSONS.findIndex(x=>x.id===id);
+    const pool=reviewPool(idx);
+    if(pool.length>=4){ runReview(idx, {contLesson:id}); return; }
+  }
   document.getElementById("lesson-prog").textContent=`LESSON ${id}`;
   const b=buildCounts(l), a=applyCounts(l);
   const rate=lessonCleanRate(l);
   const steps=[
     { t:"Meet the words", d:`Read this lesson’s ${l.words.length} words — meaning, morphemes and where each came from.`,
       done:st.studied, locked:false, fn:()=>renderStudy(l), tag:st.studied?"READ":"" },
-    { t:"Build the words", d:"Assemble each word from its morphemes, in order. Wrong pieces bounce back; finishing a word unlocks its story.",
+    { t:"Build the words", d:"Drag the colour-coded morphemes into the word each one belongs to. Finished words tick off and leave the board.",
       done:st.buildComplete, locked:!st.studied, fn:()=>startBuild(l),
       tag:st.buildComplete?`${b.clean}/${b.total} CLEAN`:(b.done?`${b.done}/${b.total} built`:"") },
     { t:"Use the words", d:"Your own sample of apply tasks — scenarios, sentences, diagrams. Your neighbour’s set will be different.",
@@ -1825,7 +1957,7 @@ function renderBuilder(mount, spec, opts){
   const bankEl=mount.querySelector("#bank");
   const slots=mount.querySelectorAll("#slots .slot");
   bank.forEach(([piece,gloss])=>{
-    const t=document.createElement("button"); t.className="tile";
+    const t=document.createElement("button"); t.className="tile "+classifyMorph(piece);
     t.innerHTML=`<span class="mm">${esc(piece)}</span><span class="gl">${esc(gloss)}</span>`;
     t.onclick=()=>{
       if(pos>=pieces.length) return;
@@ -1886,31 +2018,175 @@ function renderOriginQ(mount, spec, opts){
   });
 }
 
-/* ================= STEP 2 · BUILD ================= */
-function buildDots(l, curW){
-  const st=L(l.id);
-  return `<div class="buildprog">`+l.words.map(x=>
-    `<span class="bdot${st.buildDone[x.w]?" done":""}${x.w===curW?" now":""}"></span>`).join("")+`</div>`;
-}
+/* ================= STEP 2 · BUILD — colour-coded drag-and-drop morpheme table ================= */
+let buildCtx=null; // {l, tapSel}
 function startBuild(l){
   touchStart();
+  const st=L(l.id);
+  const buildable=l.words.filter(w=>w.type==="morph"||w.type==="compound");
+  if(buildable.every(w=>st.buildDone[w.w])){ buildOriginPhase(l); return; }
   go("build");
-  const st=L(l.id);
-  const queue=l.words.filter(x=>!st.buildDone[x.w]);
-  buildNext(l, queue);
+  renderBuildTable(l, buildable);
 }
-function buildNext(l, queue){
+function buildProgressText(l){
   const st=L(l.id);
-  document.getElementById("build-prog").textContent=`STEP 2 · BUILD · ${l.words.filter(x=>st.buildDone[x.w]).length}/${l.words.length} words`;
+  const done=l.words.filter(w=>st.buildDone[w.w]).length;
+  document.getElementById("build-prog").textContent=`STEP 2 · BUILD · ${done}/${l.words.length} words`;
+}
+function renderBuildTable(l, buildable){
+  const st=L(l.id);
+  buildCtx={l, tapSel:null};
+  /* one shared morpheme bank: every part these words need, deduped, plus a few decoys */
+  const need=new Map();
+  buildable.forEach(w=>w.tiles.forEach(([p,g])=>{ if(!need.has(p)) need.set(p,g); }));
+  const realSet=new Set(need.keys());
+  const decoyPool=[]; const seenD=new Set();
+  buildable.forEach(w=>(w.decoys||[]).forEach(([p,g])=>{ if(!realSet.has(p)&&!seenD.has(p)){ seenD.add(p); decoyPool.push([p,g]); } }));
+  const bankArr=[...need.entries()].map(([p,g])=>({piece:p,gloss:g,type:classifyMorph(p)}))
+    .concat(shuffle(decoyPool).slice(0,3).map(([p,g])=>({piece:p,gloss:g,type:classifyMorph(p)})));
+  let bankHtml="";
+  MTYPE_ORDER.forEach(type=>{
+    const group=bankArr.filter(m=>m.type===type);
+    if(!group.length) return;
+    bankHtml+=`<div class="mgroup"><div class="glabel ${type}">${MTYPE_LABEL[type]}</div><div class="mtiles">`+
+      shuffle(group).map(m=>`<button class="mtile ${m.type}" data-piece="${esc(m.piece)}" data-gloss="${esc(m.gloss)}" data-type="${m.type}"><span class="mm">${esc(m.piece)}</span><span class="gl">${esc(m.gloss)}</span></button>`).join("")+
+      `</div></div>`;
+  });
+  const active=shuffle(buildable.filter(w=>!st.buildDone[w.w]));
+  const rowsHtml=active.map(w=>{
+    const slots=w.tiles.map((_,si)=>(si?`<span class="wjoin">+</span>`:"")+`<span class="wslot" data-i="${si}"><span class="ph">drop</span></span>`).join("");
+    return `<div class="wrow" data-w="${esc(w.w)}">
+      <div class="wmean"><span class="pos">${esc(w.pos)}</span> — ${esc(w.meaning)}</div>
+      <div class="wslots">${slots}</div>
+      <div class="wbuilt"></div></div>`;
+  }).join("");
   const mount=document.getElementById("build-body");
-  if(!queue.length){ finishBuild(l); return; }
-  const word=queue.shift();
-  const markDone=()=>{ st.buildDone[word.w]=true; save(); buildNext(l, queue); };
-  const onFirst=(clean)=>{ if(st.buildFirst[word.w]===undefined){ st.buildFirst[word.w]=clean; if(!clean) WS(word.w).wrong++; save(); } };
-  if(word.type==="origin") renderOriginQ(mount, word, {dots:buildDots(l,word.w), onFirst, onDone:markDone});
-  else renderBuilder(mount, word, {dots:buildDots(l,word.w),
-    prompt: word.type==="compound"?"Build the compound — tap the two words into place, in order":"Build the word — tap the morphemes into place, in order",
-    onFirst, onDone:markDone});
+  mount.innerHTML=`
+    <h2 style="text-align:center">Build the words — Lesson ${esc(l.id)}</h2>
+    <p class="muted" style="text-align:center;margin-bottom:8px">Drag each morpheme into the word it belongs to — or tap a morpheme, then tap a slot. Build <b>prefix → root → suffix</b>, left to right. A finished word ticks off and leaves the board; keep going until none are left.</p>
+    <div class="mlegend"><span><i style="background:var(--mpre)"></i>Prefix (start)</span><span><i style="background:var(--mroot)"></i>Root (heart)</span><span><i style="background:var(--msuf)"></i>Suffix (end)</span></div>
+    <div class="mbank">${bankHtml}</div>
+    <div class="buildhint" id="buildhint"></div>
+    <div class="wtable" id="wtable">${rowsHtml}</div>`;
+  buildProgressText(l);
+  wireBuildDnD(mount);
+}
+function wireBuildDnD(mount){
+  mount.querySelectorAll(".mtile").forEach(tile=>{
+    const info={piece:tile.dataset.piece, gloss:tile.dataset.gloss, type:tile.dataset.type};
+    tile.addEventListener("pointerdown", e=>startTileDrag(e, tile, info));
+  });
+  mount.querySelectorAll(".wslot").forEach(slot=>{
+    slot.addEventListener("click", ()=>{
+      if(slot.dataset.piece){ clearSlot(slot); return; }
+      if(buildCtx.tapSel){ const s=buildCtx.tapSel; setTapSel(null); fillSlot(slot, s); }
+    });
+  });
+}
+function setTapSel(info){
+  buildCtx.tapSel=info;
+  document.querySelectorAll("#build-body .mtile").forEach(t=>{
+    t.classList.toggle("sel", !!info && t.dataset.piece===info.piece && t.dataset.type===info.type);
+  });
+}
+function startTileDrag(e, tile, info){
+  e.preventDefault();
+  const sx=e.clientX, sy=e.clientY; let moved=false, ghost=null;
+  try{ tile.setPointerCapture(e.pointerId); }catch(_){}
+  function mv(ev){
+    if(!moved && Math.hypot(ev.clientX-sx, ev.clientY-sy)>6){ moved=true; tile.classList.add("dragging"); ghost=mkGhost(info); }
+    if(moved && ghost){ ghost.style.left=ev.clientX+"px"; ghost.style.top=ev.clientY+"px"; hoverSlot(ev); }
+  }
+  function up(ev){
+    tile.removeEventListener("pointermove",mv); tile.removeEventListener("pointerup",up);
+    try{ tile.releasePointerCapture(e.pointerId); }catch(_){}
+    if(moved){
+      tile.classList.remove("dragging"); if(ghost) ghost.remove(); clearHover();
+      const slot=slotAt(ev);
+      if(slot && !slot.dataset.piece) fillSlot(slot, info);
+    } else {
+      const same=buildCtx.tapSel && buildCtx.tapSel.piece===info.piece && buildCtx.tapSel.type===info.type;
+      setTapSel(same ? null : info);
+    }
+  }
+  tile.addEventListener("pointermove",mv); tile.addEventListener("pointerup",up);
+}
+function mkGhost(info){
+  const g=document.createElement("div"); g.className="drag-ghost mtile "+info.type;
+  g.innerHTML=`<span class="mm">${esc(info.piece)}</span><span class="gl">${esc(info.gloss)}</span>`;
+  document.body.appendChild(g); return g;
+}
+function slotAt(ev){ const el=document.elementFromPoint(ev.clientX,ev.clientY); return el?el.closest(".wslot"):null; }
+function hoverSlot(ev){ clearHover(); const s=slotAt(ev); if(s && !s.dataset.piece) s.classList.add("over"); }
+function clearHover(){ document.querySelectorAll("#build-body .wslot.over").forEach(s=>s.classList.remove("over")); }
+function fillSlot(slot, info){
+  slot.dataset.piece=info.piece; slot.dataset.type=info.type;
+  slot.className="wslot filled "+info.type; slot.innerHTML=`<span class="mm">${esc(info.piece)}</span>`;
+  checkRow(slot.closest(".wrow"));
+}
+function clearSlot(slot){
+  delete slot.dataset.piece; delete slot.dataset.type;
+  slot.className="wslot"; slot.innerHTML=`<span class="ph">drop</span>`;
+  const h=document.getElementById("buildhint"); if(h) h.textContent="";
+}
+function checkRow(rowEl){
+  const w=WORD_BY_NAME[rowEl.dataset.w];
+  const slots=[...rowEl.querySelectorAll(".wslot")];
+  if(slots.some(s=>!s.dataset.piece)) return;
+  const placed=slots.map(s=>s.dataset.piece);
+  const answer=w.tiles.map(t=>t[0]);
+  const correct=placed.length===answer.length && placed.every((p,i)=>p===answer[i]);
+  const hint=document.getElementById("buildhint");
+  if(correct){ if(hint) hint.textContent=""; markRowDone(rowEl, w); }
+  else {
+    const st=L(buildCtx.l.id);
+    if(st.buildFirst[w.w]===undefined){ st.buildFirst[w.w]=false; WS(w.w).wrong++; save(); }
+    const sameSet=[...placed].sort().join("~")===[...answer].sort().join("~");
+    rowEl.classList.add("wrong"); setTimeout(()=>rowEl.classList.remove("wrong"),320);
+    if(hint) hint.innerHTML = sameSet
+      ? "Right pieces — check the <b>order</b> (prefix → root → suffix). Tap a slot to send its piece back."
+      : "Not a match yet — reread the meaning. Tap any slot to send its piece back.";
+  }
+}
+function markRowDone(rowEl, w){
+  const st=L(buildCtx.l.id);
+  st.buildDone[w.w]=true;
+  if(st.buildFirst[w.w]===undefined) st.buildFirst[w.w]=true;
+  save();
+  rowEl.classList.add("done");
+  rowEl.querySelector(".wbuilt").innerHTML=`<span class="wname">${esc(w.w)}</span> ${trSpan(w.w)} <span class="wtickmark">✓</span>`;
+  buildProgressText(buildCtx.l);
+  setTimeout(()=>{
+    rowEl.classList.add("gone");
+    setTimeout(()=>{
+      rowEl.remove();
+      if(!document.querySelector("#wtable .wrow")) buildOriginPhase(buildCtx.l);
+    },320);
+  },850);
+}
+function buildOriginPhase(l){
+  const st=L(l.id);
+  const origins=l.words.filter(w=>w.type==="origin" && !st.buildDone[w.w]);
+  if(!origins.length){ finishBuild(l); return; }
+  go("build");
+  const mount=document.getElementById("build-body");
+  mount.innerHTML=`<h2 style="text-align:center">Word origins — Lesson ${esc(l.id)}</h2>
+    <p class="muted" style="text-align:center;margin-bottom:12px">A few of this lesson’s words come from names or places, not word-parts — so you match their story instead of building them.</p>
+    <div id="origin-slot"></div>`;
+  let queue=shuffle(origins.slice());
+  function next(){
+    buildProgressText(l);
+    if(!queue.length){ finishBuild(l); return; }
+    const w=queue.shift();
+    renderTaskItem(document.getElementById("origin-slot"),
+      {type:"desc", q:w.originQ, a:w.originA, opts:w.originOpts.slice(), explain:w.note, tag:"ORIGIN · "+w.w},
+      { onAnswer:(correct)=>{
+          if(st.buildFirst[w.w]===undefined){ st.buildFirst[w.w]=correct; if(!correct) WS(w.w).wrong++; save(); }
+          if(correct){ st.buildDone[w.w]=true; save(); } else queue.push(w);
+        },
+        onNext:next });
+  }
+  next();
 }
 function finishBuild(l){
   const st=L(l.id); st.buildComplete=true; save();
@@ -1918,9 +2194,9 @@ function finishBuild(l){
   const pct=Math.round(100*b.clean/b.total);
   const cls=pct>=80?"good":(pct>=60?"mid":"low");
   document.getElementById("build-body").innerHTML=`
-    <div class="sumbox"><div class="prompt">Lesson ${esc(l.id)} — clean builds (no wrong taps)</div>
+    <div class="sumbox"><div class="prompt">Lesson ${esc(l.id)} — clean builds (right first go)</div>
     <div class="big ${cls}">${b.clean} / ${b.total}</div>
-    <p class="muted">Every word is built and its story unlocked. “Clean” means every piece placed right first go — wrong pieces just bounced back until the word was complete.</p></div>
+    <p class="muted">Every word is built. “Clean” means you placed it correctly on the first full attempt — anything you had to redo still counts as done, just not clean.</p></div>
     <div class="nextrow" style="justify-content:center">
       <button class="btn btn-ghost" onclick="goLesson()">back to lesson</button>
       <button class="btn btn-primary" onclick="startApply(LESSON_BY_ID['${l.id}'])">Use the words →</button></div>`;
@@ -1953,7 +2229,7 @@ function renderTaskItem(mount, it, hooks){
     box.appendChild(qd);
     box.appendChild(buildOpts(it,isRight,finishItem,()=>nextBtn.style.display==="inline-block",qd.querySelector(".gap")));
   } else {
-    const prompts={scenario:"Read the scenario, then choose",desc:"Match the word",morphmatch:"Read the morphemes, then choose the word they build",alchemy:"Word alchemy — use the parts to work it out"};
+    const prompts={scenario:"Read the scenario, then choose",desc:"Match the word",morphmatch:"Read the morphemes, then choose the word they build",alchemy:"Word alchemy — use the parts to work it out",wordsum:"Add the morphemes — which word do they make?",meaningmatch:"Which word fits the meaning?",morphmeaning:"What does the word-part mean?"};
     box.innerHTML+=`<div class="prompt">${prompts[kind]||prompts.desc}</div>`;
     const qd=document.createElement("div"); qd.className="qtext"; qd.innerHTML=it.q; box.appendChild(qd);
     box.appendChild(buildOpts(it,isRight,finishItem,()=>nextBtn.style.display==="inline-block",null));
@@ -1985,33 +2261,62 @@ function buildOpts(it, isRight, finishItem, locked, gapEl){
   return opts;
 }
 
+/* ================= GENERATED TASKS (for variety + anti-copying) ================= */
+function sameLessonDistractors(word, n){
+  const l=LESSON_BY_ID[WORD_LESSON[word.w]];
+  return shuffle(l.words.filter(x=>x.w!==word.w).map(x=>x.w)).slice(0,n);
+}
+function morphMap(word){
+  return word.tiles ? word.tiles.map(t=>`<b>${esc(t[0])}</b> ${esc(t[1])}`).join(" + ")+" → <b>"+esc(word.w)+"</b>" : (word.note||"");
+}
+function genTypesFor(word){ return word.tiles ? ["meaningmatch","wordsum","morphmeaning"] : ["meaningmatch"]; }
+function genTask(gtype, word){
+  if(gtype==="wordsum" && word.tiles){
+    const eq=word.tiles.map(t=>`<b>${esc(t[0])}</b>`).join(" + ");
+    return { type:"wordsum", q:`Which word do these parts build?<br><span class="eqn">${eq}</span>`,
+      a:word.w, opts:[word.w].concat(sameLessonDistractors(word,3)), explain:morphMap(word) };
+  }
+  if(gtype==="morphmeaning" && word.tiles){
+    const roots=word.tiles.filter(t=>classifyMorph(t[0])==="root");
+    const t=pick(roots.length?roots:word.tiles);
+    const wrong=shuffle(ALL_GLOSSES.filter(g=>g!==t[1])).slice(0,3);
+    return { type:"morphmeaning", q:`In <b>${esc(word.w)}</b>, what does the part <b>${esc(t[0])}</b> mean?`,
+      a:t[1], opts:[t[1]].concat(wrong), explain:`<b>${esc(t[0])}</b> = ${esc(t[1])}. &nbsp; ${morphMap(word)}` };
+  }
+  return { type:"meaningmatch", q:`Which word means this?<br><i>${esc(word.meaning)}</i>`,
+    a:word.w, opts:[word.w].concat(sameLessonDistractors(word,3)), explain:morphMap(word) };
+}
+
 /* ================= STEP 3 · USE THE WORDS ================= */
 function startApply(l){
   touchStart();
   const st=L(l.id);
   if(!st.applySample.length){
-    st.applySample=l.words.map(w=>pick(w.apply).id);
+    st.applySample=l.words.map(w=>{
+      const gts=genTypesFor(w);
+      if(Math.random()<0.5 && w.apply && w.apply.length) return {k:"a", id:pick(w.apply).id};
+      return {k:"g", g:pick(gts), w:w.w};
+    });
     save();
   }
   go("apply");
-  const items=st.applySample.map(id=>{
-    const w=ITEM_WORD[id]; return w.apply.find(x=>x.id===id);
-  });
-  let queue=shuffle(items);
-  let mastered=0;
+  const descs=st.applySample.slice();
   const record = !st.applyDone; /* re-runs don't change the report */
+  let queue=shuffle(descs.map(d=>({d, it:Object.assign({}, applyItem(d))})));
+  let mastered=0;
   function next(){
-    document.getElementById("apply-prog").textContent=`STEP 3 · USE THE WORDS · mastered ${mastered}/${items.length}`;
+    document.getElementById("apply-prog").textContent=`STEP 3 · USE THE WORDS · mastered ${mastered}/${descs.length}`;
     if(!queue.length){ finishApply(l, record); return; }
-    const it=queue.shift();
-    renderTaskItem(document.getElementById("apply-body"), it, {
+    const cur=queue.shift();
+    const key=applyKey(cur.d);
+    renderTaskItem(document.getElementById("apply-body"), cur.it, {
       onAnswer:(correct)=>{
-        if(record && st.applyFirst[it.id]===undefined){
-          st.applyFirst[it.id]=correct;
-          if(!correct) WS(ITEM_WORD[it.id].w).wrong++;
+        if(record && st.applyFirst[key]===undefined){
+          st.applyFirst[key]=correct;
+          if(!correct) WS(applyWordName(cur.d)).wrong++;
           save();
         }
-        if(correct) mastered++; else queue.push(it);
+        if(correct) mastered++; else queue.push(cur);
       },
       onNext:next,
     });
@@ -2162,23 +2467,25 @@ function weightedSample(pool, n){
   return out;
 }
 function reviewTaskFor(word, pool){
-  /* 50/50: a real apply item, or an auto-generated morpheme-match */
-  if(word.type!=="origin" && (Math.random()<0.4 || !(word.apply||[]).length)){
-    const others=shuffle(pool.filter(x=>x.w!==word.w)).slice(0,3).map(x=>x.w);
-    if(others.length===3){
-      return { type:"morphmatch",
-        q:"Which word is built from:<br><b>"+word.tiles.map(t=>`${esc(t[0])}</b> (${esc(t[1])})`).join(" + <b>")+"?",
-        a:word.w, opts:[word.w].concat(others),
-        explain:(word.note||"").split("<br>")[0] };
-    }
+  /* mix authored apply items with generated word-sum / meaning-match / part-meaning */
+  const roll=Math.random();
+  if(word.tiles){
+    if(roll<0.22) return genTask("wordsum", word);
+    if(roll<0.40) return genTask("morphmeaning", word);
+    if(roll<0.58) return genTask("meaningmatch", word);
+  } else if(roll<0.40){
+    return genTask("meaningmatch", word);
   }
-  if(word.apply && word.apply.length) return pick(word.apply);
+  if(word.apply && word.apply.length) return Object.assign({}, pick(word.apply));
+  if(word.tiles) return genTask("meaningmatch", word);
   /* origin word fallback: re-ask the origin question as MCQ */
   return { type:"desc", q:word.originQ, a:word.originA, opts:word.originOpts.slice(), explain:word.note };
 }
-function runReview(uptoIdx){
+function runReview(uptoIdx, opts){
+  opts=opts||{};
   const pool=reviewPool(uptoIdx);
-  if(pool.length<4){ go("home"); return; }
+  if(pool.length<4){ if(opts.contLesson) openLesson(opts.contLesson, false); else go("home"); return; }
+  go("review");
   const n=Math.min(6,pool.length);
   const words=weightedSample(pool,n);
   const items=words.map(w=>{ const it=Object.assign({}, reviewTaskFor(w,pool)); it._w=w.w; it.tag="REVIEW · from lesson "+WORD_LESSON[w.w]; return it; });
@@ -2187,8 +2494,8 @@ function runReview(uptoIdx){
   const firsts={};
   words.forEach(w=>{ const ws=WS(w.w); ws.seen++; ws.rev++; });
   function next(){
-    document.getElementById("review-prog").textContent=`REVIEW · mastered ${mastered}/${items.length}`;
-    if(!queue.length){ finishReview(uptoIdx, words, firsts); return; }
+    document.getElementById("review-prog").textContent=(opts.contLesson?`WARM-UP REVIEW → LESSON ${opts.contLesson}`:"REVIEW")+` · mastered ${mastered}/${items.length}`;
+    if(!queue.length){ finishReview(uptoIdx, words, firsts, opts); return; }
     const it=queue.shift();
     renderTaskItem(document.getElementById("review-body"), it, {
       onAnswer:(correct)=>{
@@ -2202,23 +2509,84 @@ function runReview(uptoIdx){
       onNext:next,
     });
   }
-  next();
+  if(opts.contLesson){
+    const mount=document.getElementById("review-body");
+    mount.innerHTML=`<div class="sumbox"><div class="prompt">Before Lesson ${esc(opts.contLesson)}</div>
+      <p class="muted" style="margin:6px 0 0">Quick warm-up first — <b>6 words from earlier lessons</b>, drawn at random (ones you’ve missed come back more often). Then we jump into the new lesson.</p></div>
+      <div class="nextrow" style="justify-content:center"><button class="btn btn-water" id="rev-begin">Start warm-up →</button>
+      <button class="btn btn-ghost" onclick="openLesson('${opts.contLesson}', false)">Skip to lesson</button></div>`;
+    mount.querySelector("#rev-begin").onclick=next;
+  } else next();
 }
-function finishReview(uptoIdx, words, firsts){
+function finishReview(uptoIdx, words, firsts, opts){
+  opts=opts||{};
   const got=words.filter(w=>firsts[w.w]===true).length;
   const missed=words.filter(w=>firsts[w.w]===false).map(w=>w.w);
   S.reviews.push({ when:Date.now(), upTo:LESSONS[uptoIdx]?LESSONS[uptoIdx].id:"—", total:words.length, got, missed });
   save();
   const pct=Math.round(100*got/words.length);
   const cls=pct>=80?"good":(pct>=60?"mid":"low");
+  const buttons = opts.contLesson
+    ? `<button class="btn btn-primary" onclick="openLesson('${opts.contLesson}', false)">Start Lesson ${esc(opts.contLesson)} →</button>
+       <button class="btn btn-ghost" onclick="go('home')">home</button>`
+    : `<button class="btn btn-water" onclick="startReviewSetup()">Another six</button>
+       <button class="btn btn-ghost" onclick="go('home')">home</button>
+       <button class="btn btn-ghost" onclick="go('report')">my report</button>`;
   document.getElementById("review-body").innerHTML=`
-    <div class="sumbox"><div class="prompt">Review — first attempts</div>
+    <div class="sumbox"><div class="prompt">${opts.contLesson?"Warm-up review":"Review"} — first attempts</div>
     <div class="big ${cls}">${got} / ${words.length}</div>
     <p class="muted">${missed.length?`Back for another visit soon: <b>${esc(missed.join(", "))}</b> — the shuffle remembers.`:"Clean sweep — these words are sticking."}</p></div>
-    <div class="nextrow" style="justify-content:center">
-      <button class="btn btn-water" onclick="startReviewSetup()">Another six</button>
-      <button class="btn btn-ghost" onclick="go('home')">home</button>
-      <button class="btn btn-ghost" onclick="go('report')">my report</button></div>`;
+    <div class="nextrow" style="justify-content:center">${buttons}</div>`;
+}
+
+/* ================= REFERENCE LOOK-UPS (always available from the nav) ================= */
+function renderMorphTable(){
+  const m=document.getElementById("morphtable-body");
+  let html=`<h2 style="text-align:center">Morpheme table</h2>
+    <p class="muted" style="text-align:center;margin-bottom:6px">Every word-part in the unit, colour-coded. Learn a part once and you can read it inside dozens of words.</p>
+    <div class="mlegend"><span><i style="background:var(--mpre)"></i>Prefix</span><span><i style="background:var(--mroot)"></i>Root / base</span><span><i style="background:var(--msuf)"></i>Suffix</span></div>`;
+  MTYPE_ORDER.forEach(type=>{
+    const group=MORPHS.filter(mm=>mm.type===type).slice().sort((a,b)=>a.piece.replace(/-/g,"").localeCompare(b.piece.replace(/-/g,"")));
+    if(!group.length) return;
+    html+=`<div class="refhead ${type}">${MTYPE_LABEL[type]}</div>
+      <table class="reftable"><tr><th>Part</th><th>Meaning</th><th>Words that use it</th></tr>`;
+    group.forEach(mm=>{
+      html+=`<tr><td><span class="mtile ${type}"><span class="mm">${esc(mm.piece)}</span></span></td>
+        <td>${esc(mm.gloss)}</td><td class="muted">${mm.examples.map(esc).join(", ")}</td></tr>`;
+    });
+    html+=`</table>`;
+  });
+  m.innerHTML=html;
+}
+function renderGlossary(){
+  const m=document.getElementById("glossary-body");
+  m.innerHTML=`<h2 style="text-align:center">Word list</h2>
+    <p class="muted" style="text-align:center;margin-bottom:10px">Every key word in the unit — meaning, parts and (if you’ve chosen a language) your translation. Search or scroll.</p>
+    <div class="reffilter"><input id="gloss-search" placeholder="Search a word or meaning…" aria-label="search words"></div>
+    <div id="gloss-list"></div>`;
+  const input=m.querySelector("#gloss-search");
+  input.addEventListener("input", ()=>drawGloss(input.value.trim().toLowerCase()));
+  drawGloss("");
+}
+function drawGloss(q){
+  const wrap=document.getElementById("gloss-list"); if(!wrap) return;
+  let html="";
+  LESSONS.forEach(l=>{
+    const ws=l.words.filter(w=> !q || w.w.toLowerCase().includes(q) || w.meaning.toLowerCase().includes(q));
+    if(!ws.length) return;
+    html+=`<div class="topichead">Lesson ${esc(l.id)} · ${esc(l.title)}</div>`;
+    ws.forEach(w=>{
+      const map=w.tiles
+        ? w.tiles.map(t=>`<span class="mtile ${classifyMorph(t[0])}"><span class="mm">${esc(t[0])}</span><span class="gl">${esc(t[1])}</span></span>`).join(" ")
+        : `<span class="muted">from a name or place — see its story in the lesson</span>`;
+      const domLabel={water:"WATER",earth:"EARTH & RESOURCES",people:"PEOPLE & VALUES",hazard:"HAZARDS"}[w.domain]||w.domain;
+      html+=`<div class="vcard"><div class="top"><span class="w">${esc(w.w)}</span><span class="pos">${esc(w.pos)}</span>${trSpan(w.w)}
+          <span class="dtag ${w.domain}">${domLabel}</span></div>
+        <div class="meaning">${esc(w.meaning)}</div>
+        <div class="morph" style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;border-top:1px dashed var(--line-soft);padding-top:8px">${map}</div></div>`;
+    });
+  });
+  wrap.innerHTML=html || `<p class="muted" style="text-align:center">No words match “${esc(q)}”.</p>`;
 }
 
 /* ================= REPORT ================= */
@@ -2261,10 +2629,8 @@ function renderReport(){
   const needs={};
   LESSONS.forEach(l=>{
     const st=S.lessons[l.id]; if(!st) return;
-    l.words.forEach(w=>{
-      if(st.buildFirst[w.w]===false) needs[w.w]=(needs[w.w]||0)+1;
-      (w.apply||[]).forEach(it=>{ if(st.applyFirst[it.id]===false) needs[w.w]=(needs[w.w]||0)+1; });
-    });
+    l.words.forEach(w=>{ if(st.buildFirst[w.w]===false) needs[w.w]=(needs[w.w]||0)+1; });
+    (st.applySample||[]).forEach(d=>{ if(st.applyFirst[applyKey(d)]===false) needs[applyWordName(d)]=(needs[applyWordName(d)]||0)+1; });
   });
   S.reviews.forEach(r=>r.missed.forEach(w=>{ needs[w]=(needs[w]||0)+1; }));
   const needList=Object.keys(needs).sort((x,y)=>needs[y]-needs[x]);
@@ -2302,7 +2668,7 @@ function saveIdAndPrint(){
 }
 
 /* ---- boot ---- */
-renderHome();
+go("home");
 </script>
 </body>
 </html>
