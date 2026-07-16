@@ -73,39 +73,38 @@ screen wipes it.
 
 ## Interactive simulations
 
-**`share-the-river.html`** — *Share the River*, a Murray–Darling allocation simulator
-(built, in the mould of the Coasts / Deserts / Mountains sims). You are the water manager
-for a fictionalised reach of the Basin in a drought year: across four seasons you divide a
-shrinking inflow between irrigated farms, the town, environmental flow and a cultural flow
-that keeps a sacred waterhole alive.
+**`share-the-river.html`** — *Share the River: the Big Dry*, a multi-year Murray–Darling
+drought simulation in the mould of the Coasts / Deserts / Mountains sims. You are the water
+manager for a fictionalised catchment through a **five-year drought** modelled on the
+Millennium Drought.
 
-The design follows the reference sims' pedagogy rather than quizzing over the top of them:
-- **The map is the decision surface, with data you must read.** A vertical catchment — highland
-  dam, two farm districts, a tributary confluence, the town, a Ramsar wetland and a cut-off
-  billabong — with **four toggleable data layers** (water, rainfall/inflow, demand, river
-  health) and a live accounting tally showing exactly how much reaches the wetland and
-  waterhole. The health layer reddens downstream of wherever you took water.
-- **Many combinable levers** (a large decision space, like the reference sims): per-district
-  **allocation + flood-vs-drip method**, a **reservoir** you bank water in across seasons, town
-  **recycling + restriction levels**, and a deliberate **cultural release** to the billabong —
-  planned against a **budget** (farms earn it; efficiency, the dam and recycling cost it) and a
-  4-season **inflow forecast**.
-- **An irreducible trade-off engine.** A transparent systems model links the four values —
-  the town leans on *both* its own water *and* farm-jobs income *and* a river clean enough to
-  drink from — so helping one user provably costs another. No plan keeps everyone at the top.
-- **Consequences emerge and are irreversible.** Over-take the river and it goes slow, warm
-  and algal (and fouls the town's own supply); starve the cultural flow and the sacred
-  waterhole **dries — and cannot be un-dried**. A live map thins downstream as water is taken.
-- **The knowledge lives in the advisers' voices** — a neutral hydrologist narrator plus four
-  consultable advisers (grower, mayor, ecologist, First Nations custodian) whose upfront
-  profiles carry the curriculum content and whose reactions respond to your actual choices.
-- **Judgement is withheld at decision time** — you allocate, run the season, and read what
-  happened; the sim never lectures mid-play.
-- **Assessment is an opt-in, non-grading debrief.** A collapsible "Reflect like a geographer"
-  with sentence-starter scaffolds (Years 5–6) and stretch extensions (Years 9–10), an
-  idea-checker that reports *which ideas you used, not whether your reasoning is right*, and
-  a self-assessment against the school's exact "I can…" continuum ladders. It prints a
-  plan + report PDF for the teacher.
+- **No number-dialling — you set policy.** Every decision is a qualitative **posture** (like
+  choosing a strategy, not an amount): Bank / Balanced / Release the dam; Full production /
+  Cut back / Fallow the farms; Business-as-usual / Restrictions; Country-&-river-first /
+  Fair-share / People-first. Reading numbers off the map and gauges is encouraged (that's the
+  map-and-data skill); typing them is never asked.
+- **Genuine uncertainty.** Each year the forecast is **odds, not a promise** (a Severe·Dry·
+  Average·Wet bar). Banking dam water becomes a real bet on next year being worse — risk
+  management, not arithmetic.
+- **Accumulating, irreversible legacy across years** (state carries over): a **salt scar** that
+  spreads with over-use and only a flood flushes; an **aquifer** that bores draw down over
+  decades; a **town population** that leaves under sustained hardship and doesn't return; a
+  dried **billabong** (a cut-off bend) that stays dry.
+- **One-off investments** bought from a carried **budget** — modernise to drip, town recycling,
+  sink bores — plus situational events: a **water-theft enforcement** decision and a
+  **flood flush-or-capture** call.
+- **Values as a mechanic (FPIC).** Consulting the First Nations custodian *before* you decide
+  unlocks genuine "Country & river first" partnership; choosing it without consulting lands as
+  tokenism. It teaches Free, Prior and Informed Consent by making you live its logic.
+- **The knowledge lives in the advisers' voices**; judgement is withheld until you commit each
+  year; the verdict is nuanced.
+- **It ends by grounding the fiction in reality** — a "What actually happened" epilogue on the
+  Millennium Drought, the 2018–19 Menindee fish kills, the Basin Plan, and the ongoing fight
+  for cultural flows.
+- **Assessment is an opt-in, non-grading debrief** — "Reflect like a geographer" with
+  sentence-starter scaffolds (Years 5–6) and stretch extensions (Years 9–10), an idea-checker
+  that reports *which ideas you used, not whether your reasoning is right*, and self-assessment
+  against the school's exact "I can…" continuum ladders. Prints a plan + report PDF.
 
 Open the file in any browser.
 
