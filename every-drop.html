@@ -49,6 +49,10 @@ h1,h2,h3{line-height:1.25}
 .tl-era.done{background:var(--okbg);border-color:#cfe0d0}
 .tl-era.now{border-color:var(--deep);box-shadow:0 0 0 2px rgba(29,95,125,.25);color:var(--ink)}
 .tl-era.now .yr{color:var(--deep)}
+.tl-era.clickable{cursor:pointer}
+.tl-era.clickable:hover{border-color:var(--warn)}
+.tl-era.reviewing{border-color:var(--warn);box-shadow:0 0 0 2px rgba(160,106,31,.35)}
+.tl-era.reviewing .yr{color:var(--warn)}
 
 /* ---------- layout ---------- */
 .gamegrid{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:14px;align-items:start}
@@ -153,6 +157,22 @@ h1,h2,h3{line-height:1.25}
 .nb-wrap{overflow-x:auto}
 .nb-bars{margin-top:12px}
 .nb-note{font-size:.8rem;color:var(--muted);margin-top:8px;line-height:1.5}
+.nb-h{cursor:pointer;user-select:none;transition:background .15s}
+.nb-h:hover{background:#e6dcc4}
+.nb-h.tracked{background:var(--deep);color:#fff}
+.nb-u{font-weight:400;text-transform:none;letter-spacing:0;opacity:.75;font-size:.62rem}
+.nb-v{font-weight:700;color:var(--ink);background:#f6fbfd}
+.nb-blank{color:#c9bfa8}
+.nb-ctl{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:.82rem;color:var(--muted);margin-top:10px}
+.nb-ctl .chip{padding:3px 10px;font-size:.74rem}
+.obs-row label{display:block;font-size:.78rem;font-weight:700;color:var(--muted);margin-bottom:6px}
+.obs-row textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:6px 9px;font:inherit;font-size:.83rem;font-weight:400;color:var(--ink);background:#fff;margin-top:3px}
+/* ---------- role bar + review bar ---------- */
+.rolebar{background:#eef4f7;border:1px solid #cfe0ea;border-radius:9px;padding:6px 12px;font-size:.82rem;color:var(--accent-ink);margin-bottom:10px}
+.reviewbar{display:none;align-items:center;gap:10px;flex-wrap:wrap;background:#f4efe0;border:1px solid #e0d3a8;border-radius:10px;padding:8px 12px;margin-bottom:8px;font-size:.85rem}
+.reviewbar.on{display:flex}
+.reviewbar b{color:var(--deep)}
+.reviewbar .spacer{flex:1}
 
 /* ---------- end / debrief ---------- */
 .verdict{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-bottom:12px}
@@ -227,6 +247,7 @@ details.reflect .inner{padding:2px 16px 14px}
     <div class="timeline" id="timeline"></div>
     <div class="gamegrid">
       <div class="vizcol">
+        <div class="reviewbar noprint" id="reviewbar"></div>
         <div class="viztabs noprint">
           <button class="vtab on" data-v="catchment" onclick="showViz('catchment')">🏞 Catchment</button>
           <button class="vtab" data-v="cycle" onclick="showViz('cycle')">🔁 Cycle diagram</button>
@@ -269,10 +290,10 @@ details.reflect .inner{padding:2px 16px 14px}
 
         <div class="vpane" id="vp-notebook">
           <div class="vizbox">
-            <h3 style="font-size:.98rem;color:var(--deep);margin-bottom:6px">📓 Field notebook — where the rain went, era by era</h3>
+            <h3 style="font-size:.98rem;color:var(--deep);margin-bottom:2px">📓 Field notebook</h3>
+            <p class="nb-note" style="margin:0 0 8px">You're the field scientist. Tap a column heading to record that reading across every era — choose the ones you think will matter over two hundred years.</p>
             <div class="nb-wrap"><table class="nb-table" id="nb-table"></table></div>
             <div class="nb-bars" id="nb-bars"></div>
-            <p class="nb-note">Each bar splits that era's rainfall three ways. This table is your data for the debrief — describe the pattern, quantify it, find the exception.</p>
           </div>
         </div>
       </div>
@@ -422,7 +443,7 @@ const ERAS=[
 
 /* ================= ERA 4 — 1990 ================= */
 { yr:"1990", name:"The City & the Farms", climate:{P:900,evapF:1.05},
-  intro:"A city of forty-five thousand — roofs and roads seal the floodplain, irrigation is big business upstream. TWO major works. Two of the best options on this desk only appear once you've listened.",
+  intro:"A city of forty-five thousand — roofs and roads seal the floodplain, irrigation is big business upstream. TWO major works. New ideas are in the air, if you talk to the people carrying them.",
   worksMax:2,
   decisions:[
     { id:"storm", title:"Stormwater: what happens when rain hits concrete?", why:"Sealed ground turns rain into instant run-off. It has to go somewhere.",
@@ -598,7 +619,7 @@ const CONTINUUM=[
 /* ---------- debrief questions ---------- */
 const QUESTIONS=[
  { id:"q1", lvl:"Continuum 2.1 · aim Level 7–8",
-   q:"Open your field notebook. Describe how the share of rain becoming RUN-OFF changed from 1850 to 2050. Use PQE: state the pattern, quantify it with two numbers from your table, and point out one exception or surprise.",
+   q:"Open your field notebook. Describe how RUN-OFF changed from 1850 to 2050 — read it off the readings you tracked, or the rainfall-split bars. Use PQE: state the pattern, quantify it with two numbers, and point out one exception or surprise.",
    scaffold:"Sentence starters: “In 1850, ___ GL of the rain ran off, but by ___, run-off had ___ to ___ GL.” · “The biggest change happened in the era of ___, when ___.” · “One surprising thing in my table is ___.”",
    stretch:"Stretch (L9): use SHEEPT — which social, economic or technological factors drove each jump in run-off? Which single factor mattered most, and how do you know from the numbers?",
    look:["pattern","increase","run-off","GL","era","exception","because","cleared","paved","sealed","soak"]},
@@ -651,11 +672,27 @@ function freshState(){ return {
   consulted:[[],[],[],[],[]], choices:[{},{},{},{},{}], picks:[[],[],[],[],[]],
   notebook:[], moods:{sana:74,marion:70,priya:76,dai:62,marcus:62,lan:60},
   baseline:null, lastFx:null, lastChanges:[], floodOutcome:null, ladders:{},
+  tracked:{}, observations:["","","","",""], hist:[],
 };}
+/* the readings a field scientist could choose to record */
+const METRICS=[
+  {k:"P",       l:"Rain",        u:"GL"},
+  {k:"ET",      l:"Back to sky", u:"GL"},
+  {k:"soak",    l:"Soak-in",     u:"GL"},
+  {k:"run",     l:"Run-off",     u:"GL"},
+  {k:"base",    l:"Baseflow",    u:"GL"},
+  {k:"river",   l:"River",       u:"GL"},
+  {k:"quality", l:"Quality",     u:"/100"},
+  {k:"aquifer", l:"Groundwater", u:"/100"},
+  {k:"salinity",l:"Salinity",    u:"/100"},
+  {k:"flash",   l:"Flash index", u:"%"},
+  {k:"take",    l:"Human take",  u:"GL"},
+];
 let state=freshState();
-/* live preview + commit animation: temporarily swap the global state */
-let _anim=false, _previewing=false;
+/* live preview + commit animation + replay: temporarily swap the global state */
+let _anim=false, _previewing=false, _viewEra=null, _animGen=0;
 function withState(tmp,fn){ const real=state; state=tmp; try{ return fn(); } finally{ state=real; } }
+function snapshot(){ const {hist,...rest}=state; return JSON.parse(JSON.stringify(rest)); }
 const NUMKEYS=["veg","imperv","farm","pop","aquifer","salinity","bill"];
 function previewState(){
   const era=ERAS[state.era]; const p={...state, lastFx:null};
@@ -666,12 +703,13 @@ function previewState(){
   }); });
   return p;
 }
-function animateCommit(before){
-  const after={...state, lastFx:state.lastFx};
-  if(!before.lastFx){ drawAll(); return; }
+function animateTransition(before, after, onDone){
+  const gen=++_animGen;
+  if(!before || !before.lastFx || !after.lastFx){ withState(after,()=>{ drawXsec(); drawCycle(); renderGauges(); }); onDone&&onDone(); return; }
   _anim=true; const t0=performance.now(), DUR=1200;
   const ease=t=>t<0.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
   const step=now=>{
+    if(gen!==_animGen) return;          // a newer draw/replay cancelled us
     const t=Math.min(1,(now-t0)/DUR), k=ease(t);
     const mid={...after};
     NUMKEYS.forEach(key=>{ mid[key]=before[key]+(after[key]-before[key])*k; });
@@ -680,9 +718,27 @@ function animateCommit(before){
       if(typeof a==="number"&&typeof b==="number") f[key]=a+(b-a)*k; });
     mid.lastFx=f;
     withState(mid,()=>{ drawXsec(); renderGauges(); });
-    if(t<1) requestAnimationFrame(step); else { _anim=false; drawAll(); }
+    if(t<1) requestAnimationFrame(step);
+    else { _anim=false; withState(after,()=>{ drawXsec(); drawCycle(); renderGauges(); }); onDone&&onDone(); }
   };
   requestAnimationFrame(step);
+}
+function animateCommit(before){ animateTransition(before, {...state, lastFx:state.lastFx}); }
+/* ---- replay / revisit ---- */
+function viewEra(i){ if(!state.hist||!state.hist[i]) return; _animGen++; _anim=false; _viewEra=i; renderReviewBar(); renderTimeline(); drawAll(); }
+function returnToNow(){ _animGen++; _anim=false; _viewEra=null; renderReviewBar(); renderTimeline(); drawAll(); }
+function replayEra(i){ if(!state.hist||!state.hist[i]) return; _viewEra=i; renderReviewBar(); renderTimeline();
+  const after=state.hist[i]; const before = i>0 && state.hist[i-1] ? state.hist[i-1] : null;
+  if(before) animateTransition(before, after); else withState(after,()=>{ drawXsec(); drawCycle(); renderGauges(); });
+}
+function renderReviewBar(){ const bar=el("reviewbar"); if(!bar) return;
+  if(_viewEra==null){ bar.classList.remove("on"); bar.innerHTML=""; return; }
+  const e=ERAS[_viewEra];
+  bar.classList.add("on");
+  bar.innerHTML=`<span>🔎 Reviewing <b>${e.yr} — ${esc(e.name)}</b> — the map, cycle and gauges show this era.</span>
+    <button class="chip" onclick="replayEra(${_viewEra})">▶ Replay this change</button>
+    <span class="spacer"></span>
+    <button class="btn" style="padding:5px 12px;font-size:.82rem" onclick="returnToNow()">Back to ${ERAS[state.era].yr} ↩</button>`;
 }
 function save(){ try{ store.setItem(KEY, JSON.stringify(state)); }catch(e){} }
 function load(){ try{ const s=store.getItem(KEY); if(s){ const p=JSON.parse(s); if(p&&typeof p.era==="number") state=Object.assign(freshState(),p); } }catch(e){} }
@@ -764,15 +820,18 @@ function applyDrift(i){
   if(i===4){ state.pop=60; state.imperv+=6; }
 }
 function startEra(i,resuming){
-  state.era=i; state.stage="plan";
+  state.era=i; state.stage="plan"; _viewEra=null;
   if(!resuming || !state._drifted || state._drifted<i){ if(!resuming) applyDrift(i); }
   if(!resuming){ state._drifted=i; }
   else if((state._drifted??0)<i){ applyDrift(i); state._drifted=i; }
-  renderTimeline(); renderEraPanel(); drawAll(); save();
+  renderReviewBar(); renderTimeline(); renderEraPanel(); drawAll(); save();
 }
 
 function renderTimeline(){
-  el("timeline").innerHTML = ERAS.map((e,i)=>`<div class="tl-era ${i<state.era?"done":i===state.era?"now":""}"><span class="yr">${e.yr}</span>${esc(e.name)}${i<state.era?" ✓":""}</div>`).join("");
+  el("timeline").innerHTML = ERAS.map((e,i)=>{
+    const reached=!!(state.hist&&state.hist[i]), done=i<state.era, now=i===state.era, rev=_viewEra===i;
+    return `<div class="tl-era ${done?"done":""} ${now&&_viewEra==null?"now":""} ${rev?"reviewing":""} ${reached?"clickable":""}" ${reached?`onclick="viewEra(${i})"`:""} title="${reached?"Tap to replay "+e.yr:""}"><span class="yr">${e.yr}</span>${esc(e.name)}${done?" ✓":""}</div>`;
+  }).join("");
 }
 
 /* ---------------- era panel: decisions + advisers ---------------- */
@@ -814,10 +873,10 @@ function renderEraPanel(){
                          : (state.choices[state.era][d.id] ?? d.def)===o.id;
       optsHtml += `<button class="opt ${sel?"sel":""} ${gatedNow?"gated-new":""}" onclick="pickOpt('${d.id}','${o.id}',${!!d.pick})">
         ${o.cost?`<span class="cost">MAJOR WORKS</span>`:""}
-        <span class="ol">${esc(o.label)}</span>${adv?`<span class="unlocked">unlocked by listening to ${esc(adv.name)}</span>`:""}
+        <span class="ol">${esc(o.label)}</span>${adv?`<span class="unlocked">💡 ${esc(adv.name.split(" ")[0]==="Aunty"?adv.name:adv.name.split(" ")[0])}'s idea</span>`:""}
         <span class="od">${esc(o.desc)}</span></button>`;
     });
-    if(hiddenCount>0) optsHtml += `<div class="hiddenopt">❓ ${hiddenCount===1?"Another way exists for this decision":hiddenCount+" other ways exist for this decision"} — someone who knows this river hasn't been consulted yet.</div>`;
+    if(hiddenCount>0) optsHtml += `<div class="hiddenopt">❓ There may be another way to handle this — worth hearing everyone out first.</div>`;
     return `<div class="dcard"><h3>${esc(d.title)}${d.pick?` <span class="pill" style="background:#efeaf6;color:var(--town)">choose exactly ${d.pick}</span>`:""}</h3><div class="dwhy">${esc(d.why)}</div>${optsHtml}</div>`;
   }).join("");
 
@@ -837,6 +896,7 @@ function renderEraPanel(){
 
   const worksLine = era.worksMax>0 ? `<div class="works">🏗 Major works chosen: ${currentWorksCost()} / ${era.worksMax}</div>` : "";
   el("erapanel").innerHTML = `
+    <div class="rolebar">You are the <b>keeper of this catchment</b> — 1850 to 2050.</div>
     <div class="era-head"><span class="yr">${era.yr}</span> — <span class="nm">${esc(era.name)}</span><p>${esc(era.intro)}</p></div>
     <div id="flashbox" class="flash noprint"></div>
     ${worksLine}${dHtml}
@@ -854,12 +914,14 @@ function toggleConsult(key){
     if(state.stage==="plan" && !(state.consulted[state.era]||[]).includes(key)){
       state.consulted[state.era]=[...(state.consulted[state.era]||[]),key];
       const gated=(era._activeDecisions||era.decisions).flatMap(d=>d.options.filter(o=>o.gate===key));
-      if(gated.length) flash(`🔓 Listening pays: <b>${gated.map(o=>esc(o.label)).join("</b> and <b>")}</b> ${gated.length>1?"are":"is"} now on the table.`);
+      const who=ADVISERS.find(a=>a.key===key); const fn=who?(who.name.startsWith("Aunty")?who.name:who.name.split(" ")[0]):"They";
+      if(gated.length) flash(`💡 <b>${esc(fn)}</b> has an idea — look for “${gated.map(o=>esc(o.label)).join("” and “")}” among your options.`);
     }
   }
   renderEraPanel(); save();
 }
 function pickOpt(did,oid,isPick){
+  if(_viewEra!=null) returnToNow();
   const era=ERAS[state.era];
   if(isPick){
     const d=(era._activeDecisions||era.decisions).find(x=>x.id===did);
@@ -911,8 +973,9 @@ function commitEra(){
   moodsUpdate(fx, stocksPrev);
   notebookAdd(fx);
   state.lastChanges = buildChanges(fx, prevFx, stocksPrev);
-  state.stage="result";
-  renderResult(); renderTimeline(); animateCommit(before); renderNotebook(); save();
+  state.stage="result"; _viewEra=null;
+  state.hist[state.era]=snapshot();
+  renderResult(); renderTimeline(); renderReviewBar(); animateCommit(before); renderNotebook(); save();
 }
 function notebookAdd(fx){
   const era=ERAS[state.era];
@@ -923,7 +986,8 @@ function notebookAdd(fx){
   if(fx.losing) notes.push("river losing to ground");
   if(state.floodOutcome) notes.push("storm: "+state.floodOutcome.k);
   state.notebook.push({era:state.era, yr:era.yr, name:era.name, P:fx.P, ET:fx.ET, soak:fx.soak, run:fx.run,
-    base:fx.base, river:fx.river, quality:fx.quality, aquifer:rnd(state.aquifer), salinity:rnd(state.salinity), note:notes.join("; ")||"—"});
+    base:fx.base, river:fx.river, quality:fx.quality, aquifer:rnd(state.aquifer), salinity:rnd(state.salinity),
+    flash:Math.round(fx.flash*100), take:fx.townRiver+fx.farmTake, note:notes.join("; ")||"—"});
 }
 function moodsUpdate(fx, prev){
   const m=state.moods, era=state.era, c=state.consulted[era]||[];
@@ -1006,9 +1070,15 @@ function arrow(x1,y1,x2,y2,w,color,label,showNums,dash,op){
 }
 function qualColor(q){ const t=clamp((q-30)/68,0,1); const mix=(a,b)=>Math.round(a+(b-a)*t);
   return `rgb(${mix(107,43)},${mix(122,122)},${mix(74,153)})`; }
+function lerpHex(a,b,t){ const P=h=>[1,3,5].map(i=>parseInt(h.slice(i,i+2),16)); const A=P(a),B=P(b);
+  return '#'+A.map((v,i)=>Math.round(v+(B[i]-v)*t).toString(16).padStart(2,'0')).join(''); }
 
 function drawAll(){
   if(_anim) return;
+  if(_viewEra!=null && state.hist && state.hist[_viewEra]){
+    withState(state.hist[_viewEra],()=>{ drawXsec(); drawCycle(); renderGauges(); });
+    return;
+  }
   if(state.stage==="plan" && state.era>0){
     const p=previewState(); _previewing=true;
     withState(p,()=>{ drawXsec(); drawCycle(); renderGauges(); });
@@ -1018,51 +1088,97 @@ function drawAll(){
 function drawXsec(){
   const fx = state.lastFx || computeEra();
   const showNums = el("ctl-nums")?.checked, ghost = el("ctl-ghost")?.checked && state.baseline;
+  const dry = clamp((1000-fx.P)/380, 0, 1);          // 0 in 1850, ~0.47 by 2050
+  const skyTop=lerpHex('#cfe6ef','#e6d9bd',dry), skyBot=lerpHex('#eef6f9','#efe6ce',dry);
+  const groundC=lerpHex('#c9b791','#cdae74',dry);
+  const rw = clamp(2.4+fx.river/40, 2, 15);
+  const riverY = x=> terrY(x)+2;
   const S=[];
-  S.push(arrowDef());
-  S.push(`<rect x="0" y="0" width="900" height="470" fill="#dcebf2"/>`);
+  S.push(`<defs>
+    <marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="4.2" markerHeight="4.2" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="context-stroke"/></marker>
+    <linearGradient id="aq" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7db4c9"/><stop offset="1" stop-color="#4a8aa8"/></linearGradient>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${skyTop}"/><stop offset="1" stop-color="${skyBot}"/></linearGradient>`);
+  S.push(`</defs>`);
+  /* sky */
+  S.push(`<rect x="0" y="0" width="900" height="470" fill="url(#sky)"/>`);
+  S.push(dry>0.28?`<circle cx="810" cy="46" r="16" fill="#e9c25a"/><text x="60" y="20" font-size="11" fill="#9a7a3a">☀️ ${ERAS[state.era].yr} — hotter, drier · rain ${rnd(fx.P)} GL</text>`
+                 :`<text x="60" y="20" font-size="11" fill="#4a7a94">☁️ ${ERAS[state.era].yr} — rain ${rnd(fx.P)} GL</text>`);
   /* sea */
-  S.push(`<rect x="820" y="284" width="80" height="186" fill="#4a8aa8" opacity=".8"/><text x="855" y="310" font-size="12" fill="#fff" text-anchor="middle">sea</text>`);
+  S.push(`<rect x="820" y="284" width="80" height="186" fill="#4a8aa8" opacity=".85"/><text x="858" y="308" font-size="12" fill="#fff" text-anchor="middle">sea</text>`);
   /* ground body */
-  S.push(`<path d="M0,140 ${TERRAIN.map(p=>`L${p[0]},${p[1]}`).join(" ")} L900,470 L0,470 Z" fill="#c9b791"/>`);
-  /* aquifer under the water table */
+  S.push(`<path d="M0,140 ${TERRAIN.map(p=>`L${p[0]},${p[1]}`).join(" ")} L900,470 L0,470 Z" fill="${groundC}"/>`);
+  /* drought cracks on the surface */
+  if(dry>0.3){ for(let i=0;i<7;i++){ const x=220+i*80, y=terrY(x); S.push(`<path d="M${x},${y+3} l4,7 l-3,6" stroke="#9a8256" stroke-width="1" fill="none" opacity=".7"/>`); } }
+  /* aquifer + water table */
   const wt = x=> terrY(x) + 16 + (100-state.aquifer)*0.75;
   const wtPts=[]; for(let x=0;x<=820;x+=40) wtPts.push(`${x},${rnd(wt(x))}`);
-  S.push(`<path d="M0,${rnd(wt(0))} ${wtPts.map(p=>"L"+p).join(" ")} L820,470 L0,470 Z" fill="url(#aq)" opacity=".55"/>`);
+  S.push(`<path d="M0,${rnd(wt(0))} ${wtPts.map(p=>"L"+p).join(" ")} L820,470 L0,470 Z" fill="url(#aq)" opacity="${clamp(0.28+state.aquifer/170,0.25,0.62)}"/>`);
   S.push(`<path d="M0,${rnd(wt(0))} ${wtPts.map(p=>"L"+p).join(" ")}" fill="none" stroke="#2b6a88" stroke-width="1.5" stroke-dasharray="5 4"/>`);
-  S.push(`<text x="12" y="${rnd(wt(30))+16}" font-size="10.5" fill="#1d5f7d">water table ${state.aquifer<30?"(low)":""}</text>`);
+  S.push(`<text x="12" y="${rnd(wt(30))+15}" font-size="10.5" fill="#1d5f7d">water table ${state.aquifer<30?"(low — bores & baseflow suffer)":""}</text>`);
+  /* salt scald — grows with salinity, across the farm flats */
+  if(state.salinity>18){ const sc=clamp(state.salinity/100,0,1);
+    for(let i=0;i<Math.round(state.salinity/9);i++){ const x=250+(i*53)%230, y=terrY(x)+3+(i%2)*3;
+      S.push(`<ellipse cx="${x}" cy="${y}" rx="${10+sc*14}" ry="${3+sc*3}" fill="#f2ede2" opacity="${0.55+sc*0.4}"/>`); }
+    S.push(`<text x="365" y="${terrY(365)-6}" font-size="10" fill="#a06a1f" text-anchor="middle">salt scald ${rnd(state.salinity)}/100</text>`);
+  }
   /* dam + reservoir */
-  if(state.dam){ const dh=state.damRaised?46:34; const dx=185, dy=terrY(dx);
-    S.push(`<path d="M${dx-60},${terrY(dx-60)} L${dx-4},${dy-dh+18} L${dx-4},${dy}" fill="#6fa4bd" opacity=".85"/>`);
-    S.push(`<rect x="${dx-6}" y="${dy-dh}" width="10" height="${dh}" rx="2" fill="#7a7468"/><text x="${dx+8}" y="${dy-dh+4}" font-size="10.5" fill="#3a3a3a">Highland Dam${state.damRaised?" (raised)":""}</text>`);
+  if(state.dam){ const dh=state.damRaised?52:38; const dx=190, dy=terrY(dx);
+    S.push(`<path d="M${dx-72},${terrY(dx-72)} L${dx-72},${dy-dh+12} L${dx-4},${dy-dh+20} L${dx-4},${dy}Z" fill="#6fa4bd" opacity=".9"/>`);
+    S.push(`<rect x="${dx-6}" y="${dy-dh}" width="11" height="${dh+4}" rx="2" fill="#7a7468"/><text x="${dx+9}" y="${dy-dh+6}" font-size="10.5" fill="#3a3a3a">Highland Dam${state.damRaised?" (raised)":""}</text>`);
   }
-  /* river band */
-  const rw = clamp(3+fx.river/38, 2.5, 15);
-  const riverPts=TERRAIN.filter(p=>p[0]>=120).map(p=>`${p[0]},${p[1]+2}`).join(" L");
-  S.push(`<path d="M ${riverPts}" fill="none" stroke="${qualColor(fx.quality)}" stroke-width="${rw}" stroke-linecap="round" opacity=".95"/>`);
-  /* vegetation */
+  /* ---- floodplain inundation sheet (room-for-river, or a pulse spreading) ---- */
+  const spreading = !state.billDried && fx.pulse && (state.flood==="room" || (state.flood!=="levees" && !state.dam));
+  if(state.flood==="room" || spreading){ const x0=600,x1=812, up=state.flood==="room"?15:9;
+    let pts=`M${x0},${rnd(terrY(x0)-up)}`; for(let x=x0;x<=x1;x+=20) pts+=` L${x},${rnd(terrY(x)-up)}`;
+    for(let x=x1;x>=x0;x-=20) pts+=` L${x},${rnd(terrY(x)+3)}`;
+    S.push(`<path d="${pts}Z" fill="#4a90b0" opacity=".33"/>`);
+    if(state.flood==="room") S.push(`<text x="690" y="${terrY(690)-up-4}" font-size="10" fill="#1d5f7d" text-anchor="middle">room for the river</text>`);
+  }
+  /* ---- the river, re-routed by choice ---- */
+  const leveed = state.flood==="levees";
+  const seg=(xa,xb,straight)=>{ let p=""; for(let x=xa;x<=xb;x+=15){ const y= straight? (riverY(xa)+(riverY(xb)-riverY(xa))*(x-xa)/(xb-xa)) : riverY(x); p+=(p?" L":"M")+x+","+rnd(y); } return p; };
+  if(leveed){
+    /* straightened, walled channel through the town reach; natural above and below */
+    S.push(`<path d="${seg(120,455,false)}" fill="none" stroke="${qualColor(fx.quality)}" stroke-width="${rw}" stroke-linecap="round"/>`);
+    S.push(`<path d="${seg(455,650,true)}" fill="none" stroke="${qualColor(fx.quality)}" stroke-width="${Math.max(2,rw*0.7)}" stroke-linecap="round"/>`);
+    /* levee berms flanking the straightened reach */
+    for(let x=460;x<=645;x+=26){ const y=riverY(455)+(riverY(650)-riverY(455))*(x-455)/(650-455); S.push(`<path d="M${x-9},${rnd(y+2)} l9,-11 l9,11Z" fill="#8b8478"/>`); }
+    S.push(`<text x="552" y="${rnd(riverY(552))-20}" font-size="10" fill="#5a5348" text-anchor="middle">leveed &amp; straightened</text>`);
+    S.push(`<path d="${seg(650,820,false)}" fill="none" stroke="${qualColor(fx.quality)}" stroke-width="${rw}" stroke-linecap="round"/>`);
+    /* wall cutting the river off from the billabong's floodplain */
+    S.push(`<rect x="748" y="${rnd(terrY(748))-20}" width="7" height="24" fill="#7a7468"/><text x="752" y="${rnd(terrY(748))-24}" font-size="9" fill="#5a5348" text-anchor="middle">flood wall</text>`);
+  } else {
+    S.push(`<path d="${seg(120,820,false)}" fill="none" stroke="${qualColor(fx.quality)}" stroke-width="${rw}" stroke-linecap="round" ${fx.losing?'stroke-dasharray="10 5"':''} opacity=".96"/>`);
+  }
+  /* ---- diversions: the river re-routed to people ---- */
+  if(fx.farmTake>25){ const x=300, y0=riverY(x), y1=terrY(x)-20, w=clamp(fx.farmTake/30,2,7);
+    S.push(`<path d="M${x},${rnd(y0)} L${x},${rnd(y1)}" stroke="#9a6b2c" stroke-width="${w}" marker-end="url(#ah)"/><text x="${x-8}" y="${rnd(y1)-2}" font-size="9.5" fill="#7a5320" text-anchor="end">${state.irr==="modern"?"drip":"irrig."}${showNums?" "+rnd(fx.farmTake):""}</text>`); }
+  /* ---- vegetation (greener when wet, sparse & brown when dry/cleared) ---- */
   const treeN=Math.round(state.veg/6);
-  for(let i=0;i<treeN;i++){ const x=18+(i*53)%300*0.78+(i%3)*9; const y=terrY(x); S.push(`<text x="${x}" y="${y+3}" font-size="${13+(i%3)*3}" text-anchor="middle">🌲</text>`); }
-  if(state.reveg) for(let i=0;i<6;i++){ const x=250+i*22, y=terrY(x); S.push(`<text x="${x}" y="${y+2}" font-size="10" text-anchor="middle">🌱</text>`); }
-  /* farm */
+  for(let i=0;i<treeN;i++){ const x=18+(i*53)%300*0.78+(i%3)*9; const y=terrY(x); S.push(`<text x="${x}" y="${y+3}" font-size="${13+(i%3)*3}" text-anchor="middle" opacity="${1-dry*0.35}">${dry>0.35&&i%3===0?"🌳":"🌲"}</text>`); }
+  if(state.reveg) for(let i=0;i<8;i++){ const x=210+i*20, y=terrY(x); S.push(`<text x="${x}" y="${y+2}" font-size="11" text-anchor="middle">🌱</text>`); }
+  /* ---- farm ---- */
   if(state.farm>0){ const fN=Math.round(state.farm/9);
-    for(let i=0;i<fN;i++){ const x=268+(i*47)%160, y=terrY(x); S.push(`<text x="${x}" y="${y+1}" font-size="12" text-anchor="middle">${i%3===0?"🐑":"🌾"}</text>`); }
-    if(state.salinity>25) for(let i=0;i<Math.round(state.salinity/14);i++){ const x=300+(i*61)%140, y=terrY(x)+7; S.push(`<ellipse cx="${x}" cy="${y}" rx="16" ry="4.5" fill="#f2ede4" opacity=".9"/><text x="${x}" y="${y+3}" font-size="8" text-anchor="middle" fill="#a06a1f">salt</text>`); }
+    for(let i=0;i<fN;i++){ const x=262+(i*47)%180, y=terrY(x); S.push(`<text x="${x}" y="${y+1}" font-size="12" text-anchor="middle">${i%3===0?"🐑":state.irr==="modern"?"🍊":"🌾"}</text>`); }
   }
-  /* town */
-  if(state.pop>0){ const bN=Math.round(state.pop/7);
-    S.push(`<rect x="470" y="${terrY(560)-4}" width="${Math.min(170,60+state.pop*1.8)}" height="7" fill="#9a958c" opacity="${clamp(state.imperv/70,0.15,0.9)}"/>`);
-    for(let i=0;i<bN;i++){ const x=478+(i*33)%160, y=terrY(x)-3; S.push(`<text x="${x}" y="${y}" font-size="${i%4===0?15:12}" text-anchor="middle">${i%4===0?"🏢":"🏠"}</text>`); }
-    S.push(`<text x="555" y="${terrY(555)+22}" font-size="10.5" fill="#3a3a3a" text-anchor="middle">Willow Bend ${state.imperv>20?`· ${rnd(state.imperv)}% sealed`:""}</text>`);
+  /* ---- town: sealing, buildings, rain-gardens, bores ---- */
+  if(state.pop>0){ const bN=Math.round(state.pop/6), tw=Math.min(180,55+state.pop*2);
+    S.push(`<rect x="466" y="${terrY(560)-3}" width="${tw}" height="6" fill="#8f8a80" opacity="${clamp(state.imperv/60,0.2,0.92)}"/>`);
+    for(let i=0;i<bN;i++){ const x=474+(i*31)%170, y=terrY(x)-3; S.push(`<text x="${x}" y="${y}" font-size="${i%4===0?15:12}" text-anchor="middle">${i%4===0?"🏢":"🏠"}</text>`); }
+    if(state.storm==="wsud"||state.sponge) for(let i=0;i<5;i++){ const x=486+i*34; S.push(`<text x="${x}" y="${terrY(x)+4}" font-size="10" text-anchor="middle">🌳</text>`); }
+    if(state.bores){ const x=512; S.push(`<rect x="${x-2}" y="${terrY(x)-9}" width="4" height="9" fill="#6b5b8a"/><path d="M${x},${terrY(x)} L${x},${rnd(wt(x))}" stroke="#6b5b8a" stroke-width="2" stroke-dasharray="3 3"/>`); }
+    S.push(`<text x="552" y="${terrY(552)+22}" font-size="10.5" fill="#3a3a3a" text-anchor="middle">Willow Bend${state.imperv>18?` · ${rnd(state.imperv)}% sealed`:""}${state.sponge?" · sponge city":""}</text>`);
   }
-  /* wetland */
+  /* ---- wetland ---- */
   const wetY=terrY(690);
-  if(!state.drained){ for(let i=0;i<7;i++) S.push(`<text x="${664+i*12}" y="${wetY+2}" font-size="11" text-anchor="middle" fill="#2c8a7e">🌿</text>`); S.push(`<text x="700" y="${wetY+18}" font-size="10" fill="#2c6a5e" text-anchor="middle">wetland</text>`); }
-  else S.push(`<text x="700" y="${wetY+16}" font-size="10" fill="#8a7a5a" text-anchor="middle">wetland (drained)</text>`);
-  /* billabong */
-  const bx=782, by=terrY(bx)+22;
-  if(state.billDried) S.push(`<ellipse cx="${bx}" cy="${by}" rx="26" ry="8" fill="#b09a72"/><text x="${bx}" y="${by+3}" font-size="11" text-anchor="middle">🪨</text><text x="${bx}" y="${by+20}" font-size="10" fill="#8a6a4a" text-anchor="middle">billabong — DRY</text>`);
-  else S.push(`<ellipse cx="${bx}" cy="${by}" rx="26" ry="8" fill="#3f88a8" opacity="${clamp(state.bill/100,0.25,1)}"/><text x="${bx}" y="${by+3}" font-size="10" text-anchor="middle">🦢</text><text x="${bx}" y="${by+20}" font-size="10" fill="#1d5f7d" text-anchor="middle">billabong ${rnd(state.bill)}/100</text>`);
+  if(!state.drained){ for(let i=0;i<7;i++) S.push(`<text x="${662+i*12}" y="${wetY+2}" font-size="11" text-anchor="middle" fill="#2c8a7e" opacity="${clamp(0.5+state.bill/200,0.4,1)}">🌿</text>`); S.push(`<text x="700" y="${wetY+18}" font-size="10" fill="#2c6a5e" text-anchor="middle">wetland</text>`); }
+  else S.push(`<rect x="664" y="${wetY-1}" width="72" height="3" fill="#8a7a5a"/><text x="700" y="${wetY+16}" font-size="10" fill="#8a7a5a" text-anchor="middle">wetland (drained to a ditch)</text>`);
+  /* ---- billabong ---- */
+  const bx=784, by=terrY(bx)+22;
+  if(state.billDried) S.push(`<ellipse cx="${bx}" cy="${by}" rx="27" ry="8" fill="#b09a72"/><text x="${bx}" y="${by+4}" font-size="12" text-anchor="middle">🪨</text><text x="${bx}" y="${by+21}" font-size="10" fill="#8a6a4a" text-anchor="middle">billabong — DRY</text>`);
+  else S.push(`<ellipse cx="${bx}" cy="${by}" rx="27" ry="${5+state.bill/16}" fill="#3f88a8" opacity="${clamp(state.bill/100,0.3,1)}"/><text x="${bx}" y="${by+3}" font-size="11" text-anchor="middle">🦢</text><text x="${bx}" y="${by+21}" font-size="10" fill="#1d5f7d" text-anchor="middle">billabong ${rnd(state.bill)}/100</text>`);
+  /* ---- desal plant on the coast ---- */
+  if(state.desal){ S.push(`<rect x="828" y="270" width="20" height="14" rx="2" fill="#2c8a7e"/><text x="838" y="266" font-size="9" fill="#1f6a5e" text-anchor="middle">desal</text>`); }
   /* ---- ghost arrows (1850 baseline) ---- */
   if(ghost){ const b=state.baseline;
     S.push(arrow(95,terrY(95)-8,95,60,b.ET/45,"var(--ghost)",null,false,false,.55));
@@ -1073,7 +1189,6 @@ function drawXsec(){
   }
   /* ---- live flux arrows ---- */
   const rainN=3; for(let i=0;i<rainN;i++){ const x=110+i*250; S.push(arrow(x,26,x,Math.min(terrY(x)-26,120),fx.P/110,"var(--rain)",i===1?`rain ${rnd(fx.P)}`:null,showNums,true)); }
-  S.push(`<text x="60" y="20" font-size="11" fill="#4a7a94">☁️ ${ERAS[state.era].yr} — rain ${rnd(fx.P)} GL</text>`);
   S.push(arrow(80,terrY(80)-10,80,58,fx.ET/45,"var(--et)",`evap+transp ${rnd(fx.ET)}`,showNums));
   if(state.farm>0) S.push(arrow(350,terrY(350)-10,350,88,fx.ET/70,"var(--et)",null,false));
   S.push(arrow(240,terrY(240)+4,240,rnd(wt(240))+6,fx.soak/45,"var(--soak)",`soak-in ${rnd(fx.soak)}`,showNums));
@@ -1088,7 +1203,7 @@ function drawXsec(){
   if(fx.pulse&&!state.billDried) S.push(arrow(742,terrY(742)+2,bx-20,by-4,4.5,state.culturalFlow?"#2f6a3e":"#3f88a8",state.culturalFlow?"cultural flow":"flood pulse",showNums,true));
   S.push(`<text x="60" y="462" font-size="10.5" fill="#6b6256">▲ ranges · farms · town · wetland &amp; billabong · sea ▶ — arrows are drawn to scale with their flow</text>`);
   el("xsec").innerHTML=S.join("");
-  el("xsec-caption").innerHTML = `<b>${ERAS[state.era].yr} — ${esc(ERAS[state.era].name)}.</b> River at the town: <b>${rnd(fx.river)} GL/yr</b> · quality <b>${rnd(fx.quality)}/100</b> · flash index ${(fx.flash*100|0)}% (how much arrives in a rush rather than seeping steadily). ${state.billDried?"The billabong is dry — permanently.":fx.pulse?"Water reached the billabong.":"No water reached the billabong."}${_previewing?` <b style="color:var(--warn)">◉ live preview of your picks — commit to lock them in</b>`:""}`;
+  el("xsec-caption").innerHTML = `<b>${ERAS[state.era].yr} — ${esc(ERAS[state.era].name)}.</b> River at the town: <b>${rnd(fx.river)} GL/yr</b> · quality <b>${rnd(fx.quality)}/100</b> · flash index ${(fx.flash*100|0)}% (how much arrives in a rush rather than seeping steadily). ${state.billDried?"The billabong is dry — permanently.":fx.pulse?"Water reached the billabong.":"No water reached the billabong."}${_previewing?` <b style="color:var(--warn)">◉ preview — not committed yet</b>`:""}`;
 }
 
 /* ---------------- cycle diagram ---------------- */
@@ -1188,21 +1303,44 @@ function renderFactfile(){
 function pqeReveal(id,k){ const d=FACTFILE.find(f=>f.id===id); const box=el("pqe-"+id);
   box.innerHTML=d.pqe[k]+`<div class="note" style="margin-top:5px">Say yours out loud first — then compare. Yours can be better than this one.</div>`; box.classList.add("on"); }
 
-/* ---------------- notebook ---------------- */
+/* ---------------- notebook (student-driven) ---------------- */
+function trackMetric(k){ state.tracked[k]=!state.tracked[k]; renderNotebook(); save(); }
+function trackAll(on){ METRICS.forEach(m=>state.tracked[m.k]=on); renderNotebook(); save(); }
+function setObs(i,v){ state.observations[i]=v; save(); }
+function nTracked(){ return METRICS.filter(m=>state.tracked[m.k]).length; }
 function renderNotebook(){
-  const head=`<tr><th>Era</th><th>Rain</th><th>Back to sky</th><th>Soak-in</th><th>Run-off</th><th>Baseflow</th><th>River</th><th>Quality</th><th>Groundwater</th><th>Salinity</th><th>Notes</th></tr>`;
-  const rows=state.notebook.map(n=>`<tr><td>${n.yr} ${esc(n.name)}</td><td>${n.P}</td><td>${n.ET}</td><td>${n.soak}</td><td>${n.run}</td><td>${n.base}</td><td>${n.river}</td><td>${n.quality}</td><td>${n.aquifer}</td><td>${n.salinity}</td><td style="text-align:left">${esc(n.note)}</td></tr>`).join("");
-  el("nb-table").innerHTML=head+(rows||`<tr><td colspan="11" style="text-align:left">Nothing recorded yet — commit your first era.</td></tr>`);
-  /* stacked share bars */
-  if(state.notebook.length){ const W=760,H=44;
-    let svg=`<svg viewBox="0 0 ${W} ${state.notebook.length*H+40}">`;
-    state.notebook.forEach((n,i)=>{ const y=6+i*H; let x=120;
-      svg+=`<text x="112" y="${y+20}" font-size="12" text-anchor="end" fill="#1f1f1f">${n.yr}</text>`;
-      [["ET","#c07a2c"],["soak","#2c8a7e"],["run","#3f88a8"]].forEach(([k,col])=>{ const w=(W-160)*n[k]/n.P; svg+=`<rect x="${x}" y="${y}" width="${w}" height="${H-16}" fill="${col}"><animate attributeName="width" from="0" to="${w}" dur="0.7s" fill="freeze"/></rect><text x="${x+w/2}" y="${y+19}" font-size="10.5" font-weight="700" text-anchor="middle" fill="#fff">${pct(n[k],n.P)}%</text>`; x+=w; });
+  const nb=state.notebook;
+  if(!nb.length){ el("nb-table").innerHTML=`<tr><td style="text-align:left">Your notebook is empty. Commit an era, then come back and record what matters.</td></tr>`; el("nb-bars").innerHTML=""; return; }
+  const trackedCount=nTracked();
+  /* header: metric buttons */
+  let head=`<tr><th style="text-align:left">Era</th>`;
+  METRICS.forEach(m=>{ const on=state.tracked[m.k];
+    head+=`<th class="nb-h ${on?"tracked":""}" onclick="trackMetric('${m.k}')" title="Tap to ${on?"stop tracking":"track"} ${m.l}">${on?"📌 ":"＋ "}${m.l}<br><span class="nb-u">${m.u}</span></th>`; });
+  head+=`<th style="text-align:left">What happened</th></tr>`;
+  const rows=nb.map(n=>{ let r=`<tr><td>${n.yr} ${esc(n.name)}</td>`;
+    METRICS.forEach(m=>{ r+= state.tracked[m.k] ? `<td class="nb-v">${n[m.k]}</td>` : `<td class="nb-blank">·</td>`; });
+    r+=`<td style="text-align:left">${esc(n.note)}</td></tr>`; return r; }).join("");
+  el("nb-table").innerHTML=head+rows;
+  /* controls + observations + provided chart */
+  const obs=nb.map((n,i)=>`<div class="obs-row"><label>${n.yr} — what I noticed<textarea rows="2" oninput="setObs(${n.era},this.value)" placeholder="e.g. run-off climbing every era; the billabong missed its flood once the dam went in…">${esc(state.observations[n.era]||"")}</textarea></label></div>`).join("");
+  let bars="";
+  { const W=760,H=44;
+    bars=`<svg viewBox="0 0 ${W} ${nb.length*H+40}">`;
+    nb.forEach((n,i)=>{ const y=6+i*H; let x=120;
+      bars+=`<text x="112" y="${y+20}" font-size="12" text-anchor="end" fill="#1f1f1f">${n.yr}</text>`;
+      [["ET","#c07a2c"],["soak","#2c8a7e"],["run","#3f88a8"]].forEach(([k,col])=>{ const w=(W-160)*n[k]/n.P; bars+=`<rect x="${x}" y="${y}" width="${w}" height="${H-16}" fill="${col}"><animate attributeName="width" from="0" to="${w}" dur="0.7s" fill="freeze"/></rect><text x="${x+w/2}" y="${y+19}" font-size="10.5" font-weight="700" text-anchor="middle" fill="#fff">${pct(n[k],n.P)}%</text>`; x+=w; });
     });
-    svg+=`<text x="120" y="${state.notebook.length*H+18}" font-size="10.5" fill="#6b6256">each bar = that era's rain, split into 🟠 back-to-sky · 🟢 soak-in · 🔵 run-off (shares don't count re-use downstream)</text></svg>`;
-    el("nb-bars").innerHTML=svg;
-  } else el("nb-bars").innerHTML="";
+    bars+=`<text x="120" y="${nb.length*H+18}" font-size="10.5" fill="#6b6256">each bar = that era's rain: 🟠 back-to-sky · 🟢 soak-in · 🔵 run-off</text></svg>`;
+  }
+  el("nb-bars").innerHTML=`
+    <div class="nb-ctl noprint">
+      <span>${trackedCount?`Tracking <b>${trackedCount}</b> reading${trackedCount>1?"s":""}`:"<b>Tap a heading above</b> to start tracking a reading"} — pick the ones you think matter.</span>
+      <button class="chip" onclick="trackAll(true)">Track all</button><button class="chip" onclick="trackAll(false)">Clear</button>
+    </div>
+    <h4 style="font-size:.85rem;margin:14px 0 4px;color:var(--deep)">The instrument reading you're given: where each era's rain went</h4>
+    ${bars}
+    <h4 style="font-size:.85rem;margin:14px 0 4px;color:var(--deep)">Your observations</h4>
+    ${obs}`;
 }
 
 /* ---------------- follow a raindrop ---------------- */
@@ -1292,7 +1430,10 @@ function renderReport(){
     const cons=(state.consulted[i]||[]).map(k=>ADVISERS.find(a=>a.key===k)?.name).filter(Boolean).join(", ");
     return `<tr><td>${e.yr} ${esc(e.name)}</td><td>${esc(cells)}</td><td>${esc(cons||"nobody")}</td></tr>`;
   }).join("");
-  const nb=state.notebook.map(n=>`<tr><td>${n.yr}</td><td>${n.P}</td><td>${n.ET}</td><td>${n.soak}</td><td>${n.run}</td><td>${n.base}</td><td>${n.river}</td><td>${n.quality}</td><td>${n.aquifer}</td><td>${n.salinity}</td><td>${esc(n.note)}</td></tr>`).join("");
+  const trk=METRICS.filter(m=>state.tracked[m.k]);
+  const nbHead=`<tr><th>Era</th>${trk.map(m=>`<th>${m.l}</th>`).join("")}<th>What happened</th></tr>`;
+  const nb=state.notebook.map(n=>`<tr><td>${n.yr}</td>${trk.map(m=>`<td>${n[m.k]}</td>`).join("")}<td>${esc(n.note)}</td></tr>`).join("");
+  const obsRep=state.notebook.map(n=>{ const o=(state.observations[n.era]||"").trim(); return o?`<tr><td>${n.yr}</td><td style="text-align:left">${esc(o)}</td></tr>`:""; }).join("");
   const refl=QUESTIONS.map(q=>{ const t=el("ta-"+q.id)?.value?.trim(); return t?`<div class="rep-sec"><h3>${esc(q.q.slice(0,90))}…</h3><p style="font-size:.85rem;line-height:1.5">${esc(t)}</p></div>`:""; }).join("");
   const lads=CONTINUUM.map(c=> state.ladders[c.id]!=null?`<tr><td>${c.code} ${esc(c.name)}</td><td><b>${c.rungs[state.ladders[c.id]].l}</b> — ${esc(c.rungs[state.ladders[c.id]].t)}</td></tr>`:"").join("");
   const code=vHash(name+"|"+klass+"|"+JSON.stringify(state.choices)+"|"+JSON.stringify(state.notebook.map(n=>n.river)));
@@ -1300,7 +1441,8 @@ function renderReport(){
     <h2>💧 Every Drop — 200-year catchment report</h2>
     <p><b>${esc(name)}</b> · ${esc(klass)} · the catchment of Willow Bend, 1850–2050</p>
     <div class="rep-sec"><h3>My decisions (and who I consulted first)</h3><table class="rep-table"><tr><th>Era</th><th>What I chose</th><th>Consulted before deciding</th></tr>${choiceRows}</table></div>
-    <div class="rep-sec"><h3>Field notebook — where the rain went (GL/yr)</h3><table class="rep-table"><tr><th>Era</th><th>Rain</th><th>Sky</th><th>Soak</th><th>Run-off</th><th>Baseflow</th><th>River</th><th>Qual.</th><th>GW</th><th>Salt</th><th>Notes</th></tr>${nb}</table></div>
+    <div class="rep-sec"><h3>Field notebook — the readings I chose to track</h3>${trk.length?`<table class="rep-table">${nbHead}${nb}</table>`:`<p style="font-size:.85rem">I didn't track any readings this time.</p>`}</div>
+    ${obsRep?`<div class="rep-sec"><h3>My field observations</h3><table class="rep-table"><tr><th>Era</th><th>What I noticed</th></tr>${obsRep}</table></div>`:""}
     <div class="rep-sec"><h3>How it ended</h3>${verdictParas()}</div>
     ${lads?`<div class="rep-sec"><h3>My self-assessment (school continuum)</h3><table class="rep-table">${lads}</table></div>`:""}
     ${refl?`<div class="rep-sec"><h3>My reflections</h3>${refl}</div>`:refl}
