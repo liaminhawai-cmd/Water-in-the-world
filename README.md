@@ -73,6 +73,34 @@ screen wipes it.
 
 ## Interactive simulations
 
+**`every-drop.html`** — *Every Drop: 200 years in one catchment*, the flagship water-cycle
+simulation. The water cycle itself is the model: a side-on catchment (ranges → farms → town →
+wetland/billabong → sea) with every flow drawn to scale — rain, evapotranspiration, soak-in,
+run-off, and the baseflow that quietly feeds the river from underground. Students keep the
+catchment across five eras (1850 Country → 1890 clearing → 1930 town → 1990 city → 2050 changed
+climate) and watch their development decisions **re-plumb the cycle**:
+
+- Clearing collapses transpiration → more, flashier, saltier river (dryland salinity surfaces
+  a generation later). Paving the floodplain strangles soak-in → groundwater falls → baseflow
+  fades → a **losing river**. Sewage re-enters at a real outfall point; the dam captures the
+  floods that fed the billabong — which needs **pulses**, not volume.
+- **Consulting is real gameplay**: opening an adviser's counsel is what counts as consulting,
+  and key options (riparian strips, the cultural flow, room-for-the-river) **only appear after
+  actually listening** to the person who knows them. The verdict judges whether plans matched
+  what people asked — FPIC practised, not clicked.
+- A **field notebook** logs every era's water balance (the data for the debrief), a **Factfile**
+  holds five real-data exhibits (BoM climographs, Perth's dam-inflow collapse, water scarcity
+  per capita, urban run-off shares, MDB water use) each with P–Q–E pattern tasks, and a
+  **compare-with-1850** ghost overlay makes the changed cycle visible at a glance.
+- Ends with a real-world epilogue (Smellbourne→Werribee, WA wheatbelt salinity, Perth's desal
+  present, cultural flows, room-for-the-river) and the same opt-in, non-grading debrief with
+  the school continuum's exact "I can…" ladders (Levels 6–11, strands 1.2 and 2.1).
+
+Covers VC2HG8K01 (cycle, renewability, flows connecting places), K02 (values incl. First
+Nations and Asia-region voices), K03 (variability + climate change), K04 (scarcity, WANA
+comparison), K05 (flood hazard: causes, impacts, responses). Figures are model numbers and
+approximate real-data values, rounded for teaching.
+
 **`share-the-river.html`** — *Share the River: the Big Dry*, a multi-year Murray–Darling
 drought simulation in the mould of the Coasts / Deserts / Mountains sims. You are the water
 manager for a fictionalised catchment through a **five-year drought** modelled on the

@@ -496,12 +496,13 @@ function renderAdvisers(){
   const hydro=`<div class="adv hydro"><div class="adv-top"><span class="adv-face">${HYDRO.icon}</span><span><span class="adv-name">${HYDRO.name}</span><br><span class="adv-role">${HYDRO.role}</span></span></div><div class="adv-say">${hSay}</div><div class="adv-consult noprint"><button class="linkbtn" onclick="toggleConsult('hydro')">${state.consult.hydro?'Close ▲':'How does a long drought work? ▶'}</button></div><div class="adv-full ${state.consult.hydro?'open':''}">${HYDRO.profile.map(x=>`<p>${x}</p>`).join("")}<p class="note">Model note: this shrinks the whole Murray–Darling Basin to one catchment and five years, to keep the choices clear.</p></div></div>`;
   const cards=ADVISERS.map(ad=>{ const v=state.meters[ad.key], mood=moodOf(v), say=latest?ad.react[mood]:ad.concern;
     let ce="";
-    if(ad.key==="culture" && state.stage==="plan"){ ce = state.consultEarly?`<div class="consult-early"><span class="ce-done">✓ You consulted Aunty Marion before deciding this year.</span></div>`:`<div class="consult-early noprint"><button class="ce-btn" onclick="doConsultEarly()">Consult before you decide →</button></div>`; }
+    if(ad.key==="culture" && state.stage==="plan" && state.consultEarly){ ce = `<div class="consult-early"><span class="ce-done">✓ You sat down with Aunty Marion before deciding this year.</span></div>`; }
     return `<div class="adv ${ad.cls}"><div class="adv-top"><span class="adv-face">${ad.icon}</span><span><span class="adv-name">${esc(ad.name)}</span><br><span class="adv-role">${esc(ad.role)}</span></span><span class="adv-mood" style="background:${moodColor(v)}">${moodWord(v)}</span></div><div class="adv-bar"><span style="width:${v}%;background:${moodColor(v)}"></span></div><div class="adv-say">${say}</div><div class="adv-consult noprint"><button class="linkbtn" onclick="toggleConsult('${ad.key}')">${state.consult[ad.key]?'Close ▲':'Consult ▶'}</button></div><div class="adv-full ${state.consult[ad.key]?'open':''}">${ad.profile.map(x=>`<p>${x}</p>`).join("")}<div class="adv-wants"><b>What they want:</b> ${esc(ad.wants)}</div></div>${ce}</div>`;}).join("");
   return hydro+`<div class="advisers">${cards}</div>`;
 }
-function toggleConsult(k){ state.consult[k]=!state.consult[k]; document.getElementById("advzone").innerHTML=renderAdvisers(); }
-function doConsultEarly(){ state.consultEarly=true; document.getElementById("advzone").innerHTML=renderAdvisers(); flash("You've consulted Country first — 'Country & river first' will now land as genuine partnership, not tokenism."); }
+function toggleConsult(k){ state.consult[k]=!state.consult[k];
+  if(k==="culture" && state.consult[k] && state.stage==="plan" && !state.consultEarly){ state.consultEarly=true; flash("You sat down with Aunty Marion before deciding. If your plan now delivers what she actually asked for, it lands as partnership — not tokenism."); }
+  document.getElementById("advzone").innerHTML=renderAdvisers(); }
 
 /* ================= INTRO ================= */
 function renderIntro(){
@@ -605,7 +606,7 @@ function renderReview(r){
       <div class="le-narr">${r.narrative}</div>${alerts}
       <div class="meters">${meterHtml}</div><div class="react">${reactHtml}</div></div>
     <div class="runrow noprint"><span></span><button class="btn btn-primary" onclick="${last?'renderEnd()':'startYear('+(state.yearIdx+1)+')'}">${last?'See how the drought ended →':'On to '+YEARS[state.yearIdx+1].name+' →'}</button></div>`;
-  document.querySelectorAll("#plan .posture, #plan .invbtn, .ce-btn").forEach(b=>b.disabled=true);
+  document.querySelectorAll("#plan .posture, #plan .invbtn").forEach(b=>b.disabled=true);
   document.querySelector(".logentry").scrollIntoView({behavior:"smooth",block:"center"});
 }
 
