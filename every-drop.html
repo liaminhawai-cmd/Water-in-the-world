@@ -210,26 +210,15 @@ details.reflect .inner{padding:2px 16px 14px}
   <!-- ================= INTRO ================= -->
   <section id="scr-intro" class="screen on">
     <div class="intro-hero">
-      <div class="eyebrow">A water cycle you can change</div>
-      <h2>Every Drop</h2>
-      <p>This is one river catchment — ranges, floodplain, a river, a wetland and a sacred billabong —
-        seen side-on, with the water cycle running through it. Every year about <b>1000 GL of rain</b>
-        falls on it, and every drop goes <i>somewhere</i>: back to the sky, down into the ground, or
-        across the surface to the river.</p>
-      <p>You will keep this catchment for <b>two hundred years</b>, era by era: first Country as it was,
-        then the clearing, the town, the city — and a changed climate. You never hand out litres.
-        You make the decisions each era brings, and then you <b>watch what they do to the cycle itself</b>:
-        which arrows grow, which shrink, and what that means for the river, the ground beneath it,
-        and the people and places that depend on both.</p>
-    </div>
-    <div class="intro-grid">
-      <div class="card"><h3>🔁 The cycle is the game</h3><p>Rain splits three ways — evaporation &amp; transpiration, soak-in, run-off. Your choices re-plumb that split. Pave the floodplain and rain that once slipped underground races off the surface instead. Nothing is "spent" — it's <i>re-routed</i>.</p></div>
-      <div class="card"><h3>🗣️ Consulting is real</h3><p>Six people know this catchment. Opening their counsel is how you consult — and some choices <b>only appear once you've listened</b> to the person who knows them. What you commit is judged against what they actually asked.</p></div>
-      <div class="card"><h3>⏳ Some things don't come back</h3><p>Salt brought up by clearing, an aquifer drawn down, a billabong that misses its floods too many times — the catchment carries your history. The notebook records every era so you can see the change in the numbers.</p></div>
+      <h2>💧 Every Drop</h2>
+      <p>One catchment. Two hundred years. Every drop of rain goes <b>somewhere</b> — sky, ground
+        or river — and every choice you make re-routes it. You're the keeper, 1850 → 2050.</p>
+      <p class="note">Talk to people before you decide — some choices only appear once you've listened.
+        Some damage doesn't come back.</p>
     </div>
     <div style="text-align:center;margin:10px 0 26px">
       <button class="btn btn-primary" style="font-size:1.05rem;padding:11px 26px" onclick="beginGame()">Begin — 1850, Country</button>
-      <p class="note" style="margin-top:8px">A fictional catchment; the processes are real. Figures are model numbers, rounded to be readable.</p>
+      <p class="note" style="margin-top:8px">A fictional catchment; the processes are real. Figures are rounded model numbers.</p>
     </div>
   </section>
 
@@ -326,7 +315,7 @@ const ADVISERS=[
 const ERAS=[
 /* ================= ERA 1 — 1850 ================= */
 { yr:"1850", name:"Country", climate:{P:1000,evapF:1.0},
-  intro:"Before the surveyors. Forest holds the ranges, the river runs clear to the sea, and the billabong — a cut-off bend on the floodplain — fills whenever the river rises and touches it. Nothing here is untouched: people have managed this Country with fire and Law for tens of thousands of years. Your only job this era is to learn how the machine works. Open the counsel of the three people who know it, follow a raindrop or two, then record the baseline in your field notebook.",
+  intro:"Before the surveyors. Forest on the ranges, a clear river, a billabong that fills when the river rises — Country, managed with fire and Law for tens of thousands of years. Learn the machine: talk to all three people, follow a raindrop, then record the baseline.",
   worksMax:0, decisions:[],
   commitLabel:"Record the baseline in my notebook →",
   voices:{
@@ -347,10 +336,10 @@ const ERAS=[
 
 /* ================= ERA 2 — 1890 ================= */
 { yr:"1890", name:"The Clearing", climate:{P:1000,evapF:1.0},
-  intro:"The selectors have arrived with axes, sheep and wheat. Cleared land means wool, grain and a living — and it means fewer trees breathing water back to the sky. Whatever the trees no longer take, the surface must carry. Decide how the clearing happens. (Talk to people first: some of them know ways of clearing that the loudest voices don't.)",
+  intro:"Selectors have arrived with axes, sheep and wheat. Cleared land is a living — and every tree gone re-routes the rain. Decide how the clearing happens. Talk to people first: some know ways the loudest voices don't.",
   worksMax:0,
   decisions:[
-    { id:"clearing", title:"How far does the clearing go?", why:"Trees drive the biggest arrow in the cycle — evaporation and transpiration. Remove them and that water doesn't vanish: it goes somewhere else.",
+    { id:"clearing", title:"How far does the clearing go?", why:"Trees drive the biggest arrow in the cycle. Remove them and that water goes somewhere else.",
       def:"flats",
       options:[
         {id:"flats", label:"Clear the river flats only", desc:"Good pasture, forest keeps the ranges. Modest farms, modest change.", fx:{dVeg:-25,dFarm:25}},
@@ -358,7 +347,7 @@ const ERAS=[
         {id:"riparian",label:"Clear widely — but keep riverside strips", desc:"Priya's ask: leave a belt of trees along every bank. Farms almost as big; the river keeps its shade and its filter.", gate:"priya", fx:{dVeg:-32,dFarm:34,set:{riparian:true}}},
         {id:"feeder",label:"Clear the flats, but leave the billabong's feeder country", desc:"Aunty Marion's ask: the low country that carries floodwater to the billabong stays uncleared, so floods can still reach it.", gate:"marion", fx:{dVeg:-27,dFarm:26,set:{protectFeeder:true}}},
       ]},
-    { id:"wetland", title:"The wetland flats", why:"The reedy country by the river floods most winters. Drained, it would be the best pasture in the district.",
+    { id:"wetland", title:"The wetland flats", why:"Drained, the reedy flats would be prime pasture. They're also the floodplain's sponge and filter.",
       def:"leave",
       options:[
         {id:"drain",label:"Drain it for pasture", desc:"Ditches and a floodgate. Prime grazing — and the sponge that slowed floods and fed the billabong is gone.", fx:{dFarm:12,set:{drained:true}}},
@@ -386,22 +375,22 @@ const ERAS=[
 
 /* ================= ERA 3 — 1930 ================= */
 { yr:"1930", name:"The Town", climate:{P:950,evapF:1.0},
-  intro:"Willow Bend is now twenty thousand people on the floodplain — with pipes, taps, and everything a town flushes away. Water must come from somewhere; waste must go somewhere. And there's a proposal on your desk for a dam in the ranges. You have the budget for TWO major works this era. Choose which — and notice who each choice helps, and what it does to the cycle.",
+  intro:"Willow Bend: twenty thousand people. Water in, waste out — and a dam proposal on your desk. Budget for TWO major works. Watch the map as you choose.",
   worksMax:2,
   decisions:[
-    { id:"sewage", title:"Where does the town's waste go?", why:"Twenty thousand people produce a river of wastewater every day. It re-enters the catchment somewhere — the only question is in what state.",
+    { id:"sewage", title:"Where does the town's waste go?", why:"A town's wastewater re-enters the catchment somewhere. The only question is in what state.",
       def:"raw",
       options:[
         {id:"raw", label:"Straight pipe to the river", desc:"Free. The outfall is just downstream of town — and just upstream of the swimming hole and the wetland.", fx:{set:{sewage:"raw"}}},
         {id:"treated", label:"Build treatment works", desc:"A major works. Settling ponds and filters take out most of the load before the water returns to the river.", cost:1, fx:{set:{sewage:"treated"}}},
       ]},
-    { id:"source", title:"Where does the town's water come from?", why:"Every tap in town pulls from the same cycle you've been watching.",
+    { id:"source", title:"Where does the town's water come from?", why:"Every tap pulls from the cycle you're watching.",
       def:"weir",
       options:[
         {id:"weir", label:"A weir on the river", desc:"Cheap and simple: pool the river at town and pump from the pool. The town drinks whatever the river carries.", fx:{set:{weir:true}}},
         {id:"bores", label:"Sink town bores", desc:"A major works. Drill to the groundwater — clean, filtered by the earth itself. It is the same water that feeds the river's baseflow.", cost:1, fx:{set:{bores:true}}},
       ]},
-    { id:"dam", title:"The Highland Dam proposal", why:"A wall in the ranges would bank winter water for dry summers — and stand between the river and every flood it has ever sent downstream.",
+    { id:"dam", title:"The Highland Dam proposal", why:"Bank winter water for dry summers — and cage every flood the river has ever sent downstream.",
       def:"nodam",
       options:[
         {id:"build", label:"Build Highland Dam", desc:"A major works. Water security for town and farms; floods caught and kept. The floods were also what filled the billabong.", cost:1, fx:{set:{dam:true}}},
@@ -433,30 +422,30 @@ const ERAS=[
 
 /* ================= ERA 4 — 1990 ================= */
 { yr:"1990", name:"The City & the Farms", climate:{P:900,evapF:1.05},
-  intro:"Willow Bend is a city of forty-five thousand. Roofs, roads and car parks now seal much of the floodplain — rain that once soaked in sheets off the concrete instead. Irrigation has become big business upstream. New ideas exist — water-sensitive design, recycling, flows for the river itself — but every one of them was learned from someone. You have TWO major works. Consult before you commit: two of the most important options on this desk only appear once you've listened.",
+  intro:"A city of forty-five thousand — roofs and roads seal the floodplain, irrigation is big business upstream. TWO major works. Two of the best options on this desk only appear once you've listened.",
   worksMax:2,
   decisions:[
-    { id:"storm", title:"Stormwater: what happens when rain hits concrete?", why:"A sealed surface turns gentle rain into instant run-off. The pipes have to send it somewhere.",
+    { id:"storm", title:"Stormwater: what happens when rain hits concrete?", why:"Sealed ground turns rain into instant run-off. It has to go somewhere.",
       def:"pipes",
       options:[
         {id:"pipes", label:"Bigger pipes — get it to the river fast", desc:"The old doctrine: collect every drop off every roof and road and race it to the channel. Efficient. Also why urban creeks flash-flood and then sit empty.", fx:{set:{storm:"pipes"}}},
         {id:"wsud", label:"Water-sensitive city design", desc:"Priya's ask, a major works: rain-gardens, permeable paving, tanks. The city starts soaking rain in again — like ground does.", gate:"priya", cost:1, fx:{set:{storm:"wsud"}}},
       ]},
-    { id:"irrigation", title:"Irrigation on the upstream farms", why:"Pumps and channels now take river water to paddocks that rain alone never could. Food, jobs — and the biggest single take from the river.",
+    { id:"irrigation", title:"Irrigation on the upstream farms", why:"Food, jobs — and the biggest single take from the river.",
       def:"expand",
       options:[
         {id:"expand", label:"Approve the expansion", desc:"More licences, more channels, more crops. The district booms; the river below the pumps runs thinner every summer.", fx:{set:{irr:"expand"}}},
         {id:"cap", label:"Cap extraction at current levels", desc:"No new licences. Growers grumble; the river keeps what it still has.", fx:{set:{irr:"cap"}}},
         {id:"modern", label:"Fund modernisation to drip", desc:"A major works: help growers swap open channels for drip lines. Similar farm output, drawn from a smaller take.", cost:1, fx:{set:{irr:"modern"}}},
       ]},
-    { id:"envwater", title:"Water for the river itself", why:"For a century, every drop has been allocated to somebody. One question has never been asked: does the RIVER get a share?",
+    { id:"envwater", title:"Water for the river itself", why:"Every drop is allocated to somebody. Does the RIVER get a share?",
       def:"none",
       options:[
         {id:"none", label:"No special provision", desc:"The river gets whatever is left after the town and farms take theirs.", fx:{}},
         {id:"envflow", label:"Environmental flow rules", desc:"Priya's ask: the water agency must release dam water to mimic small floods — timed by scientists for the wetland's needs.", gate:"priya", fx:{set:{envFlow:true}}},
         {id:"cultural", label:"A cultural flow, held by custodians", desc:"Aunty Marion's ask: a share of water legally held by First Nations people, who decide when Country needs it. Ask-first, made real.", gate:"marion", fx:{set:{culturalFlow:true}}},
       ]},
-    { id:"recycle", title:"The recycling question", why:"The treatment works now produces water clean enough to reuse — currently sent straight down the outfall.",
+    { id:"recycle", title:"The recycling question", why:"The treatment works makes water clean enough to use again.",
       def:"norecycle",
       options:[
         {id:"norecycle", label:"Keep sending it to the river", desc:"Simple, and the river appreciates the extra flow — such as it is.", fx:{}},
@@ -492,10 +481,10 @@ const ERAS=[
 
 /* ================= ERA 5 — 2050 ================= */
 { yr:"2050", name:"The Changed Cycle", climate:{P:820,evapF:1.15,spiky:true},
-  intro:"The climate has moved. Rain is down about a fifth on your grandparents' era, evaporation is up — and what rain does come falls harder: long dries broken by violent downpours. The cycle itself now runs differently, before you touch a thing. The city must choose TWO adaptations from five on the table — and one storm this era will test whatever flood plan you choose. This is the hardest desk in two hundred years. It's yours.",
+  intro:"The climate has moved: a fifth less rain, hotter air, harder downpours. The cycle runs differently before you touch a thing. Choose TWO adaptations — and one storm this era will test your flood plan.",
   worksMax:2, portfolio:true,
   decisions:[
-    { id:"adapt", title:"The adaptation portfolio — choose exactly two", why:"Five serious proposals, budget for two. Each re-plumbs the cycle in a different place.",
+    { id:"adapt", title:"The adaptation portfolio — choose exactly two", why:"Five proposals, budget for two. Each re-plumbs the cycle in a different place.",
       def:null, pick:2,
       options:[
         {id:"desal", label:"Desalination plant", desc:"Drinking water from the sea — rain-proof, drought-proof, energy-hungry. The cycle's one tap that doesn't depend on the sky.", fx:{set:{desal:true}}},
@@ -504,7 +493,7 @@ const ERAS=[
         {id:"buyback", label:"Buy back irrigation water for the river", desc:"Buy licences from willing growers and leave that water in the channel. The river's share, purchased back.", fx:{set:{buyback:true}}},
         {id:"raisedam", label:"Raise Highland Dam", desc:"More storage for the dry years — and even fewer floods escaping downstream. (Needs the dam to exist.)", needs:"dam", fx:{set:{damRaised:true}}},
       ]},
-    { id:"floodplan", title:"The flood plan", why:"The forecasts agree: sometime this era, a rain bomb will land on this catchment. On sealed ground, in a levee-lined channel, that means a wall of water. Choose how the city meets it.",
+    { id:"floodplan", title:"The flood plan", why:"A rain bomb will land this era. Choose how the city meets it.",
       def:"levees",
       options:[
         {id:"levees", label:"Higher levees", desc:"Wall the river off from the city. Works until the day it doesn't — and walls the river off from its floodplain and billabong forever.", fx:{set:{flood:"levees"}}},
@@ -664,6 +653,37 @@ function freshState(){ return {
   baseline:null, lastFx:null, lastChanges:[], floodOutcome:null, ladders:{},
 };}
 let state=freshState();
+/* live preview + commit animation: temporarily swap the global state */
+let _anim=false, _previewing=false;
+function withState(tmp,fn){ const real=state; state=tmp; try{ return fn(); } finally{ state=real; } }
+const NUMKEYS=["veg","imperv","farm","pop","aquifer","salinity","bill"];
+function previewState(){
+  const era=ERAS[state.era]; const p={...state, lastFx:null};
+  const decisions=era._activeDecisions||era.decisions;
+  withState(p,()=>{ decisions.forEach(d=>{
+    if(d.pick){ (p.picks[p.era]||[]).forEach(pid=>{ const o=d.options.find(x=>x.id===pid); if(o) applyFx(o.fx); }); }
+    else { const o=d.options.find(x=>x.id===(p.choices[p.era][d.id]??d.def)); if(o) applyFx(o.fx); }
+  }); });
+  return p;
+}
+function animateCommit(before){
+  const after={...state, lastFx:state.lastFx};
+  if(!before.lastFx){ drawAll(); return; }
+  _anim=true; const t0=performance.now(), DUR=1200;
+  const ease=t=>t<0.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
+  const step=now=>{
+    const t=Math.min(1,(now-t0)/DUR), k=ease(t);
+    const mid={...after};
+    NUMKEYS.forEach(key=>{ mid[key]=before[key]+(after[key]-before[key])*k; });
+    const f={...after.lastFx};
+    Object.keys(f).forEach(key=>{ const a=before.lastFx[key], b=after.lastFx[key];
+      if(typeof a==="number"&&typeof b==="number") f[key]=a+(b-a)*k; });
+    mid.lastFx=f;
+    withState(mid,()=>{ drawXsec(); renderGauges(); });
+    if(t<1) requestAnimationFrame(step); else { _anim=false; drawAll(); }
+  };
+  requestAnimationFrame(step);
+}
 function save(){ try{ store.setItem(KEY, JSON.stringify(state)); }catch(e){} }
 function load(){ try{ const s=store.getItem(KEY); if(s){ const p=JSON.parse(s); if(p&&typeof p.era==="number") state=Object.assign(freshState(),p); } }catch(e){} }
 function restartAll(){ if(confirm("Start the whole 200 years again? Your notebook will be wiped.")){ store.removeItem(KEY); state=freshState(); showScreen("scr-intro"); } }
@@ -774,7 +794,7 @@ function renderEraPanel(){
   const consulted=state.consulted[state.era]||[];
   let extraDecisions=[];
   if(state.era===3 && state.sewage==="raw"){
-    extraDecisions=[{ id:"outfall", title:"The outfall reckoning", why:"The straight pipe your predecessors chose now carries a city's waste. The swimming hole downstream has been closed two summers running.",
+    extraDecisions=[{ id:"outfall", title:"The outfall reckoning", why:"The straight pipe now carries a city's waste past a closed swimming hole.",
       def:"keepraw", options:[
         {id:"keepraw", label:"Keep the straight pipe", desc:"Still free. Still just upstream of the wetland.", fx:{}},
         {id:"fixit", label:"Build the treatment works at last", desc:"A major works, sixty years late — better than ninety.", cost:1, fx:{set:{sewage:"treated"}}},
@@ -820,7 +840,7 @@ function renderEraPanel(){
     <div class="era-head"><span class="yr">${era.yr}</span> — <span class="nm">${esc(era.name)}</span><p>${esc(era.intro)}</p></div>
     <div id="flashbox" class="flash noprint"></div>
     ${worksLine}${dHtml}
-    <div class="card"><h3 style="font-size:.95rem;margin-bottom:7px">🗣 Your advisers — consulting means reading what they actually say</h3><div class="advisers">${advHtml}</div></div>
+    <div class="card"><h3 style="font-size:.95rem;margin-bottom:7px">🗣 Talk to people first</h3><div class="advisers">${advHtml}</div></div>
     <div class="commitrow"><button id="commitbtn" class="btn btn-primary" style="width:100%;padding:12px" onclick="commitEra()">${era.commitLabel||`Commit ${era.yr} — see what it does to the cycle →`}</button></div>`;
 }
 function moodWord(v){ return v>=70?"CONTENT":v>=45?"UNEASY":"ALARMED"; }
@@ -848,7 +868,7 @@ function pickOpt(did,oid,isPick){
     else{ if(p.length>=d.pick){ flash(`Only ${d.pick} can be funded — unpick one first.`); renderEraPanel(); return; } p=[...p,oid]; }
     state.picks[state.era]=p;
   } else { state.choices[state.era][did]=oid; }
-  renderEraPanel(); save();
+  renderEraPanel(); drawAll(); save();
 }
 
 /* ---------------- commit & consequences ---------------- */
@@ -865,6 +885,7 @@ function commitEra(){
   for(const d of decisions){ if(d.pick){ const p=state.picks[state.era]||[]; if(p.length!==d.pick){ flash(`⚠️ “${esc(d.title)}” needs exactly ${d.pick} choices — you have ${p.length}.`); return; } } }
   if(era.worksMax>0 && currentWorksCost()>era.worksMax){ flash(`⚠️ Too many major works — the budget covers ${era.worksMax}.`); return; }
 
+  const before={...state, lastFx:state.lastFx};
   const prevFx=state.lastFx;
   /* apply decisions */
   decisions.forEach(d=>{
@@ -891,7 +912,7 @@ function commitEra(){
   notebookAdd(fx);
   state.lastChanges = buildChanges(fx, prevFx, stocksPrev);
   state.stage="result";
-  renderResult(); renderTimeline(); drawAll(); renderNotebook(); save();
+  renderResult(); renderTimeline(); animateCommit(before); renderNotebook(); save();
 }
 function notebookAdd(fx){
   const era=ERAS[state.era];
@@ -967,7 +988,7 @@ function renderResult(){
     ${mechs}
     <div class="card"><b style="font-size:.85rem">How people are travelling:</b><div style="margin-top:6px">${advHtml}</div></div>
     <div class="commitrow"><button class="btn btn-primary" style="width:100%;padding:12px" onclick="${last?"renderEnd()":"nextEra()"}">${last?"See what 200 years made →":"On to "+ERAS[state.era+1].yr+" — "+esc(ERAS[state.era+1].name)+" →"}</button></div>
-    <p class="note noprint">Check the 🏞 Catchment view (turn on <b>Compare with 1850</b>), the 🔁 Cycle diagram and your 📓 Field notebook before moving on — the debrief will ask about them.</p>`;
+    <p class="note noprint">Check the map (turn on <b>Compare with 1850</b>) and your 📓 notebook before moving on.</p>`;
   window.scrollTo(0,0);
 }
 function nextEra(){ state._openAdv=null; startEra(state.era+1); }
@@ -986,7 +1007,14 @@ function arrow(x1,y1,x2,y2,w,color,label,showNums,dash,op){
 function qualColor(q){ const t=clamp((q-30)/68,0,1); const mix=(a,b)=>Math.round(a+(b-a)*t);
   return `rgb(${mix(107,43)},${mix(122,122)},${mix(74,153)})`; }
 
-function drawAll(){ drawXsec(); drawCycle(); renderGauges(); }
+function drawAll(){
+  if(_anim) return;
+  if(state.stage==="plan" && state.era>0){
+    const p=previewState(); _previewing=true;
+    withState(p,()=>{ drawXsec(); drawCycle(); renderGauges(); });
+    _previewing=false;
+  } else { drawXsec(); drawCycle(); renderGauges(); }
+}
 function drawXsec(){
   const fx = state.lastFx || computeEra();
   const showNums = el("ctl-nums")?.checked, ghost = el("ctl-ghost")?.checked && state.baseline;
@@ -1044,23 +1072,23 @@ function drawXsec(){
     S.push(`<text x="14" y="52" font-size="10.5" fill="#8a8274">faded grey arrows = this cycle in 1850</text>`);
   }
   /* ---- live flux arrows ---- */
-  const rainN=3; for(let i=0;i<rainN;i++){ const x=110+i*250; S.push(arrow(x,26,x,Math.min(terrY(x)-26,120),fx.P/110,"var(--rain)",i===1?`rain ${fx.P}`:null,showNums,true)); }
-  S.push(`<text x="60" y="20" font-size="11" fill="#4a7a94">☁️ ${ERAS[state.era].yr} — rain ${fx.P} GL</text>`);
-  S.push(arrow(80,terrY(80)-10,80,58,fx.ET/45,"var(--et)",`evap+transp ${fx.ET}`,showNums));
+  const rainN=3; for(let i=0;i<rainN;i++){ const x=110+i*250; S.push(arrow(x,26,x,Math.min(terrY(x)-26,120),fx.P/110,"var(--rain)",i===1?`rain ${rnd(fx.P)}`:null,showNums,true)); }
+  S.push(`<text x="60" y="20" font-size="11" fill="#4a7a94">☁️ ${ERAS[state.era].yr} — rain ${rnd(fx.P)} GL</text>`);
+  S.push(arrow(80,terrY(80)-10,80,58,fx.ET/45,"var(--et)",`evap+transp ${rnd(fx.ET)}`,showNums));
   if(state.farm>0) S.push(arrow(350,terrY(350)-10,350,88,fx.ET/70,"var(--et)",null,false));
-  S.push(arrow(240,terrY(240)+4,240,rnd(wt(240))+6,fx.soak/45,"var(--soak)",`soak-in ${fx.soak}`,showNums));
+  S.push(arrow(240,terrY(240)+4,240,rnd(wt(240))+6,fx.soak/45,"var(--soak)",`soak-in ${rnd(fx.soak)}`,showNums));
   if(state.imperv>15) S.push(arrow(520,terrY(520)+4,520,rnd(wt(520))+4,fx.soak/140,"var(--soak)",null,false));
-  S.push(arrow(325,terrY(325)-16,405,terrY(405)-6,fx.run/45,"#3f88a8",`run-off ${fx.run}`,showNums));
+  S.push(arrow(325,terrY(325)-16,405,terrY(405)-6,fx.run/45,"#3f88a8",`run-off ${rnd(fx.run)}`,showNums));
   if(state.imperv>15) S.push(arrow(575,terrY(575)-12,625,terrY(625)-4,fx.run/95,"#3f88a8",null,false));
-  S.push(arrow(600,rnd(wt(600))-2,600,terrY(600)+6,fx.base/45,fx.losing?"#a83232":"var(--deep)",`${fx.losing?"LOSING":"baseflow"} ${fx.base}`,showNums,fx.losing));
+  S.push(arrow(600,rnd(wt(600))-2,600,terrY(600)+6,fx.base/45,fx.losing?"#a83232":"var(--deep)",`${fx.losing?"LOSING":"baseflow"} ${rnd(fx.base)}`,showNums,fx.losing));
   if(fx.losing) S.push(arrow(640,terrY(640)+6,640,rnd(wt(640))-2,3,"#a83232",null,false,true));
-  if(state.bores&&fx.borePump>0) S.push(arrow(505,rnd(wt(505)),505,terrY(505)-16,fx.borePump/10,"#6b5b8a",`bores ${fx.borePump}`,showNums,true));
-  if(fx.sewReturn>0) S.push(arrow(590,terrY(590)-8,648,terrY(648)+1,clamp(fx.sewReturn/8,2,8),state.sewage==="raw"?"#8a6b4a":"#a89a6a",`outfall ${fx.sewReturn}`,showNums));
+  if(state.bores&&fx.borePump>0) S.push(arrow(505,rnd(wt(505)),505,terrY(505)-16,fx.borePump/10,"#6b5b8a",`bores ${rnd(fx.borePump)}`,showNums,true));
+  if(fx.sewReturn>0) S.push(arrow(590,terrY(590)-8,648,terrY(648)+1,clamp(fx.sewReturn/8,2,8),state.sewage==="raw"?"#8a6b4a":"#a89a6a",`outfall ${rnd(fx.sewReturn)}`,showNums));
   if(state.desal) S.push(arrow(840,282,700,terrY(700)-40,4,"#2c8a7e",`desal ${fx.desalSup}`,showNums,true));
   if(fx.pulse&&!state.billDried) S.push(arrow(742,terrY(742)+2,bx-20,by-4,4.5,state.culturalFlow?"#2f6a3e":"#3f88a8",state.culturalFlow?"cultural flow":"flood pulse",showNums,true));
   S.push(`<text x="60" y="462" font-size="10.5" fill="#6b6256">▲ ranges · farms · town · wetland &amp; billabong · sea ▶ — arrows are drawn to scale with their flow</text>`);
   el("xsec").innerHTML=S.join("");
-  el("xsec-caption").innerHTML = `<b>${ERAS[state.era].yr} — ${esc(ERAS[state.era].name)}.</b> River at the town: <b>${fx.river} GL/yr</b> · quality <b>${fx.quality}/100</b> · flash index ${(fx.flash*100|0)}% (how much of the river arrives in a rush rather than seeping steadily). ${state.billDried?"The billabong is dry — permanently.":fx.pulse?"The billabong received water this era.":"No water reached the billabong this era."}`;
+  el("xsec-caption").innerHTML = `<b>${ERAS[state.era].yr} — ${esc(ERAS[state.era].name)}.</b> River at the town: <b>${rnd(fx.river)} GL/yr</b> · quality <b>${rnd(fx.quality)}/100</b> · flash index ${(fx.flash*100|0)}% (how much arrives in a rush rather than seeping steadily). ${state.billDried?"The billabong is dry — permanently.":fx.pulse?"Water reached the billabong.":"No water reached the billabong."}${_previewing?` <b style="color:var(--warn)">◉ live preview of your picks — commit to lock them in</b>`:""}`;
 }
 
 /* ---------------- cycle diagram ---------------- */
@@ -1104,11 +1132,17 @@ function renderGauges(){
     {l:"Salinity", v:rnd(state.salinity), max:100, unit:"/100", d:prev?rnd(state.salinity)-prev.salinity:0, col:"#a06a1f", invert:true},
     {l:"Town supply", v:rnd(clamp(100*( (state.desal?25:0)+(state.bores?12:0)+(state.weir?Math.min(35,fx.river*0.18):0)+(state.dam?(state.damRaised?28:18):0)+(state.pop?4:20) )/Math.max(fx.demand,6),5,100)), max:100, unit:"%", d:0, col:"#6b5b8a"},
   ];
-  el("gauges").innerHTML=items.map(g=>{
+  const host=el("gauges");
+  if(host.children.length!==items.length)
+    host.innerHTML=items.map(()=>`<div class="gauge"><div class="glabel"></div><div class="gval"></div><div class="gbar"><span></span></div></div>`).join("");
+  items.forEach((g,i)=>{ const c=host.children[i];
     const dcls=g.d>1?(g.invert?"down":"up"):g.d<-1?(g.invert?"up":"down"):"flat";
     const dtxt=g.d>1?`▲ ${rnd(g.d)}`:g.d<-1?`▼ ${rnd(Math.abs(g.d))}`:"—";
-    return `<div class="gauge"><div class="glabel">${g.l}</div><div class="gval">${g.v}${g.unit} <span class="gdelta ${dcls}">${dtxt}</span></div><div class="gbar"><span style="width:${clamp(100*g.v/g.max,2,100)}%;background:${g.col}"></span></div></div>`;
-  }).join("");
+    c.querySelector(".glabel").textContent=g.l;
+    c.querySelector(".gval").innerHTML=`${rnd(g.v)}${g.unit} <span class="gdelta ${dcls}">${dtxt}</span>`;
+    const sp=c.querySelector(".gbar span");
+    sp.style.width=clamp(100*g.v/g.max,2,100)+"%"; sp.style.background=g.col;
+  });
 }
 
 /* ---------------- factfile ---------------- */
@@ -1131,7 +1165,7 @@ function renderFactfile(){
     if(f.kind==="hbars"){ const W=860, rh=34, m=150; const maxV=Math.max(...f.data.rows.map(r=>r.val));
       svg=`<svg viewBox="0 0 ${W} ${f.data.rows.length*rh+34}">`;
       f.data.rows.forEach((r,i)=>{ const w=Math.max(4,(W-m-90)*r.val/maxV); const y=8+i*rh;
-        svg+=`<text x="${m-8}" y="${y+16}" font-size="12" text-anchor="end" fill="#1f1f1f">${r.name}</text><rect x="${m}" y="${y}" width="${w}" height="${rh-11}" fill="${r.color}" rx="3"/><text x="${m+w+7}" y="${y+16}" font-size="12" font-weight="800" fill="#1f1f1f">${r.val.toLocaleString()}${f.data.pct?"%":""}</text>`; });
+        svg+=`<text x="${m-8}" y="${y+16}" font-size="12" text-anchor="end" fill="#1f1f1f">${r.name}</text><rect x="${m}" y="${y}" width="${w}" height="${rh-11}" fill="${r.color}" rx="3"><animate attributeName="width" from="0" to="${w}" dur="0.8s" fill="freeze"/></rect><text x="${m+w+7}" y="${y+16}" font-size="12" font-weight="800" fill="#1f1f1f">${r.val.toLocaleString()}${f.data.pct?"%":""}</text>`; });
       if(f.data.scarcity){ const sx=m+(W-m-90)*f.data.scarcity/maxV; svg+=`<line x1="${sx}" y1="4" x2="${sx}" y2="${f.data.rows.length*rh+8}" stroke="#a83232" stroke-dasharray="5 4" stroke-width="1.6"/><text x="${sx+6}" y="${f.data.rows.length*rh+22}" font-size="10.5" fill="#a83232">scarcity line ≈ 1000</text>`; }
       svg+=`<text x="${m}" y="${f.data.rows.length*rh+22}" font-size="10.5" fill="#6b6256">${f.data.unit}</text></svg>`;
     }
@@ -1139,7 +1173,7 @@ function renderFactfile(){
       svg=`<svg viewBox="0 0 ${W} ${f.data.cats.length*H+46}">`;
       f.data.cats.forEach((c,ci)=>{ let x=m; const y=10+ci*H;
         svg+=`<text x="${m-8}" y="${y+24}" font-size="12" text-anchor="end" fill="#1f1f1f">${c}</text>`;
-        f.data.parts.forEach(p=>{ const w=(W-m-30)*p.vals[ci]/100; svg+=`<rect x="${x}" y="${y}" width="${w}" height="${H-18}" fill="${p.color}"/><text x="${x+w/2}" y="${y+23}" font-size="11.5" font-weight="700" text-anchor="middle" fill="#fff">${p.vals[ci]}%</text>`; x+=w; }); });
+        f.data.parts.forEach(p=>{ const w=(W-m-30)*p.vals[ci]/100; svg+=`<rect x="${x}" y="${y}" width="${w}" height="${H-18}" fill="${p.color}"><animate attributeName="width" from="0" to="${w}" dur="0.8s" fill="freeze"/></rect><text x="${x+w/2}" y="${y+23}" font-size="11.5" font-weight="700" text-anchor="middle" fill="#fff">${p.vals[ci]}%</text>`; x+=w; }); });
       f.data.parts.forEach((p,pi)=>{ svg+=`<rect x="${m+pi*200}" y="${f.data.cats.length*H+18}" width="12" height="12" fill="${p.color}" rx="2"/><text x="${m+pi*200+17}" y="${f.data.cats.length*H+28}" font-size="11.5" fill="#1f1f1f">${p.name}</text>`; });
       svg+=`</svg>`;
     }
@@ -1164,7 +1198,7 @@ function renderNotebook(){
     let svg=`<svg viewBox="0 0 ${W} ${state.notebook.length*H+40}">`;
     state.notebook.forEach((n,i)=>{ const y=6+i*H; let x=120;
       svg+=`<text x="112" y="${y+20}" font-size="12" text-anchor="end" fill="#1f1f1f">${n.yr}</text>`;
-      [["ET","#c07a2c"],["soak","#2c8a7e"],["run","#3f88a8"]].forEach(([k,col])=>{ const w=(W-160)*n[k]/n.P; svg+=`<rect x="${x}" y="${y}" width="${w}" height="${H-16}" fill="${col}"/><text x="${x+w/2}" y="${y+19}" font-size="10.5" font-weight="700" text-anchor="middle" fill="#fff">${pct(n[k],n.P)}%</text>`; x+=w; });
+      [["ET","#c07a2c"],["soak","#2c8a7e"],["run","#3f88a8"]].forEach(([k,col])=>{ const w=(W-160)*n[k]/n.P; svg+=`<rect x="${x}" y="${y}" width="${w}" height="${H-16}" fill="${col}"><animate attributeName="width" from="0" to="${w}" dur="0.7s" fill="freeze"/></rect><text x="${x+w/2}" y="${y+19}" font-size="10.5" font-weight="700" text-anchor="middle" fill="#fff">${pct(n[k],n.P)}%</text>`; x+=w; });
     });
     svg+=`<text x="120" y="${state.notebook.length*H+18}" font-size="10.5" fill="#6b6256">each bar = that era's rain, split into 🟠 back-to-sky · 🟢 soak-in · 🔵 run-off (shares don't count re-use downstream)</text></svg>`;
     el("nb-bars").innerHTML=svg;
