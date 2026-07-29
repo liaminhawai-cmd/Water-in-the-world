@@ -71,6 +71,24 @@ Morphemes deliberately spiral: *spir* (transpiration → spiritual → perspire)
 Progress is stored in the browser (localStorage) per device. "Start over" on the home
 screen wipes it.
 
+## Data-skills task
+
+**`reading-data-pqe.html`** — *Reading data like a geographer (PQE)*, a projectable + printable
+worked-example resource for the Map & Data strand of lessons 2.1–2.2. It teaches one move —
+**P**attern, **Q**uantify, **E**xception — by modelling it on a single dataset (renewable fresh
+water per person, five countries) at three tiers with reveal-to-check worked answers:
+
+- **Grade 5–6 (Level 6)** — identify: title, units, highest, lowest, read a value.
+- **Grade 7–8 (Level 7–8)** — a full PQE paragraph, with P/Q/E colour-coded.
+- **Grade 9–10 (Level 9–10)** — explain with SHEEPT factors and evaluate the data (a national
+  average hides distribution *within* a country, and "renewable" water can flow in from elsewhere).
+
+Students then transfer the skill to **Australia's rainfall distribution** (a schematic map, with a
+link to the live BoM map) with the same tiered success criteria, sentence starters and a self-check.
+The worked example's *exception* — Australia looks water-rich but its water is unevenly spread — is
+exactly what the rainfall task then reveals. Figures are approximate/rounded with sources (World
+Bank/FAO AQUASTAT; Falkenmark thresholds; BoM). Prints with the worked answers shown.
+
 ## Interactive simulations
 
 **`every-drop.html`** — *Every Drop: 200 years in one catchment*, the flagship water-cycle

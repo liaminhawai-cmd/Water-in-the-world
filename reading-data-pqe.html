@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reading Data Like a Geographer — PQE</title>
+<style>
+  :root{
+    --bg:#f4efe6; --paper:#fbf7ee; --ink:#1f1f1f; --muted:#6b6256;
+    --line:#d8cfbb; --line-soft:#e8e0cd; --deep:#1d5f7d; --accent:#2b7a99;
+    --p:#2f6a3e; --q:#1d6f8b; --e:#a0561f;
+    --pbg:#eef5ee; --qbg:#eaf3f6; --ebg:#f7efe4;
+    --l56:#5a7a4a; --l78:#1d6f8b; --l910:#7a4a8a;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:var(--bg);color:var(--ink);
+       line-height:1.55;padding:20px;display:flex;justify-content:center}
+  .wrap{width:100%;max-width:900px}
+  h1{font-size:1.7rem;color:var(--deep)}
+  h2{font-size:1.25rem;color:var(--deep);margin:6px 0}
+  h3{font-size:1.02rem}
+  .sub{color:var(--muted);font-size:.95rem}
+  .card{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin:14px 0}
+  .eyebrow{letter-spacing:.12em;text-transform:uppercase;font-size:.7rem;color:var(--muted);font-weight:800}
+  .frame{display:grid;gap:10px;grid-template-columns:1fr 1fr 1fr;margin:10px 0}
+  @media(max-width:640px){.frame{grid-template-columns:1fr}}
+  .fbox{border-radius:10px;padding:10px 13px;border:1px solid var(--line)}
+  .fbox.p{background:var(--pbg)} .fbox.q{background:var(--qbg)} .fbox.e{background:var(--ebg)}
+  .fbox .lt{font-weight:800;font-size:1.05rem}
+  .fbox.p .lt{color:var(--p)} .fbox.q .lt{color:var(--q)} .fbox.e .lt{color:var(--e)}
+  .fbox .d{font-size:.85rem;color:var(--muted)}
+  svg{display:block;max-width:100%;height:auto}
+  .chartwrap{background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px;margin:10px 0}
+  .src{font-size:.72rem;color:var(--muted);margin-top:4px}
+  .tier{border-radius:12px;border:1px solid var(--line);margin:10px 0;overflow:hidden}
+  .tier-head{display:flex;align-items:center;gap:10px;padding:11px 15px;cursor:pointer;font-weight:800;color:#fff}
+  .tier.l56 .tier-head{background:var(--l56)} .tier.l78 .tier-head{background:var(--l78)} .tier.l910 .tier-head{background:var(--l910)}
+  .tier-head .lvl{font-size:.78rem;background:rgba(255,255,255,.25);border-radius:999px;padding:2px 9px;font-weight:700}
+  .tier-head .caret{margin-left:auto;font-size:.9rem}
+  .tier-body{display:none;padding:0 15px 14px;background:var(--paper)}
+  .tier.open .tier-body{display:block}
+  .tier.open .tier-head .caret{transform:rotate(180deg)}
+  .canfor{font-size:.83rem;color:var(--muted);border-left:3px solid var(--line);padding:4px 0 4px 10px;margin:10px 0}
+  .model{background:#fff;border:1px dashed var(--line);border-radius:9px;padding:11px 13px;margin-top:8px;font-size:.92rem}
+  .model .tag{display:inline-block;font-weight:800;font-size:.7rem;border-radius:5px;padding:1px 6px;margin-right:5px;color:#fff}
+  .tag.p{background:var(--p)} .tag.q{background:var(--q)} .tag.e{background:var(--e)}
+  mark.p{background:#d7ebda} mark.q{background:#d7e9f0} mark.e{background:#f2e2cd}
+  .task{background:#eef4f7;border:1px solid #cfe0ea}
+  .steps{counter-reset:s;list-style:none;margin:8px 0}
+  .steps li{counter-increment:s;position:relative;padding:6px 0 6px 34px;font-size:.92rem}
+  .steps li::before{content:counter(s);position:absolute;left:0;top:5px;width:24px;height:24px;border-radius:50%;
+    background:var(--deep);color:#fff;font-weight:800;font-size:.8rem;display:flex;align-items:center;justify-content:center}
+  .crit{display:grid;gap:10px;grid-template-columns:1fr 1fr 1fr;margin:8px 0}
+  @media(max-width:640px){.crit{grid-template-columns:1fr}}
+  .crit .cc{border-radius:10px;padding:10px 12px;font-size:.83rem;border:1px solid var(--line);background:#fff}
+  .crit .cc b{display:block;margin-bottom:3px}
+  .crit .cc.l56 b{color:var(--l56)} .crit .cc.l78 b{color:var(--l78)} .crit .cc.l910 b{color:var(--l910)}
+  .starters{background:#f4f0e6;border-radius:9px;padding:10px 13px;font-size:.86rem}
+  .starters code{background:#fff;border:1px solid var(--line);border-radius:5px;padding:1px 6px;display:inline-block;margin:2px 0}
+  .selfcheck label{display:flex;gap:8px;align-items:flex-start;font-size:.86rem;padding:4px 0;cursor:pointer}
+  .selfcheck input{margin-top:4px}
+  .btnrow{margin:10px 0}
+  .btn{border:1px solid var(--line);background:var(--paper);border-radius:9px;padding:8px 14px;font-weight:700;cursor:pointer;font-size:.9rem}
+  .btn:hover{border-color:#b8ab8d}
+  .btn-primary{background:var(--deep);color:#fff;border-color:var(--deep)}
+  .note{font-size:.82rem;color:var(--muted)}
+  a{color:var(--accent)}
+  .legend{display:flex;gap:14px;flex-wrap:wrap;font-size:.76rem;color:var(--muted);margin-top:6px}
+  .legend .k{display:inline-flex;align-items:center;gap:5px}
+  .sw{width:16px;height:12px;border-radius:3px;display:inline-block}
+  @media print{
+    body{background:#fff;padding:0}
+    .noprint{display:none!important}
+    .tier-body{display:block!important}
+    .card,.tier{break-inside:avoid}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="eyebrow">Water in the World · Lessons 2.1–2.2 · Map &amp; Data skills</div>
+  <h1>Reading data like a geographer</h1>
+  <p class="sub">One skill, three levels. First watch it done (the water example), then do it yourself (the rainfall map).</p>
+
+  <!-- ============ THE FRAME ============ -->
+  <div class="card">
+    <h2>The move: <b>P · Q · E</b></h2>
+    <p class="sub">Any time you describe a graph, chart or map, do these three things — in this order.</p>
+    <div class="frame">
+      <div class="fbox p"><span class="lt">P — Pattern</span><div class="d">The general trend. What's the overall story? Use direction words (rises, falls, from… to…).</div></div>
+      <div class="fbox q"><span class="lt">Q — Quantify</span><div class="d">Prove it with numbers. Quote 2–3 real figures, with the units and the place.</div></div>
+      <div class="fbox e"><span class="lt">E — Exception</span><div class="d">The odd one out, or the surprise the pattern hides. This is the bit that gets top marks.</div></div>
+    </div>
+  </div>
+
+  <!-- ============ WORKED EXAMPLE ============ -->
+  <div class="card">
+    <div class="eyebrow">Watch it done — “I do / we do”</div>
+    <h2>How much fresh water does each person get?</h2>
+    <p class="sub">Renewable fresh water available per person, per year (cubic metres), in five countries. The red lines are the world “water stress”, “scarcity” and “absolute scarcity” levels.</p>
+
+    <div class="chartwrap">
+      <svg viewBox="0 0 720 300" role="img" aria-label="Bar chart of renewable fresh water per person for five countries">
+        <!-- scale: log-ish? use linear with sqrt to keep small ones visible. We'll draw to scale but annotate. -->
+        <!-- baseline -->
+        <line x1="150" y1="250" x2="700" y2="250" stroke="#6b6256" stroke-width="1"/>
+        <!-- annotation pointing to the two water-stressed bars -->
+        <text x="500" y="150" font-size="10" fill="#a83232" text-anchor="middle">Egypt &amp; Jordan are far below</text>
+        <text x="500" y="164" font-size="10" fill="#a83232" text-anchor="middle">the 1,700 m³ “water-stress” line</text>
+        <path d="M500,170 Q515,205 548,238" fill="none" stroke="#a83232" stroke-width="1" stroke-dasharray="3 3"/>
+        <!-- bars: value, label, colour -->
+        <!-- Canada 80000 -->
+        <rect x="165" y="70" width="70" height="180" fill="#2b7a99"/><text x="200" y="64" font-size="12" font-weight="800" fill="#1d5f7d" text-anchor="middle">80,000</text><text x="200" y="266" font-size="12" text-anchor="middle">Canada</text>
+        <!-- Australia 21000 -->
+        <rect x="265" y="132" width="70" height="118" fill="#2b7a99"/><text x="300" y="126" font-size="12" font-weight="800" fill="#1d5f7d" text-anchor="middle">21,000</text><text x="300" y="266" font-size="12" text-anchor="middle">Australia</text>
+        <!-- Vietnam 9000 -->
+        <rect x="365" y="185" width="70" height="65" fill="#2b7a99"/><text x="400" y="179" font-size="12" font-weight="800" fill="#1d5f7d" text-anchor="middle">9,000</text><text x="400" y="266" font-size="12" text-anchor="middle">Vietnam</text>
+        <!-- Egypt 600 -->
+        <rect x="465" y="243" width="70" height="7" fill="#c0632c"/><text x="500" y="237" font-size="12" font-weight="800" fill="#a0561f" text-anchor="middle">600</text><text x="500" y="266" font-size="12" text-anchor="middle">Egypt</text>
+        <!-- Jordan 120 -->
+        <rect x="565" y="247" width="70" height="3" fill="#a83232"/><text x="600" y="241" font-size="12" font-weight="800" fill="#a83232" text-anchor="middle">120</text><text x="600" y="266" font-size="12" text-anchor="middle">Jordan</text>
+        <!-- y axis label -->
+        <text x="150" y="40" font-size="11" fill="#6b6256">cubic metres of fresh water, per person, per year</text>
+        <text x="140" y="74" font-size="9" fill="#6b6256" text-anchor="end">80,000</text>
+        <text x="140" y="164" font-size="9" fill="#6b6256" text-anchor="end">40,000</text>
+        <text x="140" y="254" font-size="9" fill="#6b6256" text-anchor="end">0</text>
+      </svg>
+      <div class="src">Approximate, rounded values — total renewable freshwater per capita (World Bank / FAO AQUASTAT). Thresholds: Falkenmark water-stress &lt;1,700, scarcity &lt;1,000, absolute scarcity &lt;500 m³/person/yr.</div>
+    </div>
+
+    <p class="note noprint">👉 Cover the answers. Ask the class to try each level first, <b>then</b> reveal.</p>
+    <div class="btnrow noprint">
+      <button class="btn btn-primary" onclick="allTiers(true)">Reveal all levels</button>
+      <button class="btn" onclick="allTiers(false)">Hide all</button>
+    </div>
+
+    <div class="tier l56" id="t1">
+      <div class="tier-head" onclick="tog('t1')"><span>Grade 5–6</span><span class="lvl">Continuum 2.1 · Level 6 — identify</span><span class="caret">▾</span></div>
+      <div class="tier-body">
+        <div class="canfor"><b>“I can identify the key features of a graph.”</b> Find the title, the units, the biggest, the smallest, and read a value.</div>
+        <div class="model">
+          The graph shows renewable fresh water per person in five countries, in cubic metres per year.
+          <b>Canada has the most</b>, about 80,000 m³ per person. <b>Jordan has the least</b>, about 120 m³ per person.
+          Egypt and Jordan are both in the red band, so they are <b>water-stressed</b>.
+        </div>
+      </div>
+    </div>
+
+    <div class="tier l78" id="t2">
+      <div class="tier-head" onclick="tog('t2')"><span>Grade 7–8</span><span class="lvl">Continuum 2.1 · Level 7–8 — describe with PQE</span><span class="caret">▾</span></div>
+      <div class="tier-body">
+        <div class="canfor"><b>“I can describe patterns, quantify them, and point out exceptions.”</b> One PQE paragraph.</div>
+        <div class="model">
+          <p><span class="tag p">P</span><mark class="p">Fresh water per person is spread very unevenly — it drops steeply from water-rich countries like Canada and Australia to water-scarce ones like Egypt and Jordan.</mark></p>
+          <p style="margin-top:6px"><span class="tag q">Q</span><mark class="q">Canada has about 80,000 m³ per person a year, while Jordan has only about 120 — more than 600 times less. Egypt (~600) and Jordan (~120) both sit far below the water-scarcity line of 1,000 m³.</mark></p>
+          <p style="margin-top:6px"><span class="tag e">E</span><mark class="e">The surprise is that Australia sits near the top (~21,000 m³) yet still builds desalination plants — so a national average can hide where the water actually is.</mark></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="tier l910" id="t3">
+      <div class="tier-head" onclick="tog('t3')"><span>Grade 9–10</span><span class="lvl">Continuum 2.1 · Level 9–10 — explain &amp; analyse</span><span class="caret">▾</span></div>
+      <div class="tier-body">
+        <div class="canfor"><b>“I can use SHEEPT factors to explain trends”</b> and <b>“analyse relationships between sources.”</b> Explain <i>why</i>, then judge the data.</div>
+        <div class="model">
+          <p><b>Explain (SHEEPT):</b> The pattern is mostly <b>environmental</b> — Canada's cool, wet climate and huge rivers give enormous runoff, while Egypt and Jordan sit in hot deserts where little rain falls. There is a <b>political-geography</b> twist too: much of Egypt's water is the Nile flowing <i>in</i> from other countries, so its “renewable” water is not fully its own.</p>
+          <p style="margin-top:6px"><b>Analyse / evaluate:</b> The per-person average is misleading in two ways. It hides distribution <i>within</i> a country — Australia's water is in the empty north, not the crowded south, which is exactly why it desalinates — and it can count water that depends on a neighbour's rainfall. So “renewable” does not always mean <b>available</b>, or <b>reliable</b>.</p>
+        </div>
+      </div>
+    </div>
+    <p class="note">Notice the Grade 7–8 <b>exception</b> and the Grade 9–10 point are the same idea: Australia's water is unevenly spread. That's the exact thing you'll map next. 👇</p>
+  </div>
+
+  <!-- ============ YOUR TURN ============ -->
+  <div class="card task">
+    <div class="eyebrow">Now you do it — “you do”</div>
+    <h2>Where does Australia's rain fall?</h2>
+    <p class="sub">Australia looked water-rich in the last graph — but the water isn't spread evenly. Use <b>P·Q·E</b> to describe how rainfall is distributed across the country.</p>
+
+    <div class="chartwrap">
+      <svg viewBox="0 0 520 440" role="img" aria-label="Schematic map of average annual rainfall across Australia">
+        <!-- sea -->
+        <rect x="0" y="0" width="520" height="440" fill="#dcebf2"/>
+        <!-- compass -->
+        <g transform="translate(475,40)"><circle r="18" fill="#fff" stroke="#d8cfbb"/><text y="-5" font-size="11" font-weight="800" text-anchor="middle" fill="#1d5f7d">N</text><path d="M0,-14 L4,0 L-4,0 Z" fill="#a83232"/></g>
+        <!-- Australia body: driest interior as the base -->
+        <path id="aus" d="M120,120 Q95,150 100,200 Q95,250 130,300 Q160,345 230,360 Q320,372 380,340 Q430,315 435,255 Q445,200 415,160 Q385,120 320,110 Q220,100 120,120 Z" fill="#e7c98a"/>
+        <!-- interior arid core -->
+        <ellipse cx="270" cy="235" rx="95" ry="70" fill="#e0b866"/>
+        <text x="270" y="235" font-size="11" text-anchor="middle" fill="#8a6a2a">arid interior</text>
+        <text x="270" y="250" font-size="9" text-anchor="middle" fill="#8a6a2a">&lt; 300 mm</text>
+        <!-- northern (monsoon) wet band -->
+        <path d="M150,128 Q250,108 340,120 Q320,150 250,150 Q190,150 150,150 Z" fill="#6fa8c4"/>
+        <text x="245" y="123" font-size="9" text-anchor="middle" fill="#12455c">Top End — wet (summer)</text>
+        <!-- NE Qld coast very wet -->
+        <path d="M400,150 Q430,190 430,240 Q412,235 402,200 Q396,170 400,150 Z" fill="#2b7a99"/>
+        <text x="452" y="205" font-size="9" text-anchor="middle" fill="#12455c">NE coast</text>
+        <text x="452" y="217" font-size="9" text-anchor="middle" fill="#12455c">&gt; 2000 mm</text>
+        <!-- SE moderate -->
+        <path d="M360,330 Q400,315 415,285 Q420,320 395,345 Q375,352 360,330 Z" fill="#8fc0d6"/>
+        <text x="392" y="360" font-size="9" text-anchor="middle" fill="#12455c">SE — moderate</text>
+        <!-- SW corner wet (winter) -->
+        <path d="M118,270 Q100,240 105,205 Q130,215 138,250 Q135,275 118,270 Z" fill="#6fa8c4"/>
+        <text x="95" y="290" font-size="9" text-anchor="middle" fill="#12455c">SW corner</text>
+        <text x="95" y="302" font-size="9" text-anchor="middle" fill="#12455c">wet (winter)</text>
+        <!-- Tasmania -->
+        <path d="M340,392 q-14,-6 -4,-18 q16,-4 18,8 q2,12 -14,10 Z" fill="#6fa8c4"/>
+        <path d="M340,392 q-14,-6 -4,-18" fill="none"/>
+        <rect x="332" y="378" width="9" height="16" fill="#2b7a99"/>
+        <text x="352" y="404" font-size="9" fill="#12455c">Tasmania — W wet</text>
+        <!-- dots for a couple of cities -->
+        <circle cx="245" cy="132" r="3" fill="#1f1f1f"/><text x="245" y="146" font-size="8" text-anchor="middle">Darwin</text>
+        <circle cx="418" cy="205" r="3" fill="#1f1f1f"/><text x="416" y="196" font-size="8" text-anchor="end">Cairns</text>
+        <circle cx="270" cy="250" r="3" fill="#1f1f1f"/><text x="270" y="272" font-size="8" text-anchor="middle">L. Eyre</text>
+        <circle cx="120" cy="258" r="3" fill="#1f1f1f"/><text x="120" y="248" font-size="8" text-anchor="middle">Perth</text>
+        <circle cx="388" cy="330" r="3" fill="#1f1f1f"/><text x="388" y="322" font-size="8" text-anchor="end">Melbourne</text>
+      </svg>
+      <div class="legend">
+        <span class="k"><span class="sw" style="background:#2b7a99"></span> very wet (&gt;2000 mm)</span>
+        <span class="k"><span class="sw" style="background:#6fa8c4"></span> wet</span>
+        <span class="k"><span class="sw" style="background:#8fc0d6"></span> moderate</span>
+        <span class="k"><span class="sw" style="background:#e7c98a"></span> dry</span>
+        <span class="k"><span class="sw" style="background:#e0b866"></span> arid (&lt;300 mm)</span>
+      </div>
+      <div class="src">Schematic — drawn to teach the pattern, not to scale. For the real activity, project the live <a href="https://www.bom.gov.au/climate/maps/averages/rainfall/" target="_blank" rel="noopener">Bureau of Meteorology average rainfall map</a> (free, CC-BY).</div>
+    </div>
+
+    <h3>Your task</h3>
+    <ol class="steps">
+      <li><b>Read the map.</b> Find the wettest areas and the driest area. Read the rough rainfall numbers off the legend.</li>
+      <li><b>Write a P·Q·E paragraph</b> describing how rainfall is distributed across Australia. Use the words <b>distribution</b> and <b>precipitation</b>.</li>
+      <li><b>Explain it (stretch).</b> Why is it wet where it's wet? Think about the coast, mountains and the hot dry centre.</li>
+    </ol>
+
+    <h3>How good is your answer? (aim for your level, then push one higher)</h3>
+    <div class="crit">
+      <div class="cc l56"><b>Grade 5–6 · identify</b>I found the wettest and driest areas and read a rainfall figure for each. I used compass directions (north, south-east…).</div>
+      <div class="cc l78"><b>Grade 7–8 · describe (PQE)</b>My paragraph has a clear <b>Pattern</b>, is <b>Quantified</b> with 2–3 real figures and places, and names one <b>Exception</b> or surprise.</div>
+      <div class="cc l910"><b>Grade 9–10 · explain</b>I explained <b>why</b> using factors (oceans, mountains/rain shadow, latitude, the summer monsoon), and I noted what a single map can't tell you.</div>
+    </div>
+
+    <div class="starters noprint">
+      <b>Sentence starters</b><br>
+      <code>Rainfall generally decreases from the ___ and ___ coasts towards the ___.</code>
+      <code>The wettest place is ___, with over ___ mm; the driest is around ___, with under ___ mm.</code>
+      <code>An exception to the pattern is ___, because ___.</code>
+      <code>It rains most where ___, because warm ocean air ___ / is forced up over ___.</code>
+    </div>
+  </div>
+
+  <!-- ============ SELF CHECK ============ -->
+  <div class="card selfcheck">
+    <div class="eyebrow">Before you hand it in</div>
+    <h2>Self-check</h2>
+    <label><input type="checkbox"> My answer has a clear <b>Pattern</b> sentence (the overall trend, with a direction).</label>
+    <label><input type="checkbox"> I <b>Quantified</b> it — at least two real numbers, each with a place and the units.</label>
+    <label><input type="checkbox"> I named an <b>Exception</b> — a surprise, an outlier, or something the pattern hides.</label>
+    <label><input type="checkbox"> I used geographic language: <i>distribution, precipitation</i>, compass directions.</label>
+    <label><input type="checkbox"> (Stretch) I explained <b>why</b>, and said what the map/graph can't show.</label>
+  </div>
+
+  <p class="note noprint" style="text-align:center;margin:14px 0">Print or “save as PDF” for a paper worksheet — the worked answers print in full.
+    <br>Part of the <a href="index.html">Water in the World</a> teaching set.</p>
+
+</div>
+<script>
+  function tog(id){ document.getElementById(id).classList.toggle('open'); }
+  function allTiers(on){ ['t1','t2','t3'].forEach(id=>document.getElementById(id).classList.toggle('open',on)); }
+</script>
+</body>
+</html>
