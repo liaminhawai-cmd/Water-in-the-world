@@ -72,6 +72,9 @@
   @keyframes spot{0%{stroke-opacity:.12;stroke-width:9}55%{stroke-opacity:1;stroke-width:4}100%{stroke-opacity:1;stroke-width:4}}
   .hlword{background:none;border:none;padding:0 1px;font:inherit;color:#a8730c;font-weight:700;cursor:pointer;border-bottom:1.5px dotted #caa050}
   .hlword:hover{background:#f8eccb}
+  .drillword{background:none;border:none;padding:0 1px;font:inherit;color:#1d6f8b;font-weight:700;cursor:pointer;border-bottom:1.5px dashed #4a9ab5}
+  .drillword:hover{background:#e4eff3}
+  .drillword::after{content:" 🔍";font-size:.72em}
   /* collapsible worked-answer cards */
   .tier.collapsed .tier-body{display:none}
   .tier-head .caret{margin-left:auto;background:rgba(255,255,255,.28);border:none;color:#fff;font-size:.85rem;cursor:pointer;border-radius:6px;padding:2px 8px;transition:transform .15s}
@@ -135,7 +138,7 @@
 
   <div class="eyebrow">Water in the World · Lessons 2.1–2.2 · Map &amp; Data · teacher reference</div>
   <h1>Reading data like a geographer</h1>
-  <p class="sub">Model <b>P·Q·E</b> on the water example — click a level to annotate the chart, or click a number in an answer to spotlight where it comes from. Set the students' version in OneNote.</p>
+  <p class="sub">Model <b>P·Q·E</b> on the water example — click a level to annotate the chart, click a number in an answer to spotlight it, or click a country to look inside it. Set the students' version in OneNote.</p>
 
   <!-- ============ THE FRAME ============ -->
   <div class="card">
@@ -346,7 +349,7 @@
       </div>
     </div>
 
-    <p class="note noprint">👉 The same skill, leveled up — click a level (or a card) to annotate the chart; click any <span style="color:#a8730c;font-weight:700;border-bottom:1.5px dotted #caa050">number</span> in an answer to spotlight its source (school continuum 2.1).</p>
+    <p class="note noprint">👉 The same skill, leveled up. In any answer, click a <span style="color:#a8730c;font-weight:700;border-bottom:1.5px dotted #caa050">number</span> to spotlight its source, or a <span style="color:#1d6f8b;font-weight:700;border-bottom:1.5px dashed #4a9ab5">country</span> to open its breakdown — that's how you check whether the average hides something (school continuum 2.1).</p>
     <div class="tools noprint">
       <span class="lr-label" style="font-size:.8rem">Worked answers:</span>
       <button class="mini" onclick="allCollapse(false)">Expand all</button>
@@ -361,7 +364,7 @@
         <div class="model">
           The graph shows renewable fresh water per person in five countries, in cubic metres per year.
           <b>Canada has the most</b>, about <button class="hlword" onclick="hl(['canada'])">80,000</button> m³ per person. <b>Jordan has the least</b>, about <button class="hlword" onclick="hl(['jordan'])">120</button> m³ per person.
-          <button class="hlword" onclick="hl(['egypt'])">Egypt</button> and <button class="hlword" onclick="hl(['jordan'])">Jordan</button> are the smallest — both below the <button class="hlword" onclick="hl(['egypt','jordan'])">1,700 m³</button> <b>water-stress</b> line.
+          <button class="drillword" onclick="drill('egypt')" title="Look inside Egypt">Egypt</button> and <button class="drillword" onclick="drill('jordan')" title="Look inside Jordan">Jordan</button> are the smallest — both below the <button class="hlword" onclick="hl(['egypt','jordan'])">1,700 m³</button> <b>water-stress</b> line.
         </div>
       </div>
     </div>
@@ -369,11 +372,11 @@
     <div class="tier l78" id="t2">
       <div class="tier-head" onclick="setLevel('78')"><span>Grade 7–8</span><span class="lvl">Level 7–8 · describe (PQE)</span><button class="caret" onclick="event.stopPropagation();toggleCollapse('t2')">▾</button></div>
       <div class="tier-body">
-        <div class="canfor"><b>“I can describe patterns, quantify them, and point out exceptions.”</b> One PQE paragraph. <span style="color:var(--muted)">Click any number to spotlight it on the chart.</span></div>
+        <div class="canfor"><b>“I can describe patterns, quantify them, and point out exceptions.”</b> One PQE paragraph. <span style="color:var(--muted)">Click a <span style="color:#a8730c">number</span> to spotlight it, or a <span style="color:#1d6f8b">country</span> to look inside it.</span></div>
         <div class="model">
-          <p><span class="tag p">P</span><mark class="p">Fresh water per person is spread very unevenly — it drops steeply from water-rich countries like <button class="hlword" onclick="hl(['canada'])">Canada</button> and <button class="hlword" onclick="hl(['australia'])">Australia</button> to water-scarce ones like <button class="hlword" onclick="hl(['egypt'])">Egypt</button> and <button class="hlword" onclick="hl(['jordan'])">Jordan</button>.</mark></p>
-          <p style="margin-top:6px"><span class="tag q">Q</span><mark class="q"><button class="hlword" onclick="hl(['canada'])">Canada</button> has about <button class="hlword" onclick="hl(['canada'])">80,000</button> m³ per person a year, while <button class="hlword" onclick="hl(['jordan'])">Jordan</button> has only about <button class="hlword" onclick="hl(['jordan'])">120</button> — more than <button class="hlword" onclick="hl(['canada','jordan'])">600 times less</button>. Egypt (<button class="hlword" onclick="hl(['egypt'])">~600</button>) and Jordan (<button class="hlword" onclick="hl(['jordan'])">~120</button>) both sit far below the water-scarcity line of <button class="hlword" onclick="hl(['egypt','jordan'])">1,000 m³</button>.</mark></p>
-          <p style="margin-top:6px"><span class="tag e">E</span><mark class="e">The surprise is that <button class="hlword" onclick="hl(['australia'])">Australia</button> sits near the top (<button class="hlword" onclick="hl(['australia'])">~21,000 m³</button>) yet still builds desalination plants — so a national average can hide where the water actually is.</mark></p>
+          <p><span class="tag p">P</span><mark class="p">Fresh water per person is spread very unevenly — it drops steeply from water-rich countries like <button class="drillword" onclick="drill('canada')" title="Look inside Canada">Canada</button> and <button class="drillword" onclick="drill('australia')" title="Look inside Australia">Australia</button> to water-scarce ones like <button class="drillword" onclick="drill('egypt')" title="Look inside Egypt">Egypt</button> and <button class="drillword" onclick="drill('jordan')" title="Look inside Jordan">Jordan</button>.</mark></p>
+          <p style="margin-top:6px"><span class="tag q">Q</span><mark class="q"><button class="drillword" onclick="drill('canada')" title="Look inside Canada">Canada</button> has about <button class="hlword" onclick="hl(['canada'])">80,000</button> m³ per person a year, while <button class="drillword" onclick="drill('jordan')" title="Look inside Jordan">Jordan</button> has only about <button class="hlword" onclick="hl(['jordan'])">120</button> — more than <button class="hlword" onclick="hl(['canada','jordan'])">600 times less</button>. Egypt (<button class="hlword" onclick="hl(['egypt'])">~600</button>) and Jordan (<button class="hlword" onclick="hl(['jordan'])">~120</button>) both sit far below the water-scarcity line of <button class="hlword" onclick="hl(['egypt','jordan'])">1,000 m³</button>.</mark></p>
+          <p style="margin-top:6px"><span class="tag e">E</span><mark class="e">The surprise is that <button class="drillword" onclick="drill('australia')" title="Look inside Australia">Australia</button> sits near the top (<button class="hlword" onclick="hl(['australia'])">~21,000 m³</button>) yet still builds desalination plants — so a national average can hide where the water actually is.</mark></p>
         </div>
       </div>
     </div>
@@ -383,8 +386,8 @@
       <div class="tier-body">
         <div class="canfor"><b>“I can use SHEEPT factors to explain trends”</b> and <b>“analyse relationships between sources.”</b> Explain <i>why</i>, then judge the data.</div>
         <div class="model">
-          <p><b>Explain (SHEEPT):</b> The pattern is mostly <b>environmental</b> — <button class="hlword" onclick="hl(['canada'])">Canada</button>'s cool, wet climate and huge rivers give enormous runoff, while <button class="hlword" onclick="hl(['egypt','jordan'])">Egypt and Jordan</button> sit in hot deserts where little rain falls. There is a <b>political-geography</b> twist too: much of <button class="hlword" onclick="hl(['egypt'])">Egypt</button>'s water is the Nile flowing <i>in</i> from other countries, so its “renewable” water is not fully its own.</p>
-          <p style="margin-top:6px"><b>Analyse / evaluate:</b> The per-person average is misleading in two ways. It hides distribution <i>within</i> a country — <button class="hlword" onclick="hl(['australia'])">Australia</button>'s water is in the empty north, not the crowded south, which is exactly why it desalinates — and it can count water that depends on a neighbour's rainfall. So “renewable” does not always mean <b>available</b>, or <b>reliable</b>.</p>
+          <p><b>Explain (SHEEPT):</b> The pattern is mostly <b>environmental</b> — <button class="drillword" onclick="drill('canada')" title="Look inside Canada">Canada</button>'s cool, wet climate and huge rivers give enormous runoff, while <button class="hlword" onclick="hl(['egypt','jordan'])">Egypt and Jordan</button> sit in hot deserts where little rain falls. There is a <b>political-geography</b> twist too: much of <button class="drillword" onclick="drill('egypt')" title="Look inside Egypt">Egypt</button>'s water is the Nile flowing <i>in</i> from other countries, so its “renewable” water is not fully its own.</p>
+          <p style="margin-top:6px"><b>Analyse / evaluate:</b> The per-person average is misleading in two ways. It hides distribution <i>within</i> a country — <button class="drillword" onclick="drill('australia')" title="Look inside Australia">Australia</button>'s water is in the empty north, not the crowded south, which is exactly why it desalinates — and it can count water that depends on a neighbour's rainfall. So “renewable” does not always mean <b>available</b>, or <b>reliable</b>.</p>
         </div>
       </div>
     </div>
@@ -432,10 +435,12 @@
   function toggleCollapse(id){ document.getElementById(id).classList.toggle('collapsed'); }
   function allCollapse(c){ ['t1','t2','t3'].forEach(id=>document.getElementById(id).classList.toggle('collapsed',c)); }
   function drill(key){
+    clearSpots();
     document.getElementById('worldview').style.display='none';
     document.getElementById('levelrow').style.display='none';
     document.querySelectorAll('.drillscene').forEach(d=>d.style.display='none');
     document.getElementById('drill-'+key).style.display='block';
+    document.querySelector('.chartwrap').scrollIntoView({behavior:'smooth',block:'nearest'});
   }
   function undrill(){
     document.querySelectorAll('.drillscene').forEach(d=>d.style.display='none');
