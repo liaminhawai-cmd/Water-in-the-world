@@ -34,7 +34,18 @@
   .src{font-size:.72rem;color:var(--muted);margin-top:4px}
   .tiers{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;align-items:start;margin:10px 0}
   @media(max-width:860px){.tiers{grid-template-columns:1fr}}
-  .tier{border-radius:12px;border:1px solid var(--line);overflow:hidden}
+  .tier{border-radius:12px;border:1px solid var(--line);overflow:visible}
+  .tier-head{border-radius:11px 11px 0 0}
+  .tier.collapsed .tier-head{border-radius:11px}
+  .tier-body{border-radius:0 0 11px 11px}
+  /* hover/tap glossary term */
+  .term{position:relative;border-bottom:1.5px dotted currentColor;cursor:help}
+  .term .tip{position:absolute;left:0;bottom:135%;z-index:20;display:none;width:min(300px,74vw);
+    background:#242018;color:#fff;font-weight:400;font-size:.79rem;line-height:1.5;border-radius:8px;padding:9px 12px;
+    box-shadow:0 5px 16px rgba(0,0,0,.28);white-space:normal}
+  .term .tip::after{content:"";position:absolute;top:100%;left:16px;border:6px solid transparent;border-top-color:#242018}
+  .term:hover .tip,.term:focus .tip,.term:focus-within .tip{display:block}
+  .term .tip b{color:#ffd88a}
   .tier-head{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:11px 15px;cursor:pointer;font-weight:800;color:#fff}
   .tier.l56 .tier-head{background:var(--l56)} .tier.l78 .tier-head{background:var(--l78)} .tier.l910 .tier-head{background:var(--l910)}
   .tier-head .lvl{font-size:.78rem;background:rgba(255,255,255,.25);border-radius:999px;padding:2px 9px;font-weight:700}
@@ -384,9 +395,9 @@
     <div class="tier l910" id="t3">
       <div class="tier-head" onclick="setLevel('910')"><span>Grade 9–10</span><span class="lvl">Level 9–10 · explain</span><button class="caret" onclick="event.stopPropagation();toggleCollapse('t3')">▾</button></div>
       <div class="tier-body">
-        <div class="canfor"><b>“I can use SHEEPT factors to explain trends”</b> and <b>“analyse relationships between sources.”</b> Explain <i>why</i>, then judge the data.</div>
+        <div class="canfor"><b>“I can use <span class="term" tabindex="0">SHEEPT<span class="tip"><b>SHEEPT</b> — the factors geographers use to explain <i>why</i> a pattern exists: <b>S</b>ocial · <b>H</b>istorical · <b>E</b>nvironmental · <b>E</b>conomic · <b>P</b>olitical · <b>T</b>echnological.</span></span> factors to explain trends”</b> and <b>“analyse relationships between sources.”</b> Explain <i>why</i>, then judge the data.</div>
         <div class="model">
-          <p><b>Explain (SHEEPT):</b> The pattern is mostly <b>environmental</b> — <button class="drillword" onclick="drill('canada')" title="Look inside Canada">Canada</button>'s cool, wet climate and huge rivers give enormous runoff, while <button class="hlword" onclick="hl(['egypt','jordan'])">Egypt and Jordan</button> sit in hot deserts where little rain falls. There is a <b>political-geography</b> twist too: much of <button class="drillword" onclick="drill('egypt')" title="Look inside Egypt">Egypt</button>'s water is the Nile flowing <i>in</i> from other countries, so its “renewable” water is not fully its own.</p>
+          <p><b>Explain (<span class="term" tabindex="0">SHEEPT<span class="tip"><b>SHEEPT</b> — factors to explain <i>why</i>: <b>S</b>ocial · <b>H</b>istorical · <b>E</b>nvironmental · <b>E</b>conomic · <b>P</b>olitical · <b>T</b>echnological.</span></span>):</b> The pattern is mostly <b>environmental</b> — <button class="drillword" onclick="drill('canada')" title="Look inside Canada">Canada</button>'s cool, wet climate and huge rivers give enormous runoff, while <button class="hlword" onclick="hl(['egypt','jordan'])">Egypt and Jordan</button> sit in hot deserts where little rain falls. There is a <b>political-geography</b> twist too: much of <button class="drillword" onclick="drill('egypt')" title="Look inside Egypt">Egypt</button>'s water is the Nile flowing <i>in</i> from other countries, so its “renewable” water is not fully its own.</p>
           <p style="margin-top:6px"><b>Analyse / evaluate:</b> The per-person average is misleading in two ways. It hides distribution <i>within</i> a country — <button class="drillword" onclick="drill('australia')" title="Look inside Australia">Australia</button>'s water is in the empty north, not the crowded south, which is exactly why it desalinates — and it can count water that depends on a neighbour's rainfall. So “renewable” does not always mean <b>available</b>, or <b>reliable</b>.</p>
         </div>
       </div>
