@@ -437,7 +437,13 @@
     document.getElementById('btn-'+k).classList.toggle('active', on);
     document.querySelectorAll('#t2 mark.'+k).forEach(m=>m.classList.toggle('lit', on));
   }
+  function showWorld(){
+    document.querySelectorAll('.drillscene').forEach(d=>d.style.display='none');
+    document.getElementById('worldview').style.display='block';
+    document.getElementById('levelrow').style.display='flex';
+  }
   function hl(keys){
+    showWorld();                       // spotlight always needs the world chart visible
     clearSpots();
     void document.getElementById('wchart').getBoundingClientRect();
     (keys||[]).forEach(k=>{ const el=document.getElementById('ring-'+k); if(el) el.classList.add('on','pulse'); });
@@ -453,11 +459,7 @@
     document.getElementById('drill-'+key).style.display='block';
     document.querySelector('.chartwrap').scrollIntoView({behavior:'smooth',block:'nearest'});
   }
-  function undrill(){
-    document.querySelectorAll('.drillscene').forEach(d=>d.style.display='none');
-    document.getElementById('worldview').style.display='block';
-    document.getElementById('levelrow').style.display='flex';
-  }
+  function undrill(){ showWorld(); }
   setLevel('56');  // open on the identify level
 </script>
 </body>
