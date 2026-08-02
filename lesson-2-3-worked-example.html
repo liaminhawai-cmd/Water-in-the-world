@@ -73,9 +73,19 @@
 
     <div class="lvlrow noprint">
       <span class="lbl">Level:</span>
+      <button class="lv" id="v5" onclick="setLevel(5)">5</button>
       <button class="lv" id="v6" onclick="setLevel(6)">6</button>
       <button class="lv on" id="v7" onclick="setLevel(7)">7</button>
       <button class="lv" id="v8" onclick="setLevel(8)">8</button>
+      <button class="lv" id="v9" onclick="setLevel(9)">9</button>
+    </div>
+
+    <!-- LEVEL 5 -->
+    <div class="para" id="p5" style="display:none">
+      <p data-k="t"><span class="tag t">T</span>Water is important to Aboriginal people.</p>
+      <p data-k="e1"><span class="tag e1">E</span>People say the river is really important to them and it should not be wrecked.</p>
+      <p data-k="e2"><span class="tag e2">E</span>This shows water is important.</p>
+      <p data-k="l"><span class="tag l">L</span>So it is important.</p>
     </div>
 
     <!-- LEVEL 6 -->
@@ -102,6 +112,14 @@
       <p data-k="l"><span class="tag l">L</span>The interconnection between the people and the river has therefore changed from custodianship to a contest over control.</p>
     </div>
 
+    <!-- LEVEL 9 -->
+    <div class="para" id="p9" style="display:none">
+      <p data-k="t"><span class="tag t">T</span>The Martuwarra Fitzroy River shows how the interconnection between people and water has changed over time, and why that change is now being contested.</p>
+      <p data-k="e1"><span class="tag e1">E</span>Dr Anne Poelina, a Nyikina Warrwa woman, describes the river as “an ancestral serpent being with a right to not only live but a right to live and flow”, while Hancock Agriculture has sought a licence to pump 325 gigalitres a year. At Menindee on the Darling River, up to a million native fish died in 2019, blamed on drought and over-extraction — the comparison Traditional Owners themselves use.</p>
+      <p data-k="e2"><span class="tag e2">E</span>For thousands of years the interconnection was custodianship: people cared for the river and the river sustained them. Colonisation moved the decisions to the state, and the pressure now is commercial agriculture. The Murray–Darling shows what happens when that change runs unchecked — extraction outgrew the river and the interconnection collapsed. The Fitzroy River declaration (2016) and the Martuwarra Fitzroy River Council are an attempt by Traditional Owners to reverse the change before it reaches that point.</p>
+      <p data-k="l"><span class="tag l">L</span>Analysed over time, the significance of the Martuwarra is inseparable from who controls it — and the Murray–Darling comparison shows the next change is a choice, not an inevitability.</p>
+    </div>
+
     <div class="exp" id="exp"></div>
 
     <div class="moved" id="moved"></div>
@@ -120,20 +138,24 @@
     l: "<b>L — Link.</b> One sentence that goes back to the question. Do not add new evidence here."
   };
   var MOVED = {
+    5: "<b>Below the rubric.</b> No place is named, no person is named, and there is no evidence — nothing here can be credited. Naming the river and one specific connection lifts it to Level 6.",
     6: "<b>Level 6 — identify.</b> It names a connection but does not describe it. The evidence has no detail and the explain sentence only repeats the topic sentence.",
     7: "<b>Level 7 — describe.</b> It describes the interconnection using two named sources and explains what the relationship involves. To reach Level 8, add what has <i>changed</i> and why.",
-    8: "<b>Level 8 — explain and describe changes.</b> It explains why the conflict exists (colonisation changed who decides) and describes how the interconnection has changed over time."
+    8: "<b>Level 8 — explain and describe changes.</b> It explains why the conflict exists (colonisation changed who decides) and describes how the interconnection has changed over time.",
+    9: "<b>Level 9 — analyse, with discussion of change over time.</b> It analyses the change (custodianship → state control → commercial pressure) and uses a second place, the Murray–Darling, to weigh what the change could lead to."
   };
   var RUB = {
+    5: "Below Level 6 — the rubric starts at: I can identify major interconnections within and between places.",
     6: "Interconnection, Level 6: I can identify major interconnections within and between places.",
     7: "Interconnection, Level 7: I can describe major interconnections within and between places.",
-    8: "Interconnection, Level 8: I can explain major interconnections within and between places and describe changes to these places."
+    8: "Interconnection, Level 8: I can explain major interconnections within and between places and describe changes to these places.",
+    9: "Interconnection, Level 9: I can analyse major interconnections within and between places with discussion of significant changes over time."
   };
   var lvl = 7, part = null;
 
   function setLevel(n){
     lvl = n;
-    [6,7,8].forEach(function(x){
+    [5,6,7,8,9].forEach(function(x){
       document.getElementById('p'+x).style.display = (x===n) ? 'block' : 'none';
       document.getElementById('v'+x).classList.toggle('on', x===n);
     });
