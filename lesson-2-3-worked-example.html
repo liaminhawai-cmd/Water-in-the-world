@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2.3 Worked Example — Writing TEEL from sources</title>
+<style>
+  :root{
+    --bg:#f4efe6; --paper:#fbf7ee; --ink:#1f1f1f; --muted:#6b6256;
+    --line:#d8cfbb; --line-soft:#e8e0cd; --deep:#1d5f7d; --accent:#2b7a99;
+    --t:#8a5a2c; --e:#1d6f8b; --l:#2f6a3e;
+    --l67:#5a7a4a; --l8:#1d6f8b; --l910:#7a4a8a;
+    --hot:#a8730c;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:var(--bg);color:var(--ink);
+       line-height:1.55;padding:18px;display:flex;justify-content:center}
+  .wrap{width:100%;max-width:1280px}
+  h1{font-size:1.7rem;color:var(--deep)}
+  h2{font-size:1.24rem;color:var(--deep)}
+  h3{font-size:1rem;margin-bottom:3px}
+  .eyebrow{letter-spacing:.12em;text-transform:uppercase;font-size:.7rem;color:var(--muted);font-weight:800}
+  .sub{color:var(--muted);font-size:.94rem}
+  .note{font-size:.82rem;color:var(--muted);line-height:1.5}
+  .card{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:13px 0}
+  .stage{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:2px}
+  .stage .badge{font-size:.72rem;font-weight:800;color:#fff;border-radius:999px;padding:3px 12px;letter-spacing:.04em}
+  .badge.ido{background:#a83232} .badge.wedo{background:#a0561f} .badge.youdo{background:#2f6a3e}
+
+  /* TEEL frame */
+  .frame{display:grid;gap:9px;grid-template-columns:repeat(4,1fr);margin:8px 0}
+  @media(max-width:760px){.frame{grid-template-columns:1fr 1fr}}
+  .fbox{border:1px solid var(--line);border-radius:10px;padding:9px 12px;background:#fff}
+  .fbox .lt{font-weight:800;font-size:.95rem}
+  .fbox.t .lt{color:var(--t)} .fbox.e .lt{color:var(--e)} .fbox.l .lt{color:var(--l)}
+  .fbox .d{font-size:.8rem;color:var(--muted);line-height:1.45}
+
+  /* two-column: sources | writing */
+  .split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);gap:16px;align-items:start}
+  @media(max-width:940px){.split{grid-template-columns:1fr}}
+
+  /* source cards */
+  .srchead{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin-bottom:6px}
+  .src{border:1px solid var(--line);border-left:4px solid var(--line);border-radius:9px;background:#fff;
+       padding:8px 11px;margin-bottom:7px;font-size:.84rem;line-height:1.5;cursor:pointer;transition:box-shadow .15s,border-color .15s}
+  .src:hover{border-color:#b8ab8d}
+  .src .who{font-weight:800;font-size:.76rem;color:var(--deep);display:block;margin-bottom:2px}
+  .src .from{font-size:.71rem;color:var(--muted);display:block;margin-top:3px}
+  .src.q{border-left-color:#7a4a8a} .src.f{border-left-color:#1d6f8b} .src.th{border-left-color:#a83232} .src.pw{border-left-color:#a0561f}
+  .src.lit{box-shadow:0 0 0 3px var(--hot);border-color:var(--hot);background:#fdf8ee}
+  .srckey{display:flex;gap:12px;flex-wrap:wrap;font-size:.72rem;color:var(--muted);margin:2px 0 8px}
+  .srckey i{width:11px;height:11px;border-radius:3px;display:inline-block;margin-right:4px;vertical-align:-1px}
+
+  /* level buttons */
+  .lvlrow{display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin:8px 0}
+  .lvl-btn{border:2px solid var(--line);background:#fff;border-radius:9px;padding:6px 13px;font-weight:800;cursor:pointer;font-size:.85rem}
+  .lvl-btn.a{color:var(--l67)} .lvl-btn.b{color:var(--l8)} .lvl-btn.c{color:var(--l910)}
+  .lvl-btn.a.on{background:var(--l67);color:#fff;border-color:var(--l67)}
+  .lvl-btn.b.on{background:var(--l8);color:#fff;border-color:var(--l8)}
+  .lvl-btn.c.on{background:var(--l910);color:#fff;border-color:var(--l910)}
+
+  /* paragraph */
+  .para{background:#fff;border:1px solid var(--line);border-radius:11px;padding:13px 15px;font-size:.9rem;line-height:1.72}
+  .para p{margin-bottom:8px}
+  .tl{font-weight:800;font-size:.66rem;letter-spacing:.05em;color:#fff;border-radius:4px;padding:1px 6px;margin-right:6px}
+  .tl.t{background:var(--t)} .tl.e{background:var(--e)} .tl.l{background:var(--l)}
+  .ev{background:none;border:none;padding:0 1px;font:inherit;color:var(--hot);font-weight:700;
+      cursor:pointer;border-bottom:1.5px dotted #caa050}
+  .ev:hover{background:#f8eccb}
+  .ev.lit{background:#f8eccb;box-shadow:0 0 0 2px var(--hot);border-radius:3px}
+  .why{border-top:1px dashed var(--line);margin-top:9px;padding-top:7px;font-size:.79rem;color:var(--muted)}
+  .why b{color:var(--deep)}
+  .hide{display:none}
+
+  /* We do gaps */
+  .gap{background:#fdf6e3;border:1.5px dashed #d7b96a;border-radius:5px;padding:1px 9px;font-weight:700;
+       color:#8a6a1f;cursor:pointer;font-size:.86rem}
+  .gap:hover{background:#f8eccb}
+  .gap.filled{background:#eef5ee;border-style:solid;border-color:#8fbf9a;color:#1f1f1f;font-weight:400}
+  .toolbar{display:flex;gap:7px;flex-wrap:wrap;margin:8px 0}
+  .mini{border:1px solid var(--line);background:#fff;border-radius:7px;padding:4px 11px;font-size:.78rem;font-weight:700;cursor:pointer;color:var(--muted)}
+  .mini:hover{border-color:#b8ab8d}
+
+  /* you do */
+  .youdo-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px}
+  @media(max-width:860px){.youdo-grid{grid-template-columns:1fr}}
+  .starters{background:#f4f0e6;border-radius:9px;padding:10px 13px;font-size:.85rem}
+  .starters code{background:#fff;border:1px solid var(--line);border-radius:5px;padding:2px 7px;display:inline-block;margin:3px 0;font-size:.82rem}
+  .crit{border:1px solid var(--line);border-radius:9px;padding:9px 12px;background:#fff;margin-bottom:7px;font-size:.83rem}
+  .crit b{display:block;margin-bottom:2px}
+  .crit.a b{color:var(--l67)} .crit.b b{color:var(--l8)} .crit.c b{color:var(--l910)}
+  .term{position:relative;border-bottom:1.5px dotted currentColor;cursor:help}
+  .term .tip{position:absolute;left:0;bottom:135%;z-index:20;display:none;width:min(300px,74vw);
+    background:#242018;color:#fff;font-weight:400;font-size:.78rem;line-height:1.5;border-radius:8px;padding:9px 12px;box-shadow:0 5px 16px rgba(0,0,0,.28)}
+  .term:hover .tip,.term:focus .tip,.term:focus-within .tip{display:block}
+  .term .tip b{color:#ffd88a}
+  a{color:var(--accent)}
+  @media print{ body{background:#fff;padding:0} .noprint{display:none!important} .hide{display:block!important} }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="eyebrow">Water in the World · Lesson 2.3 · worked example</div>
+  <h1>Writing about significance — T·E·E·L</h1>
+  <p class="sub">Watch → read → discuss → <b>watch one done</b> → do your own. The sources are on the left; the paragraph is built from them.</p>
+
+  <div class="card">
+    <h3>The move: T · E · E · L</h3>
+    <div class="frame">
+      <div class="fbox t"><span class="lt">T — Topic</span><div class="d">Your claim, in one sentence. Answers the question directly.</div></div>
+      <div class="fbox e"><span class="lt">E — Evidence</span><div class="d">A quote or a number from a source. Say <i>who</i> said it.</div></div>
+      <div class="fbox e"><span class="lt">E — Explain</span><div class="d">What the evidence <i>means</i>. The “so what”.</div></div>
+      <div class="fbox l"><span class="lt">L — Link</span><div class="d">Tie it back to the question — significance, value, connection.</div></div>
+    </div>
+    <p class="note"><b>The question both paragraphs answer:</b> “Explain the significance of this water place to its Traditional Owners, and who decides what happens to it.”</p>
+  </div>
+
+  <!-- ================= I DO ================= -->
+  <div class="card">
+    <div class="stage"><span class="badge ido">I DO</span><h2>Case study 1 — Martuwarra Fitzroy River</h2></div>
+    <p class="note">Click any <span style="color:var(--hot);font-weight:700;border-bottom:1.5px dotted #caa050">highlighted phrase</span> in the paragraph to light up the source it came from — or click a source to find it in the paragraph.</p>
+
+    <div class="split" style="margin-top:10px">
+      <!-- SOURCES -->
+      <div>
+        <div class="srchead"><h3>The sources</h3><span class="note">what we watched and read</span></div>
+        <div class="srckey">
+          <span><i style="background:#7a4a8a"></i>voice of Country</span>
+          <span><i style="background:#1d6f8b"></i>fact</span>
+          <span><i style="background:#a83232"></i>threat</span>
+          <span><i style="background:#a0561f"></i>power</span>
+        </div>
+        <div class="src q" id="s-poelina" onclick="fromSource('s-poelina')">
+          <span class="who">Dr Anne Poelina — Nyikina Warrwa woman, chair, Martuwarra Fitzroy River Council</span>
+          “We believe that our river is an ancestral serpent being with a right to not only live but a right to live and flow.”
+          <span class="from">Guardian, 6 Sep 2020</span>
+        </div>
+        <div class="src q" id="s-mclarty" onclick="fromSource('s-mclarty')">
+          <span class="who">Anthony McLarty — Yi Martuwarra Traditional Owner, Walmajarri man</span>
+          “It's a part of me and I'm a part of it. So together we're going to protect each other. He give me fish and I gotta look after it.” · “It is a living system. It has the right to life.” · “We just can't trade water for every dollar.”
+          <span class="from">Guardian, 6 Sep 2020</span>
+        </div>
+        <div class="src q" id="s-davey" onclick="fromSource('s-davey')">
+          <span class="who">Natalie Davey — Bunuba-Walmajarri woman</span>
+          “My jarriny, which is my birth totem, is barramundi. So I got my soul and my life from this river.” · “Water is life, it is connection, it is identity.”
+          <span class="from">Guardian, 6 Sep 2020</span>
+        </div>
+        <div class="src q" id="s-video" onclick="fromSource('s-video')">
+          <span class="who">Jawoyn knowledge — <i>That's My Water! NT</i> video</span>
+          Bolung, the Rainbow Serpent, created Nitmiluk gorge. “We've got to work together with the land… we're looking after it and the land will look after us.” Waterholes are cared for, not just used — some are sacred sites you cannot simply swim in.
+          <span class="from">video, 0:00–3:15</span>
+        </div>
+        <div class="src f" id="s-size" onclick="fromSource('s-size')">
+          <span class="who">The river itself</span>
+          More than <b>700 km</b> long — WA's largest river. In its wettest years it carries <b>50 times the water of Sydney Harbour</b>. It is the biggest single site listed under WA's Aboriginal heritage laws.
+          <span class="from">Guardian, 6 Sep 2020</span>
+        </div>
+        <div class="src th" id="s-plan" onclick="fromSource('s-plan')">
+          <span class="who">The proposals</span>
+          Hancock Agriculture (Gina Rinehart) offered a land swap for a licence to pump <b>325 GL a year</b>; Gogo Station proposed <b>50 GL</b>. In 2019 the state government was considering plans ranging from <b>no irrigation to 600 GL a year</b>.
+          <span class="from">Guardian, 6 Sep 2020</span>
+        </div>
+        <div class="src th" id="s-menindee" onclick="fromSource('s-menindee')">
+          <span class="who">The warning — Menindee, Darling River</span>
+          Up to <b>1 million native fish died</b>, blamed on drought and over-extraction of irrigation water. The Martuwarra is home to 18 endemic species and is a nursery for the critically endangered freshwater sawfish.
+          <span class="from">Guardian, 6 Sep 2020</span>
+        </div>
+        <div class="src pw" id="s-council" onclick="fromSource('s-council')">
+          <span class="who">Who gets to decide</span>
+          Six Traditional Owner groups signed the <b>Fitzroy River declaration (2016)</b> and formed the Martuwarra Fitzroy River Council. Its <b>$122,000</b> in state funding was <b>not renewed</b> one week after it publicly criticised the government's water planning.
+          <span class="from">Guardian, 6 Sep 2020</span>
+        </div>
+      </div>
+
+      <!-- PARAGRAPH -->
+      <div>
+        <div class="srchead"><h3>The paragraph</h3><span class="note">same question, three levels</span></div>
+        <div class="lvlrow noprint">
+          <button class="lvl-btn a" id="lb-a" onclick="setL('a')">Level 6–7</button>
+          <button class="lvl-btn b on" id="lb-b" onclick="setL('b')">Level 8 · our target</button>
+          <button class="lvl-btn c" id="lb-c" onclick="setL('c')">Level 9–10</button>
+        </div>
+
+        <div class="para" id="p-a" style="display:none">
+          <p><span class="tl t">T</span>Water is very important to the Traditional Owners of the Martuwarra Fitzroy River.</p>
+          <p><span class="tl e">E</span>Anthony McLarty says the river <button class="ev" onclick="hl('s-mclarty')">“is a part of me and I'm a part of it”</button>. The river is <button class="ev" onclick="hl('s-size')">more than 700 km long</button> and the government is <button class="ev" onclick="hl('s-plan')">thinking about letting farmers pump water out of it</button>.</p>
+          <p><span class="tl e">E</span>This shows that the people and the river are connected to each other.</p>
+          <p><span class="tl l">L</span>So water is important for cultural reasons, not just for drinking.</p>
+          <div class="why"><b>Why it stops at Level 6–7:</b> it <i>identifies</i> a connection but the evidence isn't explained, and nothing says who decides. To move up: add a second voice, quantify the threat, and explain what the connection <i>means</i>.</div>
+        </div>
+
+        <div class="para" id="p-b">
+          <p><span class="tl t">T</span>For the Traditional Owners of the Martuwarra Fitzroy River, water holds spiritual, cultural and environmental value at the same time.</p>
+          <p><span class="tl e">E</span>Dr Anne Poelina, a Nyikina Warrwa woman, describes the river as <button class="ev" onclick="hl('s-poelina')">“an ancestral serpent being with a right to not only live but a right to live and flow”</button>, and Bunuba-Walmajarri woman Natalie Davey says <button class="ev" onclick="hl('s-davey')">“I got my soul and my life from this river”</button>. The Martuwarra runs <button class="ev" onclick="hl('s-size')">more than 700 km</button> and is <button class="ev" onclick="hl('s-size')">the biggest single site listed under WA's Aboriginal heritage laws</button>.</p>
+          <p><span class="tl e">E</span>This means the river is not only a water supply. It carries identity, law and responsibility, so <button class="ev" onclick="hl('s-mclarty')">harming the river also harms the people connected to it</button> — which is why Davey describes protecting it as her responsibility, not her choice.</p>
+          <p><span class="tl l">L</span>Water therefore connects people, culture and environment in a way the word “resource” cannot describe.</p>
+          <div class="why"><b>Why this is Level 8:</b> it <i>describes</i> the interconnection, uses two named voices and quantifies the place. To move up: explain <b>why</b> the disagreement exists — bring in power, time and scale.</div>
+        </div>
+
+        <div class="para" id="p-c" style="display:none">
+          <p><span class="tl t">T</span>The conflict over the Martuwarra Fitzroy River is not simply a clash of values — it is a contest over who has the power to decide.</p>
+          <p><span class="tl e">E</span>Traditional Owners describe the river as <button class="ev" onclick="hl('s-mclarty')">“a living system” with “the right to life”</button>, while <button class="ev" onclick="hl('s-plan')">Hancock Agriculture sought a licence to pump 325 GL a year and the state government considered allocations of up to 600 GL</button>. Six Traditional Owner groups signed the Fitzroy River declaration in 2016 and formed a council, but <button class="ev" onclick="hl('s-council')">its $122,000 in state funding was not renewed a week after it publicly criticised the government</button>.</p>
+          <p><span class="tl e">E</span>This shows the disagreement operates at several scales at once — a local river, a state government's economic plan, and a national history in which First Nations Peoples hold under 1% of water entitlements. <button class="ev" onclick="hl('s-menindee')">The Menindee fish kill, where up to a million fish died from over-extraction and drought</button>, is the warning Traditional Owners point to.</p>
+          <p><span class="tl l">L</span>Comparing this with Budj Bim, where native title and returned water let Gunditjmara aquaculture be re-established, shows the difference is not how strongly each community values water — but whether the law recognises their authority over it.</p>
+          <div class="why"><b>Why this is Level 9–10:</b> it <i>explains</i> over time and at different scales, then <i>analyses</i> by comparing two places.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= WE DO ================= -->
+  <div class="card">
+    <div class="stage"><span class="badge wedo">WE DO</span><h2>Same river — let's finish this one together</h2></div>
+    <p class="note">Click each gap to reveal what the class decides. Sources are still above.</p>
+    <div class="toolbar noprint">
+      <button class="mini" onclick="allGaps(true)">Reveal all</button>
+      <button class="mini" onclick="allGaps(false)">Reset gaps</button>
+    </div>
+    <div class="para" style="max-width:900px">
+      <p><span class="tl t">T</span>The Martuwarra Fitzroy River is significant to its Traditional Owners because it is
+        <span class="gap" data-fill="a living ancestor, not just a water supply" onclick="fill(this)">click: what kind of thing is the river to them?</span>.</p>
+      <p><span class="tl e">E</span>Anthony McLarty, a Walmajarri man, says
+        <span class="gap" data-fill="“It is a living system. It has the right to life.”" onclick="fill(this)">click: add his quote</span>,
+        and warns <span class="gap" data-fill="“We just can't trade water for every dollar.”" onclick="fill(this)">click: his warning about money</span>.</p>
+      <p><span class="tl e">E</span>This matters because
+        <span class="gap" data-fill="if the river is a living relative, then damaging it is not just an environmental cost — it breaks a relationship and a responsibility passed down through generations" onclick="fill(this)">click: so what? why does treating a river as a relative change things?</span>.</p>
+      <p><span class="tl l">L</span>Therefore
+        <span class="gap" data-fill="the significance of the Martuwarra cannot be measured only in gigalitres — its value is cultural, spiritual and environmental at once" onclick="fill(this)">click: link back to significance</span>.</p>
+    </div>
+  </div>
+
+  <!-- ================= YOU DO ================= -->
+  <div class="card">
+    <div class="stage"><span class="badge youdo">YOU DO</span><h2>Case study 2 — Budj Bim, Gunditjmara Country</h2></div>
+    <p class="note">Read the sources below, then write <b>your own</b> TEEL paragraph in OneNote answering the same question. Work on your own.</p>
+
+    <div class="youdo-grid" style="margin-top:10px">
+      <div>
+        <h3>Your sources</h3>
+        <div class="src f">
+          <span class="who">The place</span>
+          On Gunditjmara Country in south-western Victoria, at Tae Rak (Lake Condah). Over <b>thousands of years</b> Gunditjmara People built a vast system of channels and weirs to trap and farm <b>kooyong</b> (eels), and lived in villages of <b>stone houses</b> — evidence of permanent settlement and aquaculture.
+        </div>
+        <div class="src th">
+          <span class="who">What colonisation did</span>
+          After the British took the land, Gunditjmara People fought for Country but were defeated. Homes were destroyed and the aquaculture channels were <b>diverted and damaged</b> by colonists' farms.
+        </div>
+        <div class="src pw">
+          <span class="who">Winning the right to decide</span>
+          In <b>2008</b>, after a long court case, Gunditjmara People gained <b>native title</b> over Country. In <b>2019</b> the Budj Bim Cultural Landscape was given <b>UNESCO World Heritage</b> listing. Southern Rural Water <b>reallocated water</b> to Budj Bim.
+        </div>
+        <div class="src q">
+          <span class="who">What that changed</span>
+          Gunditjmara People are now <b>re-establishing the aquaculture system</b> and the kooyong farming and smoking practices for future generations, and the site is visited by people from around the world.
+        </div>
+        <p class="note" style="margin-top:6px">Sources: Australians Together, <i>Values of Water</i> (2023); National Museum of Australia, “Budj Bim Cultural Landscape”; Gunditj Mirring Traditional Owners Aboriginal Corporation.</p>
+      </div>
+
+      <div>
+        <h3>Your task</h3>
+        <p style="font-size:.88rem;margin-bottom:8px">Write one TEEL paragraph: <b>“Explain the significance of Budj Bim to Gunditjmara People, and who decides what happens to the water.”</b></p>
+        <div class="starters">
+          <b>Sentence starters</b><br>
+          <code>Budj Bim is significant to Gunditjmara People because ___.</code>
+          <code>For example, ___ , which shows ___.</code>
+          <code>In 2008 ___ , and in 2019 ___.</code>
+          <code>This means that ___.</code>
+          <code>Therefore the significance of water at Budj Bim is ___.</code>
+        </div>
+        <h3 style="margin-top:12px">How good is it? (mark your own)</h3>
+        <div class="crit a"><b>Level 6–7 · identify</b>I named who is connected to Budj Bim and one way water is used or valued.</div>
+        <div class="crit b"><b>Level 8 · describe — our target</b>I described the significance using <b>two pieces of evidence</b> (a date, a number or a detail) and explained what it <i>means</i>.</div>
+        <div class="crit c"><b>Level 9–10 · explain</b>I explained how the answer to “who decides” <b>changed over time</b> (colonisation → native title 2008 → water returned), and compared it with the Martuwarra.</div>
+        <p class="note" style="margin-top:9px">💡 The comparison to aim for: both communities value water deeply — so why does one now control it and the other is still fighting? The difference is
+          <span class="term" tabindex="0">whether the law recognises their authority<span class="tip"><b>Native title</b> was only possible after the High Court's <b>Mabo</b> decision (1992) overturned <i>terra nullius</i>. Even now, First Nations Peoples hold <b>under 1%</b> of Australia's water entitlements, despite native title covering roughly 40% of the land.</span></span>.</p>
+      </div>
+    </div>
+  </div>
+
+  <p class="note noprint" style="text-align:center;margin:14px 0">Project this, or print it as a handout — all answers print in full.
+    <br>Part of the <a href="index.html">Water in the World</a> teaching set · <a href="lesson-2-3-significance.html">2.3 teacher plan</a></p>
+</div>
+
+<script>
+  function setL(k){
+    ['a','b','c'].forEach(x=>{
+      document.getElementById('p-'+x).style.display = (x===k)?'block':'none';
+      document.getElementById('lb-'+x).classList.toggle('on', x===k);
+    });
+    clearLit();
+  }
+  function clearLit(){
+    document.querySelectorAll('.src.lit').forEach(e=>e.classList.remove('lit'));
+    document.querySelectorAll('.ev.lit').forEach(e=>e.classList.remove('lit'));
+  }
+  function hl(id){                       // click text -> light the source
+    clearLit();
+    const s=document.getElementById(id);
+    if(s){ s.classList.add('lit'); s.scrollIntoView({behavior:'smooth',block:'center'}); }
+    document.querySelectorAll('.para:not([style*="none"]) .ev').forEach(b=>{
+      if(b.getAttribute('onclick')==="hl('"+id+"')") b.classList.add('lit');
+    });
+  }
+  function fromSource(id){               // click source -> find it in the paragraph
+    clearLit();
+    const s=document.getElementById(id); if(s) s.classList.add('lit');
+    let first=null;
+    document.querySelectorAll('.para:not([style*="none"]) .ev').forEach(b=>{
+      if(b.getAttribute('onclick')==="hl('"+id+"')"){ b.classList.add('lit'); if(!first) first=b; }
+    });
+    if(first) first.scrollIntoView({behavior:'smooth',block:'center'});
+  }
+  function fill(el){
+    if(el.classList.contains('filled')){ el.textContent=el.dataset.prompt; el.classList.remove('filled'); return; }
+    if(!el.dataset.prompt) el.dataset.prompt=el.textContent;
+    el.textContent=el.dataset.fill; el.classList.add('filled');
+  }
+  function allGaps(on){
+    document.querySelectorAll('.gap').forEach(el=>{
+      if(!el.dataset.prompt) el.dataset.prompt=el.textContent;
+      if(on){ el.textContent=el.dataset.fill; el.classList.add('filled'); }
+      else { el.textContent=el.dataset.prompt; el.classList.remove('filled'); }
+    });
+  }
+</script>
+</body>
+</html>
