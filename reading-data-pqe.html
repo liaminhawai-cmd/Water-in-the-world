@@ -136,6 +136,17 @@
   .legend{display:flex;gap:14px;flex-wrap:wrap;font-size:.76rem;color:var(--muted);margin-top:6px}
   .legend .k{display:inline-flex;align-items:center;gap:5px}
   .sw{width:16px;height:12px;border-radius:3px;display:inline-block}
+
+  /* two-page lesson toggle */
+  .page-tabs{display:flex;gap:8px;margin:0 0 14px;position:sticky;top:8px;z-index:30;background:rgba(244,239,230,.94);backdrop-filter:blur(8px);padding:7px;border:1px solid var(--line);border-radius:12px}
+  .page-tab{flex:1;border:1px solid var(--line);background:#fff;color:var(--deep);border-radius:8px;padding:9px 12px;font-weight:800;cursor:pointer}
+  .page-tab.active{background:var(--deep);border-color:var(--deep);color:#fff}
+  .lesson-page[hidden]{display:none}.talk-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:14px;align-items:start}
+  .place-notes{display:grid;gap:8px}.place-note{background:#fff;border:1px solid var(--line);border-radius:9px;padding:9px 11px;font-size:.88rem}.place-note b{color:var(--deep)}
+  .talk-box{background:#eef4f7;border:1px solid #cfe0ea;border-radius:12px;padding:14px}.talk-box ol{margin:7px 0 10px 22px}.talk-box li{margin:5px 0}
+  .stem{background:#fff;border-left:4px solid var(--accent);border-radius:6px;padding:8px 10px;margin:7px 0;font-weight:700}
+  .practice-key{display:flex;gap:14px;flex-wrap:wrap;font-size:.78rem;color:var(--muted);margin:4px 0 8px}.practice-key span{display:inline-flex;align-items:center;gap:5px}.dot{width:12px;height:12px;border-radius:3px;display:inline-block}
+  @media(max-width:800px){.talk-grid{grid-template-columns:1fr}.page-tabs{position:static}}
   @media print{
     body{background:#fff;padding:0}
     .noprint{display:none!important}
@@ -146,6 +157,13 @@
 </head>
 <body>
 <div class="wrap">
+
+  <nav class="page-tabs noprint" aria-label="Choose lesson page">
+    <button id="tab-model" class="page-tab active" onclick="showPage('model')">1 · Learn with the example</button>
+    <button id="tab-practice" class="page-tab" onclick="showPage('practice')">2 · Now you try — turn and talk</button>
+  </nav>
+  <section id="page-model" class="lesson-page">
+
 
   <div class="eyebrow">Water in the World · Lessons 2.1–2.2 · Map &amp; Data · teacher reference</div>
   <h1>Reading data like a geographer</h1>
@@ -406,11 +424,70 @@
     <p class="note">Notice the Grade 7–8 <b>exception</b> and the Grade 9–10 point are the same idea: Australia's water is unevenly spread — which is exactly what a rainfall map of Australia shows. Set that as the students' version in OneNote.</p>
   </div>
 
+  </section>
+
   <p class="note noprint" style="text-align:center;margin:14px 0">A teacher reference for modelling — project it, click through the levels, then set the students' version in OneNote.
     <br>Part of the <a href="index.html">Water in the World</a> teaching set.</p>
 
+
+  <section id="page-practice" class="lesson-page" hidden>
+    <div class="eyebrow">Now you try · turn and talk</div>
+    <h1>Which place handled its water crisis differently?</h1>
+    <p class="sub">Look for a pattern, use a measure to prove it, then find the exception. You do not need to write anything — talk it through with a partner.</p>
+    <div class="card">
+      <h2>Three places, three responses</h2>
+      <p class="sub">All three places had an eighteen-month drought. The figures and place names are fictional, so you can practise reading the data without needing extra background knowledge.</p>
+      <div class="talk-grid">
+        <div class="place-notes">
+          <div class="place-note"><b>Dryhaven</b> waited until its reservoirs were very low, then introduced household watering limits and shorter shower targets.</div>
+          <div class="place-note"><b>Riverbend</b> introduced similar household restrictions and handed out water-saving showerheads.</div>
+          <div class="place-note"><b>Seabridge</b> acted early: it repaired major pipe leaks, restricted water use at factories, and saved reserve water for homes. Households did not need severe restrictions.</div>
+        </div>
+        <div class="talk-box">
+          <h3>Think · Pair · Share</h3>
+          <ol><li><b>Think:</b> What happened to household water use during the crisis?</li><li><b>Pair:</b> Which figures best prove the pattern?</li><li><b>Share:</b> Which place is the exception, and how might its response explain this?</li></ol>
+          <div class="stem"><span style="color:var(--p)">P</span> I notice that…</div>
+          <div class="stem"><span style="color:var(--q)">Q</span> A measure is…</div>
+          <div class="stem"><span style="color:var(--e)">E</span> An exception is…</div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <h2>Household water use before, during and after the crisis</h2>
+      <p class="sub">Average litres used per household each day.</p>
+      <div class="practice-key"><span><i class="dot" style="background:#8a8478"></i>Before</span><span><i class="dot" style="background:#2b7a99"></i>During</span><span><i class="dot" style="background:#6f9b62"></i>After</span></div>
+      <div class="chartwrap">
+        <svg viewBox="0 0 760 390" role="img" aria-label="Grouped bar chart of fictional household water use before, during and after a water crisis">
+          <line x1="90" y1="320" x2="730" y2="320" stroke="#6b6256"/><line x1="90" y1="70" x2="90" y2="320" stroke="#6b6256"/>
+          <g fill="#6b6256" font-size="11"><text x="78" y="324" text-anchor="end">0</text><text x="78" y="264" text-anchor="end">100</text><text x="78" y="204" text-anchor="end">200</text><text x="78" y="144" text-anchor="end">300</text><text x="78" y="84" text-anchor="end">400</text><text x="90" y="48">litres per household per day</text></g>
+          <g stroke="#e8e0cd"><line x1="90" y1="260" x2="730" y2="260"/><line x1="90" y1="200" x2="730" y2="200"/><line x1="90" y1="140" x2="730" y2="140"/><line x1="90" y1="80" x2="730" y2="80"/></g>
+          <rect x="145" y="68" width="42" height="252" fill="#8a8478"/><text x="166" y="61" text-anchor="middle" font-size="11" font-weight="800">420</text>
+          <rect x="190" y="170" width="42" height="150" fill="#2b7a99"/><text x="211" y="163" text-anchor="middle" font-size="11" font-weight="800">250</text>
+          <rect x="235" y="104" width="42" height="216" fill="#6f9b62"/><text x="256" y="97" text-anchor="middle" font-size="11" font-weight="800">360</text><text x="211" y="345" text-anchor="middle" font-size="13" font-weight="700">Dryhaven</text>
+          <rect x="335" y="86" width="42" height="234" fill="#8a8478"/><text x="356" y="79" text-anchor="middle" font-size="11" font-weight="800">390</text>
+          <rect x="380" y="188" width="42" height="132" fill="#2b7a99"/><text x="401" y="181" text-anchor="middle" font-size="11" font-weight="800">220</text>
+          <rect x="425" y="122" width="42" height="198" fill="#6f9b62"/><text x="446" y="115" text-anchor="middle" font-size="11" font-weight="800">330</text><text x="401" y="345" text-anchor="middle" font-size="13" font-weight="700">Riverbend</text>
+          <rect x="525" y="74" width="42" height="246" fill="#8a8478"/><text x="546" y="67" text-anchor="middle" font-size="11" font-weight="800">410</text>
+          <rect x="570" y="92" width="42" height="228" fill="#2b7a99"/><text x="591" y="85" text-anchor="middle" font-size="11" font-weight="800" fill="#a0561f">380</text>
+          <rect x="615" y="80" width="42" height="240" fill="#6f9b62"/><text x="636" y="73" text-anchor="middle" font-size="11" font-weight="800">400</text><text x="591" y="345" text-anchor="middle" font-size="13" font-weight="700" fill="#a0561f">Seabridge</text>
+          <rect x="562" y="84" width="58" height="244" fill="none" stroke="#a0561f" stroke-width="3" rx="5"/><text x="591" y="370" text-anchor="middle" font-size="11" font-weight="800" fill="#a0561f">possible exception?</text>
+        </svg>
+      </div>
+      <p class="note">There is more than one useful comparison. Listen for your partner using the units, naming a place, and explaining why Seabridge does not follow the same pattern.</p>
+    </div>
+  </section>
+
 </div>
 <script>
+
+  function showPage(which){
+    const model=which==='model';
+    document.getElementById('page-model').hidden=!model;
+    document.getElementById('page-practice').hidden=model;
+    document.getElementById('tab-model').classList.toggle('active',model);
+    document.getElementById('tab-practice').classList.toggle('active',!model);
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
   const TMAP={'56':'t1','78':'t2','910':'t3'};
   function clearSpots(){ document.querySelectorAll('.spot').forEach(el=>el.classList.remove('on','pulse')); }
   function setLevel(l){
