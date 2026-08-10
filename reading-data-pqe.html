@@ -147,6 +147,28 @@
   .stem{background:#fff;border-left:4px solid var(--accent);border-radius:6px;padding:8px 10px;margin:7px 0;font-weight:700}
   .practice-key{display:flex;gap:14px;flex-wrap:wrap;font-size:.78rem;color:var(--muted);margin:4px 0 8px}.practice-key span{display:inline-flex;align-items:center;gap:5px}.dot{width:12px;height:12px;border-radius:3px;display:inline-block}
   @media(max-width:800px){.talk-grid{grid-template-columns:1fr}.page-tabs{position:static}}
+
+  /* projection-first practice slide */
+  #page-practice{min-height:calc(100vh - 88px)}
+  .projection-head{display:flex;align-items:end;justify-content:space-between;gap:16px;margin-bottom:7px}
+  .projection-head h1{font-size:1.45rem;line-height:1.15}
+  .projection-head .sub{font-size:.82rem;max-width:720px}
+  .project-task{background:#eef4f7;border:1px solid #cfe0ea;border-radius:9px;padding:7px 11px;font-size:.84rem;margin:7px 0}
+  .project-layout{display:grid;grid-template-columns:180px minmax(520px,1fr) 180px;gap:9px;align-items:stretch}
+  .side-prompts{display:flex;flex-direction:column;gap:7px}
+  .prompt-head{font-size:.68rem;text-transform:uppercase;letter-spacing:.1em;font-weight:800;color:var(--muted);padding:1px 3px}
+  .side-stem{background:#fff;border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:7px;padding:9px 8px;font-size:.83rem;font-weight:700;line-height:1.28;flex:1}
+  .side-stem.p{border-left-color:var(--p)}.side-stem.q{border-left-color:var(--q)}.side-stem.e{border-left-color:var(--e)}
+  .response-stem{background:#f7f2e8;border-left-color:#7a4a8a}
+  .project-centre{background:#fff;border:1px solid var(--line);border-radius:10px;padding:7px 9px;min-width:0}
+  .inside-key{display:flex;gap:11px;align-items:center;flex-wrap:wrap;font-size:.7rem;fill:#6b6256}
+  .place-strips{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:4px}
+  .place-strip{border:1px solid var(--line);border-radius:7px;padding:6px 8px;font-size:.72rem;line-height:1.28;background:var(--paper)}
+  .place-strip b{display:block;color:var(--deep);font-size:.77rem;margin-bottom:2px}
+  .place-strip.good{border-top:4px solid #2f6a3e}.place-strip.bad{border-top:4px solid #a0561f}
+  .micro-source{text-align:center;color:var(--muted);font-size:.67rem;margin-top:5px}
+  @media(max-width:980px){.project-layout{grid-template-columns:150px minmax(430px,1fr) 150px}.side-stem{font-size:.75rem;padding:7px 6px}}
+  @media(max-width:760px){.project-layout{grid-template-columns:1fr}.side-prompts{display:grid;grid-template-columns:repeat(3,1fr)}.prompt-head{grid-column:1/-1}.place-strips{grid-template-columns:1fr}}
   @media print{
     body{background:#fff;padding:0}
     .noprint{display:none!important}
@@ -431,52 +453,70 @@
 
 
   <section id="page-practice" class="lesson-page" hidden>
-    <div class="eyebrow">Now you try · turn and talk</div>
-    <h1>Which place handled its water crisis differently?</h1>
-    <p class="sub">Look for a pattern, use a measure to prove it, then find the exception. You do not need to write anything — talk it through with a partner.</p>
-    <div class="card">
-      <h2>Three places, three responses</h2>
-      <p class="sub">All three places had an eighteen-month drought. The figures and place names are fictional, so you can practise reading the data without needing extra background knowledge.</p>
-      <div class="talk-grid">
-        <div class="place-notes">
-          <div class="place-note"><b>Dryhaven</b> waited until its reservoirs were very low, then introduced household watering limits and shorter shower targets.</div>
-          <div class="place-note"><b>Riverbend</b> introduced similar household restrictions and handed out water-saving showerheads.</div>
-          <div class="place-note"><b>Seabridge</b> acted early: it repaired major pipe leaks, restricted water use at factories, and saved reserve water for homes. Households did not need severe restrictions.</div>
-        </div>
-        <div class="talk-box">
-          <h3>Think · Pair · Share</h3>
-          <ol><li><b>Think:</b> What happened to household water use during the crisis?</li><li><b>Pair:</b> Which figures best prove the pattern?</li><li><b>Share:</b> Which place is the exception, and how might its response explain this?</li></ol>
-          <div class="stem"><span style="color:var(--p)">P</span> I notice that…</div>
-          <div class="stem"><span style="color:var(--q)">Q</span> A measure is…</div>
-          <div class="stem"><span style="color:var(--e)">E</span> An exception is…</div>
-        </div>
-      </div>
+    <div class="projection-head">
+      <div><div class="eyebrow">Now you try · five-minute turn and talk</div><h1>Rainfall, water use and smart responses</h1></div>
+      <p class="sub">Three fictional places faced the same length drought. Does household water use simply follow rainfall?</p>
     </div>
-    <div class="card">
-      <h2>Household water use before, during and after the crisis</h2>
-      <p class="sub">Average litres used per household each day.</p>
-      <div class="practice-key"><span><i class="dot" style="background:#8a8478"></i>Before</span><span><i class="dot" style="background:#2b7a99"></i>During</span><span><i class="dot" style="background:#6f9b62"></i>After</span></div>
-      <div class="chartwrap">
-        <svg viewBox="0 0 760 390" role="img" aria-label="Grouped bar chart of fictional household water use before, during and after a water crisis">
-          <line x1="90" y1="320" x2="730" y2="320" stroke="#6b6256"/><line x1="90" y1="70" x2="90" y2="320" stroke="#6b6256"/>
-          <g fill="#6b6256" font-size="11"><text x="78" y="324" text-anchor="end">0</text><text x="78" y="264" text-anchor="end">100</text><text x="78" y="204" text-anchor="end">200</text><text x="78" y="144" text-anchor="end">300</text><text x="78" y="84" text-anchor="end">400</text><text x="90" y="48">litres per household per day</text></g>
-          <g stroke="#e8e0cd"><line x1="90" y1="260" x2="730" y2="260"/><line x1="90" y1="200" x2="730" y2="200"/><line x1="90" y1="140" x2="730" y2="140"/><line x1="90" y1="80" x2="730" y2="80"/></g>
-          <rect x="145" y="68" width="42" height="252" fill="#8a8478"/><text x="166" y="61" text-anchor="middle" font-size="11" font-weight="800">420</text>
-          <rect x="190" y="170" width="42" height="150" fill="#2b7a99"/><text x="211" y="163" text-anchor="middle" font-size="11" font-weight="800">250</text>
-          <rect x="235" y="104" width="42" height="216" fill="#6f9b62"/><text x="256" y="97" text-anchor="middle" font-size="11" font-weight="800">360</text><text x="211" y="345" text-anchor="middle" font-size="13" font-weight="700">Dryhaven</text>
-          <rect x="335" y="86" width="42" height="234" fill="#8a8478"/><text x="356" y="79" text-anchor="middle" font-size="11" font-weight="800">390</text>
-          <rect x="380" y="188" width="42" height="132" fill="#2b7a99"/><text x="401" y="181" text-anchor="middle" font-size="11" font-weight="800">220</text>
-          <rect x="425" y="122" width="42" height="198" fill="#6f9b62"/><text x="446" y="115" text-anchor="middle" font-size="11" font-weight="800">330</text><text x="401" y="345" text-anchor="middle" font-size="13" font-weight="700">Riverbend</text>
-          <rect x="525" y="74" width="42" height="246" fill="#8a8478"/><text x="546" y="67" text-anchor="middle" font-size="11" font-weight="800">410</text>
-          <rect x="570" y="92" width="42" height="228" fill="#2b7a99"/><text x="591" y="85" text-anchor="middle" font-size="11" font-weight="800" fill="#a0561f">380</text>
-          <rect x="615" y="80" width="42" height="240" fill="#6f9b62"/><text x="636" y="73" text-anchor="middle" font-size="11" font-weight="800">400</text><text x="591" y="345" text-anchor="middle" font-size="13" font-weight="700" fill="#a0561f">Seabridge</text>
-          <rect x="562" y="84" width="58" height="244" fill="none" stroke="#a0561f" stroke-width="3" rx="5"/><text x="591" y="370" text-anchor="middle" font-size="11" font-weight="800" fill="#a0561f">possible exception?</text>
+    <div class="project-task"><b>Think → pair → share:</b> Find the overall relationship, support it with a measure, then explain the <b>two different exceptions</b>.</div>
+
+    <div class="project-layout">
+      <aside class="side-prompts" aria-label="PQE sentence stems">
+        <div class="prompt-head">Make an observation</div>
+        <div class="side-stem p"><b>P · Pattern</b><br>I notice that as rainfall…, household water use…</div>
+        <div class="side-stem q"><b>Q · Quantify</b><br>A measure that shows this is…</div>
+        <div class="side-stem e"><b>E · Exceptions</b><br>An exception is… because…</div>
+      </aside>
+
+      <main class="project-centre">
+        <svg viewBox="0 0 760 360" role="img" aria-label="Household water use before, during and after a drought, with rainfall during the crisis as a percent of normal">
+          <!-- key inside chart -->
+          <g font-size="11">
+            <rect x="86" y="18" width="13" height="10" rx="2" fill="#8a8478"/><text x="104" y="27">Before</text>
+            <rect x="157" y="18" width="13" height="10" rx="2" fill="#2b7a99"/><text x="175" y="27">During</text>
+            <rect x="232" y="18" width="13" height="10" rx="2" fill="#6f9b62"/><text x="250" y="27">After</text>
+            <line x1="314" y1="23" x2="340" y2="23" stroke="#4b9fc4" stroke-width="3"/><circle cx="327" cy="23" r="5" fill="#fff" stroke="#4b9fc4" stroke-width="3"/>
+            <text x="348" y="27">Rainfall during crisis (% of normal)</text>
+          </g>
+          <!-- axes and grid -->
+          <line x1="74" y1="300" x2="700" y2="300" stroke="#6b6256"/><line x1="74" y1="62" x2="74" y2="300" stroke="#6b6256"/>
+          <g stroke="#e8e0cd"><line x1="74" y1="244" x2="700" y2="244"/><line x1="74" y1="188" x2="700" y2="188"/><line x1="74" y1="132" x2="700" y2="132"/><line x1="74" y1="76" x2="700" y2="76"/></g>
+          <g fill="#6b6256" font-size="10"><text x="66" y="304" text-anchor="end">0</text><text x="66" y="248" text-anchor="end">100</text><text x="66" y="192" text-anchor="end">200</text><text x="66" y="136" text-anchor="end">300</text><text x="66" y="80" text-anchor="end">400</text><text x="74" y="51">litres per household per day</text></g>
+          <!-- household bars: Fortwell 400/365/390 -->
+          <rect x="126" y="76" width="35" height="224" fill="#8a8478"/><text x="143" y="70" text-anchor="middle" font-size="10" font-weight="800">400</text>
+          <rect x="164" y="96" width="35" height="204" fill="#2b7a99"/><text x="181" y="90" text-anchor="middle" font-size="10" font-weight="800">365</text>
+          <rect x="202" y="82" width="35" height="218" fill="#6f9b62"/><text x="219" y="76" text-anchor="middle" font-size="10" font-weight="800">390</text>
+          <!-- Riverbend 400/280/360 -->
+          <rect x="316" y="76" width="35" height="224" fill="#8a8478"/><text x="333" y="70" text-anchor="middle" font-size="10" font-weight="800">400</text>
+          <rect x="354" y="143" width="35" height="157" fill="#2b7a99"/><text x="371" y="137" text-anchor="middle" font-size="10" font-weight="800">280</text>
+          <rect x="392" y="98" width="35" height="202" fill="#6f9b62"/><text x="409" y="92" text-anchor="middle" font-size="10" font-weight="800">360</text>
+          <!-- Sandport 400/220/350 -->
+          <rect x="506" y="76" width="35" height="224" fill="#8a8478"/><text x="523" y="70" text-anchor="middle" font-size="10" font-weight="800">400</text>
+          <rect x="544" y="177" width="35" height="123" fill="#2b7a99"/><text x="561" y="171" text-anchor="middle" font-size="10" font-weight="800">220</text>
+          <rect x="582" y="104" width="35" height="196" fill="#6f9b62"/><text x="599" y="98" text-anchor="middle" font-size="10" font-weight="800">350</text>
+          <!-- rainfall line: 30%, 55%, 82% mapped 278..103 -->
+          <polyline points="181,236 371,187 561,124" fill="none" stroke="#4b9fc4" stroke-width="3" stroke-dasharray="6 4"/>
+          <g fill="#fff" stroke="#4b9fc4" stroke-width="3"><circle cx="181" cy="236" r="7"/><circle cx="371" cy="187" r="7"/><circle cx="561" cy="124" r="7"/></g>
+          <g fill="#1d6f8b" font-size="11" font-weight="800"><text x="181" y="224" text-anchor="middle">30%</text><text x="371" y="175" text-anchor="middle">55%</text><text x="561" y="112" text-anchor="middle">82%</text></g>
+          <g font-size="13" font-weight="800"><text x="181" y="322" text-anchor="middle" fill="#2f6a3e">Fortwell</text><text x="371" y="322" text-anchor="middle">Riverbend</text><text x="561" y="322" text-anchor="middle" fill="#a0561f">Sandport</text></g>
+          <g font-size="10"><text x="181" y="338" text-anchor="middle" fill="#2f6a3e">low rain · small drop</text><text x="371" y="338" text-anchor="middle" fill="#6b6256">middle rain · middle drop</text><text x="561" y="338" text-anchor="middle" fill="#a0561f">more rain · biggest drop</text></g>
         </svg>
-      </div>
-      <p class="note">There is more than one useful comparison. Listen for your partner using the units, naming a place, and explaining why Seabridge does not follow the same pattern.</p>
+
+        <div class="place-strips">
+          <div class="place-strip good"><b>Fortwell · planned early</b>Very low rain, but full reservoirs, repaired leaks and factory limits protected household supply.</div>
+          <div class="place-strip"><b>Riverbend · the main pattern</b>Average storage and household restrictions meant water use fell as rainfall fell.</div>
+          <div class="place-strip bad"><b>Sandport · water slipped away</b>Tropical rain fell, but sandy soil, leaky pipes and little storage meant severe household cuts.</div>
+        </div>
+        <div class="micro-source">Fictional places and simplified data designed for a five-minute PQE discussion.</div>
+      </main>
+
+      <aside class="side-prompts" aria-label="Partner response stems">
+        <div class="prompt-head">Respond to your partner</div>
+        <div class="side-stem response-stem"><b>Build</b><br>I agree because…</div>
+        <div class="side-stem response-stem"><b>Challenge</b><br>Another way to read it is…</div>
+        <div class="side-stem response-stem"><b>Connect</b><br>The response mattered because…</div>
+      </aside>
     </div>
   </section>
-
 </div>
 <script>
 
